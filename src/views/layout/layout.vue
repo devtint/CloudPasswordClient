@@ -1,17 +1,19 @@
 <template>
   <div class="layout">
     <el-container>
-      <el-header>
-        <div class="logo">
-          <img src="./logo.png" alt="" />
-        </div>
-        <div class="menu">
-          <app-aside class="aside-menu" />
-        </div>
-        <div class="user">
-          <user-link />
-        </div>
-      </el-header>
+      <div class="header">
+        <el-header>
+          <div class="logo">
+            <img src="./logo.png" alt="" />
+          </div>
+          <div class="menu">
+            <app-aside class="aside-menu" />
+          </div>
+          <div class="user">
+            <user-link />
+          </div>
+        </el-header>
+      </div>
       <el-main>
         <router-view></router-view>
       </el-main>
@@ -63,27 +65,27 @@ export default {
 </script>
 
 <style scoped lang="less">
+.header {
+  top: 0;
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  height: 60px;
+  background-color: white;
+}
 .el-header {
-  line-height: 60px;
-  // top: 0;
-  // position: fixed;
-  // z-index: 1000;
+  // line-height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   .logo {
     padding-top: 1rem;
   }
-  .menu {
-    // display: flex;
-    // align-items: center;
-    // left: 2rem;
-    // margin-left: -10rem;
-  }
 }
 .el-main {
   margin: 0;
   padding: 0;
+  margin-top: 60px;
 }
 .el-footer {
   // background-color: #b3c0d1;

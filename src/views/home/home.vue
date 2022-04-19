@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import rotationVue from './components/rotation.vue'
+import rotationVue from '@/components/rotation.vue'
 export default {
   name: 'home',
   components: {
