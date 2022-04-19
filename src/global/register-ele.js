@@ -1,7 +1,43 @@
 // import 'element-plus/lib/theme-chalk/base.css'
-import { Button, Container, Header, Main, Footer } from 'element-ui'
+import {
+  Button,
+  Container,
+  Header,
+  Main,
+  Footer,
+  Menu,
+  Submenu,
+  MenuItem,
+  Link,
+  Carousel,
+  CarouselItem,
+  Image,
+  Row,
+  Col,
+  Card,
+  Steps,
+  Step,
+} from 'element-ui'
 
-const components = [Button, Container, Header, Main, Footer]
+const components = [
+  Button,
+  Container,
+  Header,
+  Main,
+  Footer,
+  Menu,
+  Submenu,
+  MenuItem,
+  Link,
+  Carousel,
+  CarouselItem,
+  Image,
+  Row,
+  Col,
+  Card,
+  Steps,
+  Step,
+]
 
 function install(Vue) {
   components.forEach(component => {

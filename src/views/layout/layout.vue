@@ -1,36 +1,116 @@
 <template>
   <div class="layout">
     <el-container>
-      <el-header>Header</el-header>
-      <el-main>Main</el-main>
-      <el-footer>Footer</el-footer>
+      <el-header>
+        <div class="logo">
+          <img src="./logo.png" alt="" />
+        </div>
+        <div class="menu">
+          <app-aside class="aside-menu" />
+        </div>
+        <div class="user">
+          <user-link />
+        </div>
+      </el-header>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
+      <el-footer>
+        <div class="footer">
+          <!-- 备案信息 -->
+          <div class="footer-record">
+            <span>Copright © 2021</span>
+            <span>北京江南天安科技有限公司</span>
+            <span>京公网安备11010802028740号</span>
+            <el-link
+              href="https://beian.miit.gov.cn/"
+              target="_blank"
+              :underline="false"
+              >京ICP备08012318号</el-link
+            >
+          </div>
+        </div>
+      </el-footer>
     </el-container>
   </div>
 </template>
 
 <script>
+import AppAside from './components/aside'
+import userLink from './components/userLink'
 export default {
   name: 'layout',
-  components: {},
+  components: {
+    AppAside,
+    userLink,
+  },
   props: {},
   data() {
-    return {}
+    return {
+      activeIndex: '1',
+    }
   },
   computed: {},
   watch: {},
   created() {},
   mounted() {},
-  methods: {},
+  methods: {
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath)
+    },
+  },
 }
 </script>
 
 <style scoped lang="less">
-.el-header,
+.el-header {
+  line-height: 60px;
+  // top: 0;
+  // position: fixed;
+  // z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .logo {
+    padding-top: 1rem;
+  }
+  .menu {
+    // display: flex;
+    // align-items: center;
+    // left: 2rem;
+    // margin-left: -10rem;
+  }
+}
+.el-main {
+  margin: 0;
+  padding: 0;
+}
 .el-footer {
-  background-color: #b3c0d1;
+  // background-color: #b3c0d1;
+  // position: fixed;
   color: #333;
   text-align: center;
-  line-height: 60px;
+  line-height: 80px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  // top: 0;
+  margin: auto;
+
+  .footer {
+    // padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: small;
+    .footer-record {
+      display: flex;
+      align-items: center;
+      span {
+        margin-right: 10px;
+      }
+    }
+  }
 }
 
 .el-aside {
@@ -38,13 +118,6 @@ export default {
   color: #333;
   text-align: center;
   line-height: 200px;
-}
-
-.el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
 }
 
 body > .el-container {

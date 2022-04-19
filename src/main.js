@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 // 全局引入
 import { globalRegister } from './global'
+import '@/assets/style/global_icon.css'
 
 Vue.config.productionTip = false
 Vue.use(store)
