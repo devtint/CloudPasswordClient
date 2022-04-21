@@ -5,7 +5,7 @@ import router from '@/router' //引入router
 import qs from 'qs' //引入qs模块，用于序列化post请求参数
 import JSONBig from 'json-bigint'
 
-import wx from 'weixin-js-sdk'
+// import wx from 'weixin-js-sdk'
 
 import { BASE_URL } from '@/global/config'
 

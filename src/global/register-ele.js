@@ -17,6 +17,17 @@ import {
   Card,
   Steps,
   Step,
+  Table,
+  TableColumn,
+  InputNumber,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  Input,
+  Select,
+  Option,
+  Tabs,
+  TabPane,
 } from 'element-ui'
 
 const components = [
@@ -37,6 +48,17 @@ const components = [
   Card,
   Steps,
   Step,
+  Table,
+  TableColumn,
+  InputNumber,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  Input,
+  Select,
+  Option,
+  Tabs,
+  TabPane,
 ]
 
 function install(Vue) {

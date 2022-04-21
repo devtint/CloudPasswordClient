@@ -16,10 +16,12 @@
         >
           <el-card>
             <div class="cardMain">
-              <h3>{{ item.title }}</h3>
+              <h3>{{ item.goodsName }}</h3>
               <p>有效期: {{ item.validity }}</p>
               <p class="price">￥{{ item.price }}</p>
-              <el-button type="warning" size="small" plain>购买</el-button>
+              <el-button type="warning" size="small" plain @click="payPro(item)"
+                >购买</el-button
+              >
             </div>
           </el-card>
         </el-col>
@@ -30,6 +32,8 @@
 
 <script>
 import rotationVue from '@/components/rotation.vue'
+
+import { useOrderStore } from '@/store/order'
 export default {
   name: 'serviceProducts',
   components: {
@@ -40,29 +44,34 @@ export default {
     return {
       cardData: [
         {
-          title: '完整性校验密钥',
+          goodsName: '完整性校验密钥',
           validity: '1年',
           price: '120.00',
+          num: '1',
         },
         {
-          title: '隐私数据保护密钥',
+          goodsName: '隐私数据保护密钥',
           validity: '1年',
           price: '220.00',
+          num: '1',
         },
         {
-          title: '完整性校验密钥',
+          goodsName: '完整性校验密钥',
           validity: '1年',
           price: '170.00',
+          num: '1',
         },
         {
-          title: '完整性校验密钥',
+          goodsName: '完整性校验密钥',
           validity: '2年',
           price: '190.00',
+          num: '1',
         },
         {
-          title: '完整性校验密钥',
+          goodsName: '完整性校验密钥',
           validity: '3年',
           price: '420.00',
+          num: '1',
         },
       ],
     }
@@ -71,7 +80,18 @@ export default {
   watch: {},
   created() {},
   mounted() {},
-  methods: {},
+  methods: {
+    payPro(item) {
+      // price和num 转为数字类型
+      let currentGoodsNew = {
+        ...item,
+        price: Number(item.price),
+        num: Number(item.num),
+      }
+      useOrderStore().setCurrentGoods(currentGoodsNew)
+      this.$router.push('/confirm')
+    },
+  },
 }
 </script>
 

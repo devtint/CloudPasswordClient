@@ -99,6 +99,7 @@ export default {
   text-align: center;
   .cardMain {
     margin: 1rem;
+    height: 7rem;
     p {
       font-size: small;
       color: #999;

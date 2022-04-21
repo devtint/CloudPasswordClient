@@ -25,6 +25,14 @@ const routes = [
           ),
       },
       {
+        path: '/confirm',
+        name: 'confirm',
+        component: () =>
+          import(
+            /* webpackChunkName: "confirm" */ '@/views/confirm/confirmOrder.vue'
+          ),
+      },
+      {
         path: '/secretKey',
         name: 'secretKey',
         component: () =>
@@ -39,6 +47,12 @@ const routes = [
           import(
             /* webpackChunkName: "password" */ '@/views/password/passwordService.vue'
           ),
+      },
+      {
+        path: '/order',
+        name: 'order',
+        component: () =>
+          import(/* webpackChunkName: "order" */ '@/views/order/order.vue'),
       },
     ],
   },

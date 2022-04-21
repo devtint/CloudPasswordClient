@@ -7,6 +7,7 @@ import { globalRegister } from './global'
 import '@/assets/style/global_icon.css'
 
 Vue.config.productionTip = false
+Vue.config.devtools = true
 Vue.use(store)
 Vue.use(globalRegister)
 

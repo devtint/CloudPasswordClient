@@ -1,23 +1,32 @@
-//src/store/home.js
+//src/store/order.js
 
 import { defineStore } from 'pinia'
 
-export const useHomeStore = defineStore({
-  id: 'home', // id必填，且需要唯一
+export const useOrderStore = defineStore({
+  id: 'order', // id必填，且需要唯一
   state: () => {
     return {
       // hello: '',
+      // 选中的当前商品信息
+      currentGoods: {},
     }
   },
   getters: {
     // getHello: state => {
     //   return state.hello
     // },
+    // 获取选中的商品
+    getCurrentGoods: state => {
+      return state.currentGoods
+    },
   },
   actions: {
     // setHello(payload) {
     //   this.hello = payload
     // },
+    setCurrentGoods(payload) {
+      this.currentGoods = payload
+    },
     // // 异步actions
     // async login(account, pwd) {
     //   const { data } = await api.login(account, pwd)

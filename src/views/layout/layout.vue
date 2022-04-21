@@ -3,7 +3,7 @@
     <el-container>
       <div class="header">
         <el-header>
-          <div class="logo">
+          <div class="logo" @click="toHome">
             <img src="./logo.png" alt="" />
           </div>
           <div class="menu">
@@ -17,7 +17,8 @@
       <el-main>
         <router-view></router-view>
       </el-main>
-      <el-footer>
+      <!-- <el-footer> -->
+      <div class="el-footer">
         <div class="footer">
           <!-- 备案信息 -->
           <div class="footer-record">
@@ -32,7 +33,8 @@
             >
           </div>
         </div>
-      </el-footer>
+        <!-- </el-footer> -->
+      </div>
     </el-container>
   </div>
 </template>
@@ -57,6 +59,9 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    toHome() {
+      this.$router.push('/')
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath)
     },
@@ -80,28 +85,33 @@ export default {
   align-items: center;
   .logo {
     padding-top: 1rem;
+    cursor: pointer;
   }
 }
 .el-main {
   margin: 0;
   padding: 0;
   margin-top: 60px;
+  margin-bottom: 3rem;
 }
 .el-footer {
-  // background-color: #b3c0d1;
-  // position: fixed;
+  background-color: white;
+  position: fixed;
   color: #333;
   text-align: center;
-  line-height: 80px;
+  height: 40px;
+  line-height: 40px;
   left: 0;
   bottom: 0;
   right: 0;
   // top: 0;
   margin: auto;
+  z-index: 3002;
 
   .footer {
     // padding: 0 20px;
     display: flex;
+    height: 40px;
     justify-content: center;
     align-items: center;
     font-size: small;
@@ -115,12 +125,12 @@ export default {
   }
 }
 
-.el-aside {
-  background-color: #d3dce6;
-  color: #333;
-  text-align: center;
-  line-height: 200px;
-}
+// .el-aside {
+//   background-color: #d3dce6;
+//   color: #333;
+//   text-align: center;
+//   line-height: 200px;
+// }
 
 body > .el-container {
   margin-bottom: 40px;
