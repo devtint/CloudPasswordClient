@@ -3,7 +3,7 @@
     <!-- 轮播图 -->
     <rotation-vue />
     <main>
-      <div class="title">密钥托管服务</div>
+      <div class="title">{{ title }}</div>
       <el-row :gutter="0">
         <el-col
           :xs="24"
@@ -42,6 +42,7 @@ export default {
   props: {},
   data() {
     return {
+      title: '服务产品',
       cardData: [
         {
           goodsName: '完整性校验密钥',
@@ -78,7 +79,11 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+    // 获取路由传过来的参数
+    console.log(this.$route.params.details)
+    this.title = this.$route.params.title
+  },
   mounted() {},
   methods: {
     payPro(item) {

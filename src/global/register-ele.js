@@ -28,6 +28,10 @@ import {
   Option,
   Tabs,
   TabPane,
+  Form,
+  FormItem,
+  Checkbox,
+  Message,
 } from 'element-ui'
 
 const components = [
@@ -59,6 +63,10 @@ const components = [
   Option,
   Tabs,
   TabPane,
+  Form,
+  FormItem,
+  Checkbox,
+  Message,
 ]
 
 function install(Vue) {

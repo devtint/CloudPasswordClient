@@ -10,10 +10,9 @@
       <!-- <i class="el-icon-s-home"></i> -->
       <span slot="title">首页</span>
     </el-menu-item>
-    <el-menu-item index="/products">
-      <!-- <i class="el-icon-s-home"></i> -->
+    <!-- <el-menu-item index="/products">
       <span slot="title">服务产品</span>
-    </el-menu-item>
+    </el-menu-item> -->
     <el-menu-item index="/secretKey">
       <!-- <i class="el-icon-s-home"></i> -->
       <span slot="title">密钥管理</span>

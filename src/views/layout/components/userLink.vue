@@ -4,7 +4,18 @@
       <i class="icon icon-sousuo"></i>
     </el-link>
     <el-link href="javascript:;" :underline="false">
-      <i class="icon icon-zhanghao"></i>
+      <div class="avatar-wrap">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <i class="icon icon-zhanghao"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="toLogin"
+              >用户登录</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </el-link>
     <el-link href="javascript:;" :underline="false">
       <i class="icon icon-envelope"></i>
@@ -42,6 +53,9 @@ export default {
     toMyOrder() {
       this.$router.push('/order')
     },
+    toLogin() {
+      this.$router.push('/login')
+    },
   },
 }
 </script>
@@ -55,7 +69,7 @@ export default {
   }
   .el-dropdown-link {
     cursor: pointer;
-    color: #409eff;
+    // color: #409eff;
   }
   .el-icon-arrow-down {
     font-size: 12px;

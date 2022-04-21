@@ -19,7 +19,13 @@
             <div class="cardMain">
               <h3>{{ item.title }}</h3>
               <p>{{ item.desc }}</p>
-              <el-button type="primary" size="small" plain>查看详情</el-button>
+              <el-button
+                type="primary"
+                size="small"
+                plain
+                @click="checkTheDetails(item)"
+                >查看详情</el-button
+              >
             </div>
           </el-card>
         </el-col>
@@ -51,31 +57,37 @@ export default {
   props: {},
   data() {
     return {
+      // 云密钥托管服务
+      // 完整性校验密钥（1年/2年），隐私数据保护密钥（1年/2年/3年/永久有效）
+
+      // 云证书托管服务
+      // 数字签名证书-X509证书（1年/2年/3年/永久有效）
+
+      // 云密码服务
+      // 签名服务（RSA，RSA/SM2，SM1）
+
+      // 云密码机租赁服务
+      // 云密码机租赁服务（DES/3DES/RSA，DES/3DE S/RSA/SM1/SM2/SM3/SM4，SM1/SM2/SM3/SM4）
       cardData: [
         {
-          imgUrl: 'http://res.tintjs.com/img/v2_云服务.png',
-          title: '云服务',
-          desc: '云服务器ECS、GPU云服务器、块存储、FPGA云服务器···',
+          imgUrl: require('@/views/home/images/v2_密钥托管.png'),
+          title: '云密钥托管服务',
+          desc: '完整性校验密钥（1年/2年），隐私数据保护密钥（1年/2年/3年/永久有效）',
         },
         {
-          imgUrl: 'http://res.tintjs.com/img/v2_密钥托管.png',
-          title: '密钥托管',
-          desc: '密钥托管、密钥管理、密钥绑定、密钥解绑···',
+          imgUrl: require('@/views/home/images/v2_云密码服务.png'),
+          title: '云证书托管服务',
+          desc: '数字签名证书-X509证书（1年/2年/3年/永久有效）',
         },
         {
-          imgUrl: 'http://res.tintjs.com/img/v2_云证书托管.png',
-          title: '云证书托管',
-          desc: '云证书托管、云证书管理、云证书绑定、云证书解绑···',
-        },
-        {
-          imgUrl: 'http://res.tintjs.com/img/v2_云密码服务.png',
+          imgUrl: require('@/views/home/images/v2_云证书托管.png'),
           title: '云密码服务',
-          desc: '云密码服务、云密码管理、云密码绑定、云密码解绑···',
+          desc: '签名服务（RSA，RSA/SM2，SM1）',
         },
         {
-          imgUrl: 'http://res.tintjs.com/img/v2_租赁云密码机.png',
-          title: '租赁云密码机',
-          desc: '租赁云密码机、租赁云密码机管理、租赁云密码机绑定、租赁云密码机解绑···',
+          imgUrl: require('@/views/home/images/v2_租赁云密码机.png'),
+          title: '云密码机租赁服务',
+          desc: '云密码机租赁服务（DES/3DES/RSA，DES/3DE S/RSA/SM1/SM2/SM3/SM4，SM1/SM2/SM3/SM4）',
         },
       ],
     }
@@ -84,7 +96,17 @@ export default {
   watch: {},
   created() {},
   mounted() {},
-  methods: {},
+  methods: {
+    checkTheDetails(item) {
+      this.$router.push({
+        name: 'products',
+        params: {
+          title: item.title,
+          details: item,
+        },
+      })
+    },
+  },
 }
 </script>
 

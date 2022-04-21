@@ -5,6 +5,20 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/login',
+    name: 'login',
+    component: () =>
+      import(/* webpackChunkName: "login" */ '@/views/login/login.vue'),
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () =>
+      import(
+        /* webpackChunkName: "register" */ '@/views/register/register.vue'
+      ),
+  },
+  {
     path: '/',
     // name: '',
     component: () =>
