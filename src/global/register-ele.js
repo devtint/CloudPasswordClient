@@ -31,7 +31,8 @@ import {
   Form,
   FormItem,
   Checkbox,
-  Message,
+  // Message,
+  Pagination,
 } from 'element-ui'
 
 const components = [
@@ -66,7 +67,8 @@ const components = [
   Form,
   FormItem,
   Checkbox,
-  Message,
+  // Message,
+  Pagination,
 ]
 
 function install(Vue) {

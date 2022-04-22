@@ -19,20 +19,31 @@
     <!-- tabs -->
     <div class="tabs">
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
-        <el-tab-pane label="全部" name="1">
-          <order-lists></order-lists>
+        <el-tab-pane label="全部" name="0">
+          <!-- <order-lists></order-lists> -->
         </el-tab-pane>
-        <el-tab-pane label="等待支付" name="2">等待支付</el-tab-pane>
-        <el-tab-pane label="待收款确认" name="3">待收款确认</el-tab-pane>
-        <el-tab-pane label="等待配货" name="4">等待配货</el-tab-pane>
-        <el-tab-pane label="配货完成" name="5">配货完成</el-tab-pane>
+        <el-tab-pane label="等待支付" name="1">
+          <!-- <order-lists></order-lists> -->
+        </el-tab-pane>
+        <el-tab-pane label="待收款确认" name="2">
+          <!-- <order-lists></order-lists> -->
+        </el-tab-pane>
+        <el-tab-pane label="等待配货" name="3">
+          <!-- <order-lists></order-lists> -->
+        </el-tab-pane>
+        <el-tab-pane label="配货完成" name="4">
+          <!-- <order-lists></order-lists> -->
+        </el-tab-pane>
       </el-tabs>
+      <order-lists></order-lists>
     </div>
   </div>
 </template>
 
 <script>
 import orderLists from './components/orderLists.vue'
+
+import { useOrderStore } from '@/store/order'
 export default {
   name: 'order',
   components: {
@@ -43,16 +54,19 @@ export default {
     return {
       searchValue: '',
       select: '',
-      activeName: '1',
+      activeName: '0',
     }
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+    useOrderStore().setCurentTabs('0')
+  },
   mounted() {},
   methods: {
     handleTabClick(tab, event) {
-      console.log(tab, event)
+      console.log(tab.name)
+      useOrderStore().setCurentTabs(tab.name)
     },
   },
 }

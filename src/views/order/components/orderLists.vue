@@ -22,16 +22,16 @@
       <el-table-column prop="status" label="状态" width="120">
         <template slot-scope="scope">
           <div class="statusStyle">
-            <span v-if="scope.row.status == 1" class="warning"
+            <span v-if="scope.row.status == '1'" class="warning"
               ><i class="el-icon-warning"></i> 等待支付</span
             >
-            <span v-if="scope.row.status == 2" class="info"
+            <span v-if="scope.row.status == '2'" class="info"
               ><i class="el-icon-info"></i> 待付款确认</span
             >
-            <span v-if="scope.row.status == 3" class="goods"
+            <span v-if="scope.row.status == '3'" class="goods"
               ><i class="el-icon-s-goods"></i> 等待配货</span
             >
-            <span v-if="scope.row.status == 4" class="success"
+            <span v-if="scope.row.status == '4'" class="success"
               ><i class="el-icon-success"></i> 配货完成</span
             >
           </div>
@@ -57,20 +57,59 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <div class="paginationBox">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="5"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
 //导入js文件(文件脚本内容在下文)
 import { getRowspanMethod } from '@/utils'
+import { Message } from 'element-ui'
 
+import { useOrderStore } from '@/store/order'
 export default {
   name: 'orderLists',
   components: {},
   props: {},
   data() {
     return {
-      tableData: [
+      currentPage: 1,
+      tableData: [],
+    }
+  },
+  computed: {
+    currentTabs() {
+      return useOrderStore().getCurrentTabs
+    },
+  },
+  watch: {
+    currentTabs: {
+      handler(newValue, oldValue) {
+        this.init(newValue)
+      },
+      immediate: true,
+    },
+  },
+  created() {
+    console.log('currentTabs', this.currentTabs)
+  },
+  mounted() {},
+  methods: {
+    init(tabStatus) {
+      console.log('init', tabStatus)
+      let initTableData = [
         {
           time: '2019-01-01 14:00:31',
           billNo: '1342345635744781',
@@ -80,7 +119,7 @@ export default {
           num: '1',
           discount: '1.0',
           subtotal: '120.00',
-          status: 1,
+          status: '1',
         },
         {
           time: '2019-01-01 14:00:32',
@@ -91,7 +130,7 @@ export default {
           num: '1',
           discount: '1.0',
           subtotal: '120.00',
-          status: 2,
+          status: '2',
         },
         {
           time: '2019-01-01 14:00:33',
@@ -102,7 +141,7 @@ export default {
           num: '1',
           discount: '1.0',
           subtotal: '120.00',
-          status: 3,
+          status: '3',
         },
         {
           time: '2019-01-01 14:00:33',
@@ -113,7 +152,7 @@ export default {
           num: '1',
           discount: '1.0',
           subtotal: '360.00',
-          status: 3,
+          status: '3',
         },
         {
           time: '2019-01-01 14:00:34',
@@ -124,16 +163,21 @@ export default {
           num: '1',
           discount: '1.0',
           subtotal: '120.00',
-          status: 4,
+          status: '4',
         },
-      ],
-    }
-  },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
-  methods: {
+      ]
+      if (tabStatus === '0') {
+        this.tableData = Object.assign(initTableData)
+      } else {
+        let tableData = initTableData.filter(item => {
+          if (item.status === tabStatus) {
+            return true
+          }
+          return false
+        })
+        this.tableData = tableData
+      }
+    },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       //调用函数并导出需要的合并列函数 注意需要根据
       //data为查询到的数据
@@ -160,6 +204,14 @@ export default {
       //   },
       // })
     },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
+      console.log(this.tabStatus)
+      Message(`当前页: ${val}`)
+    },
   },
 }
 </script>
@@ -178,5 +230,12 @@ export default {
   .success {
     color: #87d068;
   }
+}
+.paginationBox {
+  // 固定屏幕右下角
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  background-color: #fff;
 }
 </style>

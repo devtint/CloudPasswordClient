@@ -9,6 +9,8 @@ export const useOrderStore = defineStore({
       // hello: '',
       // 选中的当前商品信息
       currentGoods: {},
+      // 当前tabs选项
+      curentTabs: '',
     }
   },
   getters: {
@@ -19,6 +21,10 @@ export const useOrderStore = defineStore({
     getCurrentGoods: state => {
       return state.currentGoods
     },
+
+    getCurrentTabs: state => {
+      return state.curentTabs
+    },
   },
   actions: {
     // setHello(payload) {
@@ -26,6 +32,9 @@ export const useOrderStore = defineStore({
     // },
     setCurrentGoods(payload) {
       this.currentGoods = payload
+    },
+    setCurentTabs(payload) {
+      this.curentTabs = payload
     },
     // // 异步actions
     // async login(account, pwd) {
