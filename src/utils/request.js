@@ -82,7 +82,11 @@ request.interceptors.request.use(
       // config.headers.Authorization = `Bearer ${user.token}`
       config.headers.res_token = `${user.res_token}`
       config.headers['X-CSRF-TOKEN'] = `${user.token.token}`
+    } else {
+      // 暂时使用通用res_token
+      config.headers.res_token = 'adeebd32-5f54-4a88-9821-f38c44538dca'
     }
+
     // 当这里 return config 之后，请求才会真正的发出去
     // console.log('new请求', config)
     return config

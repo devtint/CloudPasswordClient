@@ -33,6 +33,8 @@ import {
   Checkbox,
   // Message,
   Pagination,
+  Breadcrumb,
+  BreadcrumbItem,
 } from 'element-ui'
 
 const components = [
@@ -69,6 +71,8 @@ const components = [
   Checkbox,
   // Message,
   Pagination,
+  Breadcrumb,
+  BreadcrumbItem,
 ]
 
 function install(Vue) {

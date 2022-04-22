@@ -6,7 +6,7 @@ module.exports = {
   // devServer Options don't belong into `configureWebpack`
   publicPath: './',
   // 输出文件目录(默认dist)
-  outputDir: 'CloudPasswordClient',
+  // outputDir: 'CloudPasswordClient',
   devServer: {
     // public: '192.1.2.110:4399',
     // hot: true,

@@ -1,7 +1,15 @@
 <template>
   <div class="serviceProducts">
     <!-- 轮播图 -->
-    <rotation-vue />
+    <!-- <rotation-vue /> -->
+    <div slot="header" class="breadcrumbBox">
+      <!-- 面包屑路径导航 -->
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>服务产品/{{ title }}</el-breadcrumb-item>
+      </el-breadcrumb>
+      <!-- 面包屑路径导航  end -->
+    </div>
     <main>
       <div class="title">{{ title }}</div>
       <el-row :gutter="0">
@@ -96,6 +104,7 @@ export default {
       getServiceProductList(params).then(res => {
         if (res.data.rs === '1') {
           let productList = res.data.queryServiceProductList
+          console.log('productList:', productList)
           this.productList = productList.map(item => {
             return {
               ...item,
@@ -125,6 +134,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+.breadcrumbBox {
+  padding: 20px;
+}
 .title {
   font-size: 24px;
   margin: 1.5rem 0;

@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "commit": "cz"
+    "commit": "cz",
+    "deployment": "vue-cli-service build && rm -rf ~/tomcat7/webapps/CloudPasswordClient/* && cp -rf ./dist/* ~/tomcat7/webapps/CloudPasswordClient/ && echo '--部署完成-- [http://www.paytunnel.cn/CloudPasswordClient]'"
   },
   "dependencies": {
     "@vue/composition-api": "^1.4.9",
