@@ -33,7 +33,14 @@
     </main>
     <footer>
       <div class="title">购物流程</div>
-      <el-steps :active="5" align-center>
+      <div class="shoppingDiv">
+        <el-image
+          class="shoppingImg"
+          :src="require('@/views/home/images/shopping.png')"
+          style="width: 60%"
+        />
+      </div>
+      <!-- <el-steps :active="5" align-center>
         <el-step title="用户注册" description="用户注册"></el-step>
         <el-step title="用户登录" description="用户登录"></el-step>
         <el-step
@@ -42,7 +49,7 @@
         ></el-step>
         <el-step title="线下付款" description="线下完成订单的支付。"></el-step>
         <el-step title="上传凭证" description="上传线下支付的凭证。"></el-step>
-      </el-steps>
+      </el-steps> -->
     </footer>
   </div>
 </template>
@@ -129,5 +136,10 @@ export default {
       margin-bottom: 1rem;
     }
   }
+}
+.shoppingDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

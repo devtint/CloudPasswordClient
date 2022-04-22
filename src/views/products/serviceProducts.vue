@@ -11,7 +11,7 @@
           :md="12"
           :lg="6"
           :xl="1"
-          v-for="(item, index) in cardData"
+          v-for="(item, index) in productList"
           :key="index"
         >
           <el-card>
@@ -34,6 +34,7 @@
 import rotationVue from '@/components/rotation.vue'
 
 import { useOrderStore } from '@/store/order'
+import { getServiceProductList } from '@/api/product'
 export default {
   name: 'serviceProducts',
   components: {
@@ -43,7 +44,7 @@ export default {
   data() {
     return {
       title: '服务产品',
-      cardData: [
+      productList: [
         {
           goodsName: '完整性校验密钥',
           validity: '1年',
@@ -81,11 +82,34 @@ export default {
   watch: {},
   created() {
     // 获取路由传过来的参数
-    console.log(this.$route.params.details)
     this.title = this.$route.params.title
+    // 获取服务产品列表
+    this.init(this.title)
   },
   mounted() {},
   methods: {
+    init(name) {
+      let params = {
+        serviceName: name,
+        TELLERCOMPANY: '',
+      }
+      getServiceProductList(params).then(res => {
+        if (res.data.rs === '1') {
+          let productList = res.data.queryServiceProductList
+          this.productList = productList.map(item => {
+            return {
+              ...item,
+              goodsName: item.srlID,
+              validity: item.priceAttrValueList,
+              price: item.priceAfterDiscount,
+              num: 1,
+            }
+          })
+        } else {
+          console.log(res.data.rs)
+        }
+      })
+    },
     payPro(item) {
       // price和num 转为数字类型
       let currentGoodsNew = {
