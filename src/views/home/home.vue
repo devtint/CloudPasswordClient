@@ -56,6 +56,8 @@
 
 <script>
 import rotationVue from '@/components/rotation.vue'
+
+import { useHomeStore } from '@/store/home'
 export default {
   name: 'home',
   components: {
@@ -105,6 +107,7 @@ export default {
   mounted() {},
   methods: {
     checkTheDetails(item) {
+      useHomeStore().setCurentProduct(item)
       this.$router.push({
         name: 'products',
         params: {

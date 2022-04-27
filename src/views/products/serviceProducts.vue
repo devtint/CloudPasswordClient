@@ -6,7 +6,7 @@
       <!-- 面包屑路径导航 -->
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>服务产品/{{ title }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ curentProduct.title }}</el-breadcrumb-item>
       </el-breadcrumb>
       <!-- 面包屑路径导航  end -->
     </div>
@@ -41,6 +41,7 @@
 <script>
 import rotationVue from '@/components/rotation.vue'
 
+import { useHomeStore } from '@/store/home'
 import { useOrderStore } from '@/store/order'
 import { getServiceProductList } from '@/api/product'
 export default {
@@ -52,47 +53,20 @@ export default {
   data() {
     return {
       title: '服务产品',
-      productList: [
-        {
-          goodsName: '完整性校验密钥',
-          validity: '1年',
-          price: '120.00',
-          num: '1',
-        },
-        {
-          goodsName: '隐私数据保护密钥',
-          validity: '1年',
-          price: '220.00',
-          num: '1',
-        },
-        {
-          goodsName: '完整性校验密钥',
-          validity: '1年',
-          price: '170.00',
-          num: '1',
-        },
-        {
-          goodsName: '完整性校验密钥',
-          validity: '2年',
-          price: '190.00',
-          num: '1',
-        },
-        {
-          goodsName: '完整性校验密钥',
-          validity: '3年',
-          price: '420.00',
-          num: '1',
-        },
-      ],
+      productList: [],
     }
   },
-  computed: {},
+  computed: {
+    curentProduct() {
+      return useHomeStore().getCurentProduct
+    },
+  },
   watch: {},
   created() {
-    // 获取路由传过来的参数
-    this.title = this.$route.params.title
+    // // 获取路由传过来的参数
+    // this.title = this.$route.params.title
     // 获取服务产品列表
-    this.init(this.title)
+    this.init(this.curentProduct.title)
   },
   mounted() {},
   methods: {
@@ -127,7 +101,12 @@ export default {
         num: Number(item.num),
       }
       useOrderStore().setCurrentGoods(currentGoodsNew)
-      this.$router.push('/confirm')
+      this.$router.push({
+        path: '/confirm',
+        params: {
+          title: this.title,
+        },
+      })
     },
   },
 }

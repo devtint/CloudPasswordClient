@@ -7,17 +7,24 @@ export const useHomeStore = defineStore({
   state: () => {
     return {
       // hello: '',
+      curentProduct: '',
     }
   },
   getters: {
     // getHello: state => {
     //   return state.hello
     // },
+    getCurentProduct: state => {
+      return state.curentProduct
+    },
   },
   actions: {
     // setHello(payload) {
     //   this.hello = payload
     // },
+    setCurentProduct(payload) {
+      this.curentProduct = payload
+    },
     // // 异步actions
     // async login(account, pwd) {
     //   const { data } = await api.login(account, pwd)

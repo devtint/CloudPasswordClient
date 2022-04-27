@@ -14,12 +14,17 @@
         ></el-input>
       </el-form-item>
       <el-form-item prop="code">
-        <el-input
-          v-model="user.code"
-          placeholder="请输入验证码"
-          show-password
-          clearable
-        ></el-input>
+        <div class="get_code">
+          <el-input
+            v-model="user.code"
+            placeholder="请输入验证码"
+            show-password
+            clearable
+          >
+            <!-- 发送验证码 -->
+          </el-input>
+          <el-button class="get-btn" type="primary">获取验证码</el-button>
+        </div>
       </el-form-item>
       <el-form-item prop="agree2">
         <div class="agreement">
@@ -194,5 +199,13 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.get_code {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .get-btn {
+    margin-left: 10px;
+  }
 }
 </style>

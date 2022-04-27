@@ -1,6 +1,17 @@
 <template>
   <div class="confirmOrder">
     <div class="confirm">
+      <div slot="header" class="breadcrumbBox">
+        <!-- 面包屑路径导航 -->
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/products' }">{{
+            orderData[0].productName
+          }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ orderData[0].srlID }}</el-breadcrumb-item>
+        </el-breadcrumb>
+        <!-- 面包屑路径导航  end -->
+      </div>
       <div class="title">确认订单信息</div>
       <div class="tableBox">
         <div>
@@ -28,6 +39,7 @@
               <template slot-scope="scope">
                 <el-input-number
                   v-model="scope.row.num"
+                  :min="1"
                   size="mini"
                   @change="handleChange"
                 ></el-input-number>
@@ -74,6 +86,7 @@ export default {
   props: {},
   data() {
     return {
+      title: '',
       orderData: [],
       totalPrice: 0,
     }
@@ -85,6 +98,8 @@ export default {
   },
   watch: {},
   created() {
+    // 获取路由传过来的参数
+    this.title = this.$route.params.title
     this.totalPrice = this.currentGoods.price
     // 存入数组
     let arrData = []
@@ -107,6 +122,10 @@ export default {
 </script>
 
 <style scoped lang="less">
+.breadcrumbBox {
+  padding: 20px;
+}
+
 .confirm {
   min-height: 80vh;
 }

@@ -142,10 +142,14 @@ export default {
   // background: url('./login_bg.jpg') no-repeat;
   background-size: cover;
   .login-form-wrap {
-    min-width: 300px;
-    padding: 20px 50px 100px;
+    min-width: 320px;
+    max-width: 320px;
+    // padding: 20px 50px 100px;
     // margin: 50px;
     background-color: #fff;
+    .el-tabs--border-card > .el-tabs__content {
+      padding: 50px;
+    }
     .login-head {
       display: flex;
       justify-content: center;
