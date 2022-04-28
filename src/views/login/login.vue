@@ -1,17 +1,22 @@
 <template>
   <div class="login-container">
-    <!--
+    <div class="login_header">
+      <el-page-header @back="goBack" title="" content="用户登录">
+      </el-page-header>
+    </div>
+    <div class="login_main">
+      <!--
       el-form 表单组件
       每个表单项都必须使用 el-form-item 组件包裹
     -->
 
-    <div class="login-form-wrap">
-      <div class="login-head">
-        <div class="logo">
-          <el-image :src="require('@/views/layout/logo.png')"></el-image>
+      <div class="login-form-wrap">
+        <div class="login-head">
+          <div class="logo">
+            <el-image :src="require('@/views/layout/logo.png')"></el-image>
+          </div>
         </div>
-      </div>
-      <!--
+        <!--
         配置Form表单验证:
         1、必须给el-form组件绑定 model 表单数据对象 如  :model="user"
         2、给需要验证的表单项 el-form-item 设置 prop 属性 如  prop="mobile"
@@ -23,19 +28,20 @@
         2、通过 ref 获取 el-form 组件，调用组件的 validate 进行验证
         -->
 
-      <el-tabs
-        type="border-card"
-        stretch
-        v-model="activeName"
-        @tab-click="handleClick"
-      >
-        <el-tab-pane label="账号登录" name="1">
-          <login-account></login-account>
-        </el-tab-pane>
-        <el-tab-pane label="手机验证码登录" name="2">
-          <login-phone></login-phone>
-        </el-tab-pane>
-      </el-tabs>
+        <el-tabs
+          type="border-card"
+          stretch
+          v-model="activeName"
+          @tab-click="handleClick"
+        >
+          <el-tab-pane label="账号登录" name="1">
+            <login-account></login-account>
+          </el-tab-pane>
+          <el-tab-pane label="手机验证码登录" name="2">
+            <login-phone></login-phone>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
     </div>
   </div>
 </template>
@@ -62,6 +68,10 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    goBack() {
+      console.log('goBack')
+      this.$router.go(-1)
+    },
     handleClick(tab, event) {},
     onLogin() {
       // 获取表单数据(根据接口要求绑定数据)
@@ -129,10 +139,14 @@ export default {
 </script>
 
 <style scoped lang="less">
-.login-container {
-  position: fixed;
+.login_header {
+  padding: 20px;
+}
+.login_main {
+  // position: fixed;
+  position: absolute;
   left: 0;
-  top: 0;
+  top: 50px;
   right: 0;
   bottom: 0;
   display: flex;

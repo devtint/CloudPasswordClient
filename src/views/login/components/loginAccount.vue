@@ -71,7 +71,7 @@ export default {
           {
             pattern: /^1[3|5|7|8|9]\d{9}$/,
             message: '请输入正确的号码格式',
-            trigger: 'change',
+            trigger: 'blur',
           },
         ],
         password: [
@@ -79,7 +79,7 @@ export default {
           {
             pattern: /^\d{6}$/,
             message: '请输入正确的密码格式',
-            trigger: 'change',
+            trigger: 'blur',
           },
         ],
         agree: [

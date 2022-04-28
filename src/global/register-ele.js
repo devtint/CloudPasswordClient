@@ -35,6 +35,7 @@ import {
   Pagination,
   Breadcrumb,
   BreadcrumbItem,
+  PageHeader,
 } from 'element-ui'
 
 const components = [
@@ -73,6 +74,7 @@ const components = [
   Pagination,
   Breadcrumb,
   BreadcrumbItem,
+  PageHeader,
 ]
 
 function install(Vue) {

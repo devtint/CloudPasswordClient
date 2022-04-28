@@ -11,7 +11,7 @@
       <!-- 面包屑路径导航  end -->
     </div>
     <main>
-      <div class="title">{{ title }}</div>
+      <div class="title">{{ curentProduct.title }}</div>
       <el-row :gutter="0">
         <el-col
           :xs="24"

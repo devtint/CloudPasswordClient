@@ -70,6 +70,10 @@ export default {
 </script>
 
 <style scoped lang="less">
+* {
+  margin: 0;
+  padding: 0;
+}
 .header {
   top: 0;
   position: fixed;
@@ -84,7 +88,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   .logo {
-    padding-top: 1rem;
+    // padding-top: 1rem;
+    padding-left: 1rem;
     cursor: pointer;
   }
 }

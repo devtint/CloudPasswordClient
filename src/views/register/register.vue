@@ -1,5 +1,12 @@
 <template>
   <div class="loginAccount">
+    <div class="register_header">
+      <el-page-header
+        @back="goBack"
+        title=""
+        content="用户注册"
+      ></el-page-header>
+    </div>
     <div class="login-container">
       <!--
       el-form 表单组件
@@ -22,28 +29,55 @@
             :rules="rules"
             ref="ruleForm"
             class="demo-ruleForm"
+            label-position="right"
+            label-width="80px"
           >
-            <el-form-item prop="account">
+            <el-form-item prop="enterpriseName" label="企业名称">
+              <el-input
+                v-model="ruleForm.enterpriseName"
+                placeholder="请输入企业名称"
+                clearable
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="userName" label="姓名">
+              <el-input
+                v-model="ruleForm.userName"
+                placeholder="请输入姓名"
+                clearable
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="phone" label="手机号码">
+              <el-input
+                v-model="ruleForm.phone"
+                placeholder="请输入手机号码"
+                clearable
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="account" label="账号">
               <el-input
                 v-model="ruleForm.account"
                 placeholder="请输入账号"
                 clearable
               ></el-input>
             </el-form-item>
-            <el-form-item prop="pass">
+            <el-form-item prop="pass" label="密码">
               <el-input
                 type="password"
                 placeholder="请输入密码"
                 v-model="ruleForm.pass"
                 autocomplete="off"
+                show-password
+                clearable
               ></el-input>
             </el-form-item>
-            <el-form-item prop="checkPass">
+            <el-form-item prop="checkPass" label="确认密码">
               <el-input
                 type="password"
                 placeholder="请再次输入确认密码"
                 v-model="ruleForm.checkPass"
                 autocomplete="off"
+                show-password
+                clearable
               ></el-input>
             </el-form-item>
             <el-form-item>
@@ -67,6 +101,8 @@
 </template>
 
 <script>
+import { encryption } from '@/utils'
+import { getPK } from '@/api/user'
 export default {
   name: 'register',
   components: {},
@@ -75,6 +111,8 @@ export default {
     var validateAccount = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('账号不能为空'))
+      } else {
+        callback()
       }
     }
     var validatePass = (rule, value, callback) => {
@@ -96,24 +134,75 @@ export default {
         callback()
       }
     }
+    var validateEnterpriseName = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('企业名称不能为空'))
+      } else {
+        callback()
+      }
+    }
+    var validateUserName = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('姓名不能为空'))
+      } else {
+        callback()
+      }
+    }
+    var validatePhone = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('手机号码不能为空'))
+      } else {
+        var myreg = /^[1][3,4,5,7,8][0-9]{9}$/
+        if (!myreg.test(value)) {
+          callback(new Error('请输入正确的手机号码'))
+        } else {
+          callback()
+        }
+      }
+    }
     return {
       ruleForm: {
         pass: '',
         checkPass: '',
         account: '',
+        enterpriseName: '',
+        userName: '',
+        phone: '',
+        pkbase64:''
       },
       rules: {
         pass: [{ validator: validatePass, trigger: 'blur' }],
         checkPass: [{ validator: validatePass2, trigger: 'blur' }],
         account: [{ validator: validateAccount, trigger: 'blur' }],
+        enterpriseName: [
+          { validator: validateEnterpriseName, trigger: 'blur' },
+        ],
+        userName: [{ validator: validateUserName, trigger: 'blur' }],
+        phone: [{ validator: validatePhone, trigger: 'blur' }],
       },
     }
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+    this.getPKFn()
+  },
   mounted() {},
   methods: {
+    getPKFn() {
+      getPK()
+        .then(res => {
+          console.log('PK res', res)
+          this.pkbase64 = res.data.pkkey
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    goBack() {
+      console.log('goBack')
+      this.$router.go(-1)
+    },
     onForget() {
       console.log('忘记密码')
     },
@@ -125,7 +214,10 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert('submit!')
+          console.log('submitForm 检验通过')
+          // 加密密码
+          let newPassword = encryption('RSA',this.pkbase64, this.ruleForm.pass)
+          console.log('加密后', newPassword)
         } else {
           console.log('error submit!!')
           return false
@@ -140,6 +232,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+.register_header {
+  padding: 20px;
+}
 .headerTitle {
   display: flex;
   justify-content: center;
@@ -149,9 +244,9 @@ export default {
   color: #4f4f4f;
 }
 .login-container {
-  position: fixed;
+  position: absolute;
   left: 0;
-  top: 0;
+  top: 50px;
   right: 0;
   bottom: 0;
   display: flex;
@@ -160,8 +255,9 @@ export default {
   align-items: center;
   // background: url('./login_bg.jpg') no-repeat;
   background-size: cover;
+
   .login-form-wrap {
-    min-width: 300px;
+    min-width: 400px;
     padding: 20px 50px 100px;
     // margin: 50px;
     background-color: #fff;
