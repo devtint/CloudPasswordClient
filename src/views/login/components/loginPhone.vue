@@ -23,7 +23,13 @@
           >
             <!-- 发送验证码 -->
           </el-input>
-          <el-button class="get-btn" type="primary">获取验证码</el-button>
+          <el-button
+            class="get-btn"
+            type="primary"
+            :disabled="codeDisabled"
+            @click="getCode"
+            >{{ codeText }}</el-button
+          >
         </div>
       </el-form-item>
       <el-form-item prop="agree2">
@@ -57,12 +63,16 @@
 </template>
 
 <script>
+import { getPK } from '@/api/user'
+import { Message } from 'element-ui'
 export default {
   name: 'loginPhone',
   components: {},
   props: {},
   data() {
     return {
+      codeText: '获取验证码',
+      codeDisabled: false,
       user: {
         mobile: '', // 手机号
         code: '', // 验证码
@@ -109,9 +119,21 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+    this.getPKFn()
+  },
   mounted() {},
   methods: {
+    getPKFn() {
+      getPK()
+        .then(res => {
+          console.log('PK res', res)
+          this.pkbase64 = res.data.pkkey
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     onForget() {
       // this.$message('忘记密码')
       console.log('忘记密码')
@@ -181,6 +203,36 @@ export default {
       // 处理后端响应结果
       //   成功:xxx
       //   失败:xxx
+    },
+    getCode() {
+      // 先验证手机号是否合法
+      this.$refs['login-form'].validateField('mobile', (valid, error) => {
+        console.log('valid', valid)
+        console.log('error', error)
+        if (valid) {
+          Message(`${valid}`)
+          console.log(valid)
+          return
+        } else {
+          console.log('通过')
+          // 获取验证码
+          // 倒计时
+          this.codeText = '获取验证码'
+          this.codeDisabled = true
+          let count = 60
+          this.codeTimer = setInterval(() => {
+            count--
+            if (count <= 0) {
+              clearInterval(this.codeTimer)
+              this.codeText = '重新获取'
+              this.codeDisabled = false
+              count = 60
+            } else {
+              this.codeText = `${count}s后重试`
+            }
+          }, 1000)
+        }
+      })
     },
   },
 }

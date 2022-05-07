@@ -14,3 +14,21 @@ export const getPK = () => {
     url: '/app/getPK',
   })
 }
+
+// (注册企业客户账号)btnRegisteredEnterpriseAccount
+export const registerAccount = data => {
+  return request({
+    method: 'POST',
+    url: '/insertReturn/btnRegisteredEnterpriseAccount',
+    data,
+  })
+}
+
+// (账号密码登录)loginByAccount
+export const loginAccount = data => {
+  return request({
+    method: 'POST',
+    url: '/login/loginByAccount',
+    data,
+  })
+}

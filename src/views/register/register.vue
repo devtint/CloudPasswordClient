@@ -102,7 +102,8 @@
 
 <script>
 import { encryption } from '@/utils'
-import { getPK } from '@/api/user'
+import { getPK, registerAccount } from '@/api/user'
+import { Message,MessageBox } from 'element-ui'
 export default {
   name: 'register',
   components: {},
@@ -168,7 +169,7 @@ export default {
         enterpriseName: '',
         userName: '',
         phone: '',
-        pkbase64:''
+        pkbase64: '',
       },
       rules: {
         pass: [{ validator: validatePass, trigger: 'blur' }],
@@ -216,8 +217,53 @@ export default {
         if (valid) {
           console.log('submitForm 检验通过')
           // 加密密码
-          let newPassword = encryption('RSA',this.pkbase64, this.ruleForm.pass)
+          let newPassword = encryption('RSA', this.pkbase64, this.ruleForm.pass)
           console.log('加密后', newPassword)
+          // 注册请求
+          // srlIDForEngine:Splenwise云密码服务平台
+          // busiNameForEngine:企业客户管理
+          // busiFunNameForEngine:企业客户注册
+          // miniProcNameForEngine:为企业客户创建注册配置
+          // prjDesCmpName:北京江南天安科技有限公司
+          // projectName:Splenwise云密码服务平台
+          // cmpCate:采购云密码服务的企业
+          // status:101002
+          // workingStatus:1
+          // roleID:企业客户超级用户
+          // companyName:测试企业
+          // contactor:test
+          // employeeName:test
+          // phone:13826260000
+          // mobile:13826260000
+          // tellerNo:test
+          // passwordCiper:加密的密码
+          let data = {
+            srlIDForEngine: 'Splenwise云密码服务平台',
+            busiNameForEngine: '企业客户管理',
+            busiFunNameForEngine: '企业客户注册',
+            miniProcNameForEngine: '为企业客户创建注册配置',
+            prjDesCmpName: '北京江南天安科技有限公司',
+            projectName: 'Splenwise云密码服务平台',
+            cmpCate: '采购云密码服务的企业',
+            status: '1',
+            workingStatus: '1',
+            roleID: '企业客户超级用户',
+            companyName: this.ruleForm.enterpriseName,
+            contactor: this.ruleForm.userName,
+            mobile: this.ruleForm.phone,
+            tellerNo: this.ruleForm.account,
+            passwordCiper: newPassword,
+          }
+          console.log('注册请求参数', data)
+          registerAccount(data).then(res => {
+            if (res.data.rs === '1') {
+              console.log('注册成功')
+              Message('注册成功')
+            } else {
+              // Message(res.data.rs)
+              MessageBox.alert(res.data.rs)
+            }
+          })
         } else {
           console.log('error submit!!')
           return false

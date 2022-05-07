@@ -50,12 +50,16 @@
 </template>
 
 <script>
+import { encryption } from '@/utils'
+import { getPK, loginAccount } from '@/api/user'
+import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'loginAccount',
   components: {},
   props: {},
   data() {
     return {
+      pkbase64: '',
       user: {
         account: '', // 账号
         password: '', // 密码
@@ -69,8 +73,8 @@ export default {
         account: [
           { required: true, message: '账号不能为空', trigger: 'blur' },
           {
-            pattern: /^1[3|5|7|8|9]\d{9}$/,
-            message: '请输入正确的号码格式',
+            // pattern: /^1[3|5|7|8|9]\d{9}$/,
+            // message: '请输入正确的号码格式',
             trigger: 'blur',
           },
         ],
@@ -102,9 +106,21 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+    this.getPKFn()
+  },
   mounted() {},
   methods: {
+    getPKFn() {
+      getPK()
+        .then(res => {
+          console.log('PK res', res)
+          this.pkbase64 = res.data.pkkey
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     onForget() {
       // this.$message('忘记密码')
       console.log('忘记密码')
@@ -123,22 +139,50 @@ export default {
       //   console.log(valid)
       //   console.log(error)
       // })
-      // validate 方法是异步的
       this.$refs['login-form'].validate(valid => {
-        // 如果表单验证失败，停止请求提交
-        if (!valid) {
-          return
+        if (valid) {
+          console.log('submitForm 检验通过')
+          // 加密密码
+          let newPassword = encryption('RSA', this.pkbase64, this.user.password)
+          console.log('加密后', newPassword)
+          let data = {
+            tellerNo: this.user.account,
+            cipherText: newPassword,
+          }
+          console.log('登录请求参数', data)
+          loginAccount(data).then(res => {
+            if (res.data.rs === '1') {
+              console.log('登录成功', res.data)
+              Message('登录成功')
+            } else {
+              // Message(res.data.rs)
+              MessageBox.alert(res.data.rs)
+            }
+          })
+        } else {
+          console.log('error submit!!')
+          return false
         }
-        // 验证通过,提交登录
-        this.login()
       })
+      // validate 方法是异步的
+      // this.$refs['login-form'].validate(valid => {
+      //   // 如果表单验证失败，停止请求提交
+      //   if (!valid) {
+      //     return
+      //   }
+      //   // 验证通过,提交登录
+      //   this.login()
+      // })
     },
 
     login() {
       // 登录按钮的loding...
       this.loginLoding = true
-      // 接口封装后
-      login(this.user)
+      let data = {
+        tellerNo: '',
+        cipherText: '',
+      }
+      loginAccount(data)
         .then(res => {
           // 登录成功
           // console.log(res)

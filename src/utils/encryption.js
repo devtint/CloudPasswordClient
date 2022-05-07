@@ -5,7 +5,7 @@ export function encryption(algorithm, pkbase64, data) {
     //密码前面添加4位长度
     let newPassword = PrefixZero(data.length * 2, 4)
     newPassword = newPassword + stringToHex(data)
-    // console.log('newPassword', newPassword)
+    console.log('newPassword', newPassword)
 
     //使用标准RSA算法处理
     let privateKey =
