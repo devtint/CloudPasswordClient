@@ -36,6 +36,7 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   PageHeader,
+  Avatar,
 } from 'element-ui'
 
 const components = [
@@ -75,6 +76,7 @@ const components = [
   Breadcrumb,
   BreadcrumbItem,
   PageHeader,
+  Avatar,
 ]
 
 function install(Vue) {

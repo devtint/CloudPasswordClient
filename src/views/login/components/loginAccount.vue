@@ -153,7 +153,19 @@ export default {
           loginAccount(data).then(res => {
             if (res.data.rs === '1') {
               console.log('登录成功', res.data)
-              Message('登录成功')
+              window.localStorage.setItem('user', JSON.stringify(res.data))
+              window.localStorage.setItem(
+                'enterpriseName',
+                res.data.TELLERCOMPANY
+              )
+              window.localStorage.setItem('userName', res.data.TELLERNAME)
+              window.localStorage.setItem('memberID', res.data.memberID)
+
+              Message({
+                message: '登录成功',
+                type: 'success',
+              })
+              this.$router.push('/')
             } else {
               // Message(res.data.rs)
               MessageBox.alert(res.data.rs)

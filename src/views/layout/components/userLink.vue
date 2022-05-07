@@ -36,36 +36,84 @@
     </el-link> -->
     <!-- <el-button type="text">登录</el-button>
     <el-button type="primary">立即注册</el-button> -->
-    <a
-      href="javascript:void 0;"
-      hotrep="hp.pc.topnav.login"
-      rel="nofollow"
-      class="login_btn"
-      @click="toLogin"
-      >登录</a
-    >
-    <a
-      href="javascript:void 0;"
-      hotrep="hp.pc.topnav.register"
-      rel="nofollow"
-      class="register_btn"
-      @click="toRegister"
-      >免费注册</a
-    >
+    <div class="loginBox" v-if="!isLogin">
+      <a
+        href="javascript:void 0;"
+        hotrep="hp.pc.topnav.login"
+        rel="nofollow"
+        class="login_btn"
+        @click="toLogin"
+        >登录</a
+      >
+      <a
+        href="javascript:void 0;"
+        hotrep="hp.pc.topnav.register"
+        rel="nofollow"
+        class="register_btn"
+        @click="toRegister"
+        >免费注册</a
+      >
+    </div>
+    <el-link href="javascript:;" :underline="false" v-else>
+      <div class="avatar-wrap">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <!-- <i class="icon icon-zhanghao"></i> -->
+            <!-- <el-avatar size="large" :src="circleUrl"></el-avatar> -->
+
+            <div class="pls-nav-bubble-wrap pls-nav-account">
+              <a href="javascript:void 0;" class="pls-nav-bubble-trigger"
+                ><i
+                  class="pls-nav-bubble-trigger-icon"
+                  style="
+                    background-image: url('https://cloudcache.tencentcs.com/qcloud/portal/kit/images/default-avatar.de71167d.svg');
+                  "
+                ></i
+              ></a>
+            </div>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="toLogin">{{
+              userName
+            }}</el-dropdown-item>
+            <el-dropdown-item @click.native="toLogin"
+              >ID:{{ memberID }}</el-dropdown-item
+            >
+            <el-dropdown-item @click.native="logout" v-if="isLogin"
+              >退出登录</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </el-link>
   </div>
 </template>
 
 <script>
+import { BASE_HREF } from '@/global/config'
 export default {
   name: 'userLink',
   components: {},
   props: {},
   data() {
-    return {}
+    return {
+      isLogin: false,
+      userName: '',
+      memberID: '',
+      // circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+      circleUrl:
+        'https://cloudcache.tencentcs.com/qcloud/portal/kit/images/default-avatar.de71167d.svg',
+    }
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+    this.userName = window.localStorage.getItem('userName')
+    this.memberID = window.localStorage.getItem('memberID')
+    if (this.memberID) {
+      this.isLogin = true
+    }
+  },
   mounted() {},
   methods: {
     toMyOrder() {
@@ -77,12 +125,22 @@ export default {
     toRegister() {
       this.$router.push('/register')
     },
+    logout() {
+      window.localStorage.removeItem('user')
+      window.localStorage.removeItem('userName')
+      window.localStorage.removeItem('memberID')
+      window.location.href = BASE_HREF
+      Message({
+        message: '已退出登录',
+        type: 'success',
+      })
+    },
   },
 }
 </script>
 
 <style scoped lang="less">
-.userLink {
+.userLink .loginBox {
   display: flex;
   align-items: center;
   .el-link {
@@ -127,5 +185,24 @@ a {
     cursor: pointer;
     background-color: #65acf2;
   }
+}
+.el-link {
+  font-size: 25px;
+  color: #409eff;
+  margin-right: 20px;
+}
+.pls-nav-bubble-trigger-icon {
+  display: block;
+  box-sizing: border-box;
+  width: 38px;
+  height: 38px;
+  border: 2px solid #fff;
+  background-image: linear-gradient(0deg, #ffffff 0%, #f3f5f8 100%);
+  box-shadow: 8px 8px 20px 0 rgb(55 99 170 / 30%);
+  border-radius: 50%;
+  background: #f3f5f8;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 </style>

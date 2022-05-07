@@ -103,7 +103,7 @@
 <script>
 import { encryption } from '@/utils'
 import { getPK, registerAccount } from '@/api/user'
-import { Message,MessageBox } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'register',
   components: {},
@@ -258,7 +258,11 @@ export default {
           registerAccount(data).then(res => {
             if (res.data.rs === '1') {
               console.log('注册成功')
-              Message('注册成功')
+              Message({
+                message: '注册成功!',
+                type: 'success',
+              })
+              this.$router.push('login')
             } else {
               // Message(res.data.rs)
               MessageBox.alert(res.data.rs)

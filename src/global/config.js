@@ -16,6 +16,7 @@
 let BASE_URL = ''
 let BASE_DOMAIN = ''
 let BASE_COMNAME = ''
+let BASE_HREF = ''
 const TIME_OUT = 10000
 
 console.log('process.env.NODE_ENV', process.env.NODE_ENV)
@@ -28,6 +29,7 @@ if (process.env.NODE_ENV === 'development') {
   BASE_URL = 'http://www.paytunnel.cn/CloudPasswordServer'
   BASE_DOMAIN = 'http://www.paytunnel.cn'
   BASE_COMNAME = '广州睿颢软件技术有限公司'
+  BASE_HREF = 'http://www.paytunnel.cn/CloudPasswordClient'
 } else {
   BASE_URL = 'http://www.paytunnel.cn/CloudPasswordServer'
   BASE_DOMAIN = 'http://www.paytunnel.cn'
@@ -36,4 +38,4 @@ if (process.env.NODE_ENV === 'development') {
 
 console.log('BASE_URL', BASE_URL)
 
-export { BASE_URL, BASE_DOMAIN, BASE_COMNAME, TIME_OUT }
+export { BASE_URL, BASE_DOMAIN, BASE_COMNAME, BASE_HREF, TIME_OUT }
