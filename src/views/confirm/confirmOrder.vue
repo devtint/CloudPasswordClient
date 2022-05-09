@@ -80,6 +80,7 @@
 
 <script>
 import { useOrderStore } from '@/store/order'
+import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'confirmOrder',
   components: {},
@@ -116,6 +117,31 @@ export default {
     },
     submitOrder() {
       console.log('submitOrder')
+      // 验证是否登录
+      let user = window.localStorage.getItem('user')
+      if (!user) {
+        MessageBox.confirm('接下来的操作需要用户登录,是否登录?', '登录提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            this.$router.push('/login')
+            Message({
+              type: 'success',
+              message: '跳转到登录页面',
+            })
+          })
+          .catch(() => {
+            Message({
+              type: 'info',
+              message: '已取消登录',
+            })
+          })
+      } else {
+        // 跳转到订单页面
+        this.$router.push('/order')
+      }
     },
   },
 }
