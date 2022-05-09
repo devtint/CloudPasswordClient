@@ -83,6 +83,7 @@ export default {
             return {
               ...item,
               goodsName: item.srlID,
+              // validity: item.priceAttrValueList.split('tps.')[1],
               validity: item.priceAttrValueList,
               price: item.priceAfterDiscount,
               num: 1,

@@ -80,6 +80,7 @@
 
 <script>
 import { useOrderStore } from '@/store/order'
+import { createOrder } from '@/api/order'
 import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'confirmOrder',
@@ -89,6 +90,7 @@ export default {
     return {
       title: '',
       orderData: [],
+      prdNum: 1,
       totalPrice: 0,
     }
   },
@@ -113,6 +115,7 @@ export default {
   methods: {
     handleChange(value) {
       console.log(value)
+      this.prdNum = value
       this.totalPrice = value * this.currentGoods.price
     },
     submitOrder() {
@@ -139,8 +142,87 @@ export default {
             })
           })
       } else {
-        // 跳转到订单页面
-        this.$router.push('/order')
+        // 创建订单
+        // actNo:1493-20210618083212-00040780-0217
+        // transChanelCate:企业客户工作站
+        // transChanelID:北京江南天安科技有限公司
+        // buyerCmpCate:采购云密码服务的企业
+        // purchaseCompanyName:广州睿颢软件技术有限公司
+        // companyName:北京江南天安科技有限公司
+        // saleCmpName:北京江南天安科技有限公司
+        // productName:云密钥托管服务
+        // srlID:完整性校验密钥
+        // 密码算法:3DES-128Bits
+        // 有效期限:1年
+        // prdUnitPrc:120.00
+        // prdNum:1
+        // totalPrice:120.00
+        // remark:
+        let apiData = {
+          actNo: this.currentGoods.actNo,
+          transChanelCate: this.currentGoods.transChanelCate,
+          transChanelID: this.currentGoods.transChanelID,
+          buyerCmpCate: this.currentGoods.buyerCmpCate,
+          purchaseCompanyName: window.localStorage.getItem('enterpriseName'),
+          companyName: this.currentGoods.companyName,
+          saleCmpName: this.currentGoods.saleCmpName,
+          productName: this.currentGoods.productName,
+          srlID: this.currentGoods.goodsName,
+          密码算法: '3DES-128Bits',
+          有效期限: this.currentGoods.validity,
+          prdUnitPrc: this.currentGoods.priceAfterDiscount,
+          prdNum: this.prdNum,
+          totalPrice: this.totalPrice,
+          remark: '',
+        }
+        console.log('apiData', apiData)
+        createOrder(apiData)
+          .then(res => {
+            if (res.data.rs === '1') {
+              console.log('createOrder success', res.data)
+              Message({
+                type: 'success',
+                message: '下单成功!',
+              })
+              // 跳转到订单页面
+              this.$router.push('/order')
+            } else {
+              console.log('createOrder error', res.data.rs)
+              Message({
+                type: 'error',
+                message: res.data.rs,
+              })
+            }
+          })
+          .catch(err => {
+            // 如果403,则重新登录
+            if (err.response.status === 403) {
+              MessageBox.confirm('登录已失效,是否重新登录?', '登录提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+              })
+                .then(() => {
+                  // 清除登录信息
+                  window.localStorage.removeItem('user')
+                  window.localStorage.removeItem('enterpriseName')
+                  window.localStorage.removeItem('userName')
+                  window.localStorage.removeItem('memberID')
+                  // 跳转到登录页面
+                  this.$router.push('/login')
+                  Message({
+                    type: 'success',
+                    message: '跳转到登录页面',
+                  })
+                })
+                .catch(() => {
+                  Message({
+                    type: 'info',
+                    message: '已取消登录',
+                  })
+                })
+            }
+          })
       }
     },
   },
