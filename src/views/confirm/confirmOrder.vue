@@ -6,9 +6,9 @@
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item :to="{ path: '/products' }">{{
-            orderData[0].productName
+            currentGoods.productName
           }}</el-breadcrumb-item>
-          <el-breadcrumb-item>{{ orderData[0].srlID }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ currentGoods.srlID }}</el-breadcrumb-item>
         </el-breadcrumb>
         <!-- 面包屑路径导航  end -->
       </div>
@@ -18,27 +18,62 @@
           <el-table :data="orderData" stripe style="width: 100%">
             <el-table-column
               align="center"
-              prop="goodsName"
+              prop="srlID"
               label="商品名称"
               width="250"
             >
             </el-table-column>
             <el-table-column
               align="center"
-              prop="validity"
+              prop="priceAttrValueList"
               label="有效期"
               width="180"
             >
-            </el-table-column>
-            <el-table-column prop="price" label="单价" width="100">
               <template slot-scope="scope">
-                <div class="priceStyle">￥{{ scope.row.price }}</div>
+                <el-select
+                  v-model="validityValue"
+                  placeholder="请选择"
+                  @change="changeValidity"
+                >
+                  <el-option
+                    v-for="item in validityOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="algorithms"
+              label="密码算法"
+              width="180"
+            >
+              <template slot-scope="scope">
+                <el-select v-model="algorithmsValue" placeholder="请选择">
+                  <el-option
+                    v-for="item in algorithmsOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column prop="priceAfterDiscount" label="单价" width="100">
+              <template slot-scope="scope">
+                <div class="priceStyle">
+                  ￥{{ scope.row.priceAfterDiscount }}
+                </div>
               </template>
             </el-table-column>
             <el-table-column align="center" label="数量" width="180">
               <template slot-scope="scope">
                 <el-input-number
-                  v-model="scope.row.num"
+                  v-model="prdNum"
                   :min="1"
                   size="mini"
                   @change="handleChange"
@@ -53,7 +88,7 @@
             >
               <template slot-scope="scope">
                 <div class="priceStyle">
-                  ￥{{ scope.row.price * scope.row.num }}
+                  ￥{{ Number(scope.row.priceAfterDiscount) * prdNum }}
                 </div>
               </template>
             </el-table-column>
@@ -79,8 +114,9 @@
 </template>
 
 <script>
+import { useHomeStore } from '@/store/home'
 import { useOrderStore } from '@/store/order'
-import { createOrder } from '@/api/order'
+import { createOrder, getCryptographicAlgorithmList } from '@/api/order'
 import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'confirmOrder',
@@ -89,30 +125,104 @@ export default {
   data() {
     return {
       title: '',
+      productInfo: '',
       orderData: [],
       prdNum: 1,
       totalPrice: 0,
+      validityValue: '',
+      validityOptions: [],
+      algorithmsValue: '',
+      algorithmsOptions: [],
     }
   },
   computed: {
     currentGoods() {
       return useOrderStore().getCurrentGoods
     },
+    productList() {
+      return useHomeStore().getStoreProductList
+    },
   },
-  watch: {},
+  watch: {
+    orderData() {
+      this.totalPrice =
+        Number(this.orderData[0].priceAfterDiscount) * this.prdNum
+    },
+  },
   created() {
     // 获取路由传过来的参数
-    this.title = this.$route.params.title
-    this.totalPrice = this.currentGoods.price
+    // this.title = this.$route.params.title
+    // this.totalPrice = this.currentGoods.price
     // 存入数组
-    let arrData = []
-    arrData.push(this.currentGoods)
-    this.orderData = arrData
-    console.log('confirmOrder created', this.orderData)
+    // let arrData = []
+    // arrData.push(this.currentGoods)
+    // this.orderData = arrData
+    // console.log('confirmOrder created', this.orderData)
     // this.orderData = this.currentGoods
+    this.getProductInfo(this.currentGoods.srlID)
+    // 获取加密算法列表
+    this.getAlgorithmList()
   },
   mounted() {},
   methods: {
+    changeValidity(value) {
+      // 根据有效期替换数据
+      let orderDataNew = []
+      orderDataNew = this.productInfo.filter(item => {
+        if (item.priceAttrValueList === value) {
+          return {
+            ...item,
+          }
+        }
+      })
+      this.orderData = orderDataNew
+      console.log('changeValidity', this.orderData)
+    },
+    getProductInfo(id) {
+      let descList = []
+      this.productList.forEach(e => {
+        if (e.srlID === id) {
+          descList.push(e)
+        }
+      })
+      this.productInfo = descList
+      // 转为数组array
+      // this.orderData = this.orderData.concat(descList[0])
+      this.orderData = this.orderData.concat(descList[0])
+      this.totalPrice = this.orderData[0].priceAfterDiscount
+
+      this.validityValue = this.orderData[0].priceAttrValueList
+      this.validityOptions = this.productInfo.map(item => {
+        return {
+          value: item.priceAttrValueList,
+          label: item.priceAttrValueList,
+        }
+      })
+      console.log('descList:', descList)
+      console.log('this.orderData:', this.orderData, typeof this.orderData)
+    },
+    getAlgorithmList() {
+      let params = {
+        productId: this.currentGoods.productName,
+        srlId: this.currentGoods.srlID,
+        type: '密码算法',
+      }
+      console.log('getAlgorithmList params:', params)
+      getCryptographicAlgorithmList(params).then(res => {
+        if (res.data.rs === '1') {
+          let lists = res.data.queryCryptographicAlgorithmList
+          this.algorithmsValue = lists[0].specAttr
+          this.algorithmsOptions = lists.map(item => {
+            return {
+              value: item.specAttr,
+              label: item.specAttr,
+            }
+          })
+        } else {
+          console.log(res.data.rs)
+        }
+      })
+    },
     handleChange(value) {
       console.log(value)
       this.prdNum = value
@@ -159,18 +269,18 @@ export default {
         // totalPrice:120.00
         // remark:
         let apiData = {
-          actNo: this.currentGoods.actNo,
-          transChanelCate: this.currentGoods.transChanelCate,
-          transChanelID: this.currentGoods.transChanelID,
-          buyerCmpCate: this.currentGoods.buyerCmpCate,
+          actNo: this.orderData[0].actNo,
+          transChanelCate: this.orderData[0].transChanelCate,
+          transChanelID: this.orderData[0].transChanelID,
+          buyerCmpCate: this.orderData[0].buyerCmpCate,
           purchaseCompanyName: window.localStorage.getItem('enterpriseName'),
-          companyName: this.currentGoods.companyName,
-          saleCmpName: this.currentGoods.saleCmpName,
-          productName: this.currentGoods.productName,
-          srlID: this.currentGoods.goodsName,
-          密码算法: '3DES-128Bits',
-          有效期限: this.currentGoods.validity,
-          prdUnitPrc: this.currentGoods.priceAfterDiscount,
+          companyName: this.orderData[0].companyName,
+          saleCmpName: this.orderData[0].saleCmpName,
+          productName: this.orderData[0].productName,
+          srlID: this.orderData[0].srlID,
+          密码算法: this.algorithmsValue,
+          有效期限: this.orderData[0].priceAttrValueList,
+          prdUnitPrc: this.orderData[0].priceAfterDiscount,
           prdNum: this.prdNum,
           totalPrice: this.totalPrice,
           remark: '',

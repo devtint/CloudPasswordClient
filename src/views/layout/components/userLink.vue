@@ -79,6 +79,9 @@
             <el-dropdown-item @click.native="toLogin"
               >ID:{{ memberID }}</el-dropdown-item
             >
+            <el-dropdown-item @click.native="toMyOrder"
+              >我的订单</el-dropdown-item
+            >
             <el-dropdown-item @click.native="logout" v-if="isLogin"
               >退出登录</el-dropdown-item
             >

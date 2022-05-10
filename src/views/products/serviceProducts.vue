@@ -17,16 +17,17 @@
           :xs="24"
           :sm="24"
           :md="12"
-          :lg="6"
+          :lg="8"
           :xl="1"
           v-for="(item, index) in productList"
           :key="index"
         >
           <el-card>
             <div class="cardMain">
-              <h3>{{ item.goodsName }}</h3>
-              <p>有效期: {{ item.validity }}</p>
-              <p class="price">￥{{ item.price }}</p>
+              <h3>{{ item }}</h3>
+              <!-- <p>有效期: {{ item.validity }}</p> -->
+              <p>简单详情介绍</p>
+              <!-- <p class="price">￥{{ item.price }}</p> -->
               <el-button type="warning" size="small" plain @click="payPro(item)"
                 >购买</el-button
               >
@@ -79,16 +80,43 @@ export default {
         if (res.data.rs === '1') {
           let productList = res.data.queryServiceProductList
           console.log('productList:', productList)
-          this.productList = productList.map(item => {
-            return {
-              ...item,
-              goodsName: item.srlID,
-              // validity: item.priceAttrValueList.split('tps.')[1],
-              validity: item.priceAttrValueList,
-              price: item.priceAfterDiscount,
-              num: 1,
+          useHomeStore().setStoreProductList(productList)
+          // this.productList = productList.map(item => {
+          //   return {
+          //     ...item,
+          //     goodsName: item.srlID,
+          //     // validity: item.priceAttrValueList.split('tps.')[1],
+          //     validity: item.priceAttrValueList,
+          //     price: item.priceAfterDiscount,
+          //     num: 1,
+          //   }
+          // })
+          // 产品列表
+          let lists = []
+          productList.forEach(e => {
+            // srlID去重
+            if (!lists.includes(e.srlID)) {
+              lists.push(e.srlID)
             }
           })
+          this.productList = lists
+          console.log('lists:', lists)
+
+          // 过滤对应产品的有效期列表
+          // let newLists = []
+          // // 产品对应的有效期和价格列表
+          // productList.forEach(e => {
+          //   lists.forEach(item => {
+          //     if (e.srlID === item) {
+          //       newLists.push({
+          //         goodsName: e.srlID,
+          //         validity: e.priceAttrValueList,
+          //         price: e.priceAfterDiscount,
+          //       })
+          //     }
+          //   })
+          // })
+          // console.log('newLists:', newLists)
         } else {
           console.log(res.data.rs)
         }
@@ -97,15 +125,17 @@ export default {
     payPro(item) {
       // price和num 转为数字类型
       let currentGoodsNew = {
-        ...item,
-        price: Number(item.price),
-        num: Number(item.num),
+        srlID: item,
+        productName: this.curentProduct.title,
+
       }
+
       useOrderStore().setCurrentGoods(currentGoodsNew)
       this.$router.push({
         path: '/confirm',
         params: {
           title: this.title,
+          srlID: item,
         },
       })
     },
@@ -126,7 +156,7 @@ export default {
   margin: 1rem;
   text-align: center;
   .cardMain {
-    margin: 1rem;
+    padding: 1rem;
     p {
       font-size: small;
       color: #999;
@@ -136,6 +166,11 @@ export default {
     .price {
       font-size: large;
       color: #ff6600;
+    }
+    .el-button {
+      width: 100%;
+      margin-top: 1rem;
+      margin-bottom: -2rem;
     }
   }
 }

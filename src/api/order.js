@@ -16,3 +16,12 @@ export const createOrder = data => {
     data,
   })
 }
+
+// (查询密钥算法列表)queryCryptographicAlgorithmList
+export const getCryptographicAlgorithmList = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryCryptographicAlgorithmList',
+    params,
+  })
+}

@@ -46,14 +46,47 @@
           >
             订单详情
           </el-button>
-          <el-button
+          <!-- <el-button
             type="text"
             size="small"
             @click="updatePayCredentials(scope.row.billNo)"
             v-if="scope.row.status == 1"
           >
             上传支付凭证
-          </el-button>
+          </el-button> -->
+          <el-upload
+            class="upload-demo"
+            action="#"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :before-remove="beforeRemove"
+            multiple
+            :limit="3"
+            :on-exceed="handleExceed"
+            :file-list="fileList"
+            :list-type="listType"
+            v-if="scope.row.status == 1"
+          >
+            <el-button
+              type="text"
+              size="small"
+              @click="updatePayCredentials(scope.row.billNo)"
+              >选取文件</el-button
+            >
+            <el-button
+              style="margin-left: 10px"
+              size="small"
+              type="text"
+              @click="submitUpload"
+              >上传支付凭证</el-button
+            >
+            <!-- <div slot="tip" class="el-upload__tip">
+              只能上传jpg/png文件，且不超过500kb
+            </div> -->
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="" />
+          </el-dialog>
         </template>
       </el-table-column>
     </el-table>
@@ -76,7 +109,7 @@
 <script>
 //导入js文件(文件脚本内容在下文)
 import { getRowspanMethod } from '@/utils'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 
 import { useOrderStore } from '@/store/order'
 export default {
@@ -87,6 +120,19 @@ export default {
     return {
       currentPage: 1,
       tableData: [],
+      dialogImageUrl: '',
+      dialogVisible: false,
+      listType: 'text',
+      fileList: [
+        // {
+        //   name: 'food.jpeg',
+        //   url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+        // },
+        // {
+        //   name: 'food2.jpeg',
+        //   url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+        // },
+      ],
     }
   },
   computed: {
@@ -212,6 +258,27 @@ export default {
       console.log(this.tabStatus)
       Message(`当前页: ${val}`)
     },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      console.log(file)
+      // this.listType = 'picture'
+      this.dialogImageUrl =
+        'http://www.paytunnel.cn/CloudPasswordClient/#/' + file.name
+      this.dialogVisible = true
+    },
+    handleExceed(files, fileList) {
+      MessageBox.warning(
+        `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
+          files.length + fileList.length
+        } 个文件`
+      )
+    },
+    beforeRemove(file, fileList) {
+      return MessageBox.confirm(`确定移除 ${file.name}？`)
+    },
+    submitUpload(){}
   },
 }
 </script>
