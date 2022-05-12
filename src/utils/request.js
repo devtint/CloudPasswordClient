@@ -4,6 +4,7 @@ import axios from 'axios'
 import router from '@/router' //引入router
 import qs from 'qs' //引入qs模块，用于序列化post请求参数
 import JSONBig from 'json-bigint'
+import { Message, MessageBox } from 'element-ui'
 
 // import wx from 'weixin-js-sdk'
 
@@ -113,6 +114,30 @@ request.interceptors.response.use(
     // console.log('响应结果', res.data.rs)
     // 如果rs=-5 提示退回到菜单
     if (res.data.rs === '-5') {
+      MessageBox.confirm('登录已失效,是否重新登录?', '登录提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          // 清除登录信息
+          window.localStorage.removeItem('user')
+          window.localStorage.removeItem('enterpriseName')
+          window.localStorage.removeItem('userName')
+          window.localStorage.removeItem('memberID')
+          // 跳转到登录页面
+          this.$router.push('/login')
+          Message({
+            type: 'success',
+            message: '跳转到登录页面',
+          })
+        })
+        .catch(() => {
+          Message({
+            type: 'info',
+            message: '已取消登录',
+          })
+        })
       // this.$toast(res.data.msg)
       // WeixinJSBridge.call('closeWindow')
       // setTimeout(function () {
@@ -142,6 +167,30 @@ request.interceptors.response.use(
     }
     // 如果rs=-6,提示跳转到登录
     if (res.data.rs === '-6') {
+      MessageBox.confirm('您还未登录,是否登录?', '登录提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          // // 清除登录信息
+          // window.localStorage.removeItem('user')
+          // window.localStorage.removeItem('enterpriseName')
+          // window.localStorage.removeItem('userName')
+          // window.localStorage.removeItem('memberID')
+          // 跳转到登录页面
+          this.$router.push('/login')
+          Message({
+            type: 'success',
+            message: '跳转到登录页面',
+          })
+        })
+        .catch(() => {
+          Message({
+            type: 'info',
+            message: '已取消登录',
+          })
+        })
       // this.$toast(res.data.msg)
       // Dialog.confirm({
       //   title: '提示',

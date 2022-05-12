@@ -17,7 +17,7 @@
           :xs="24"
           :sm="24"
           :md="12"
-          :lg="8"
+          :lg="6"
           :xl="1"
           v-for="(item, index) in productList"
           :key="index"
@@ -29,7 +29,7 @@
               <p>简单详情介绍</p>
               <!-- <p class="price">￥{{ item.price }}</p> -->
               <el-button type="warning" size="small" plain @click="payPro(item)"
-                >购买</el-button
+                >立即选购</el-button
               >
             </div>
           </el-card>
@@ -127,7 +127,6 @@ export default {
       let currentGoodsNew = {
         srlID: item,
         productName: this.curentProduct.title,
-
       }
 
       useOrderStore().setCurrentGoods(currentGoodsNew)
@@ -168,7 +167,7 @@ export default {
       color: #ff6600;
     }
     .el-button {
-      width: 100%;
+      width: 70%;
       margin-top: 1rem;
       margin-bottom: -2rem;
     }

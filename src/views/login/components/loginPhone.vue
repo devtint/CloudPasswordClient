@@ -34,7 +34,10 @@
       </el-form-item>
       <el-form-item prop="agree2">
         <div class="agreement">
-          <el-checkbox v-model="user.agree">我已阅读并同意用户协议</el-checkbox>
+          <el-checkbox v-model="user.agree"
+            >我已阅读并同意
+            <a class="userAgreement" :href="userAgreement">《用户协议》</a>
+          </el-checkbox>
           <el-link class="forgotPassword" href="javascript:;" @click="onForget"
             >忘记密码</el-link
           >
@@ -46,14 +49,14 @@
             class="login-btn"
             type="primary"
             @click="onLogin"
-            :loading="loginLoding"
+            :loading="loginLoading"
             >登录</el-button
           >
           <el-button
             class="login-btn"
             type="primary"
             @click="onRegister"
-            :loading="loginLoding"
+            :loading="loginLoading"
             >注册</el-button
           >
         </div>
@@ -71,6 +74,7 @@ export default {
   props: {},
   data() {
     return {
+      userAgreement: '#',
       codeText: '获取验证码',
       codeDisabled: false,
       user: {
@@ -79,7 +83,7 @@ export default {
         agree2: false, // 是否同意协议
       },
       // checked: false, // 是否同意协议的选中状态
-      loginLoding: false, // 登录的 loding 状态
+      loginLoading: false, // 登录的 loading 状态
       formRules: {
         // 表单验证规则配置
         // 要验证的数据名称：规则列表【】
@@ -164,8 +168,8 @@ export default {
     },
 
     login() {
-      // 登录按钮的loding...
-      this.loginLoding = true
+      // 登录按钮的loading...
+      this.loginLoading = true
       // 接口封装后
       login(this.user)
         .then(res => {
@@ -176,8 +180,8 @@ export default {
             type: 'success',
           })
 
-          // 关闭 loding...
-          this.loginLoding = false
+          // 关闭 loading...
+          this.loginLoading = false
 
           // 将接口返回的用户相关数据放到本地存储，方便应用数据共享
           // window.localStorage.setItem('user', res.data.data)
@@ -197,8 +201,8 @@ export default {
           console.log('登录失败', err)
           this.$message.error('登录失败，手机号或者验证码错误!')
 
-          // 关闭 loding...
-          this.loginLoding = false
+          // 关闭 loading...
+          this.loginLoading = false
         })
       // 处理后端响应结果
       //   成功:xxx
@@ -258,6 +262,13 @@ export default {
   align-items: center;
   .get-btn {
     margin-left: 10px;
+  }
+}
+.userAgreement {
+  text-decoration: none;
+  cursor: pointer;
+  &:hover {
+    color: #00a0e9;
   }
 }
 </style>

@@ -188,7 +188,28 @@ export default {
       this.productInfo = descList
       // 转为数组array
       // this.orderData = this.orderData.concat(descList[0])
-      this.orderData = this.orderData.concat(descList[0])
+      // 如果priceAttrValueList值中有.  进行分割为algorithmList/tps/validity
+      let validityList = []
+      let algorithmList = []
+      let tpsList = []
+      this.productInfo.forEach(e => {
+        if (e.priceAttrValueList.includes('.')) {
+          let arr = e.priceAttrValueList.split('.')
+          algorithmList.push(arr[0])
+          tpsList.push(arr[1])
+          validityList.push(arr[2])
+
+          // 有限期替换为arr[2]
+          // e.priceAttrValueList = arr[2]
+
+        } else {
+          validityList.push(e.priceAttrValueList)
+          algorithmList.push('')
+          tpsList.push('')
+        }
+      })
+      this.orderData = this.orderData.concat(this.productInfo[0])
+
       this.totalPrice = this.orderData[0].priceAfterDiscount
 
       this.validityValue = this.orderData[0].priceAttrValueList

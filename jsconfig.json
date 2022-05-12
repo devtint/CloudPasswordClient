@@ -1,0 +1,10 @@
+// jsconfig.json
+{
+  "vueCompilerOptions": {
+    "experimentalShamefullySupportOptionsApi": false,
+    "experimentalDisableTemplateSupport": true
+  }
+  // "compilerOptions": {
+  //   "jsx": "preserve"
+  // }
+}
