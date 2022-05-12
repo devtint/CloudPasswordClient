@@ -8,7 +8,12 @@
     >
       <el-table-column prop="billNo" label="订单编号" width="200">
       </el-table-column>
-      <el-table-column prop="time" label="下单时间" width="180">
+      <el-table-column prop="transDate" label="下单时间" width="180">
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.transDate + ' ' + scope.row.transTime }}
+          </div>
+        </template>
       </el-table-column>
       <el-table-column prop="goodsName" label="商品名称"> </el-table-column>
       <el-table-column prop="Validity" label="有效期" width="80">
@@ -18,21 +23,24 @@
       <el-table-column prop="discount" label="折扣" width="80">
       </el-table-column>
       <el-table-column prop="subtotal" label="小计" width="120">
+        <template slot-scope="scope">
+          <div>￥{{ scope.row.totalPrice }}</div>
+        </template>
       </el-table-column>
       <el-table-column prop="status" label="状态" width="120">
         <template slot-scope="scope">
           <div class="statusStyle">
-            <span v-if="scope.row.status == '1'" class="warning"
-              ><i class="el-icon-warning"></i> 等待支付</span
+            <span v-if="scope.row.status == '等待支付'" class="warning"
+              ><i class="el-icon-warning"></i> {{ scope.row.status }}</span
             >
-            <span v-if="scope.row.status == '2'" class="info"
-              ><i class="el-icon-info"></i> 待付款确认</span
+            <span v-if="scope.row.status == '待付款确认'" class="info"
+              ><i class="el-icon-info"></i> {{ scope.row.status }}</span
             >
-            <span v-if="scope.row.status == '3'" class="goods"
-              ><i class="el-icon-s-goods"></i> 等待配货</span
+            <span v-if="scope.row.status == '等待配货'" class="goods"
+              ><i class="el-icon-s-goods"></i> {{ scope.row.status }}</span
             >
-            <span v-if="scope.row.status == '4'" class="success"
-              ><i class="el-icon-success"></i> 配货完成</span
+            <span v-if="scope.row.status == '配货完成'" class="success"
+              ><i class="el-icon-success"></i> {{ scope.row.status }}</span
             >
           </div>
         </template>
@@ -65,19 +73,13 @@
             :on-exceed="handleExceed"
             :file-list="fileList"
             :list-type="listType"
-            v-if="scope.row.status == 1"
+            @on-success="handleSuccess"
+            v-if="scope.row.status == '等待支付'"
           >
             <el-button
               type="text"
               size="small"
               @click="updatePayCredentials(scope.row.billNo)"
-              >选取文件</el-button
-            >
-            <el-button
-              style="margin-left: 10px"
-              size="small"
-              type="text"
-              @click="submitUpload"
               >上传支付凭证</el-button
             >
             <!-- <div slot="tip" class="el-upload__tip">
@@ -96,10 +98,10 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[5, 10, 50, 100]"
+        :page-sizes="[5, 10, 20, 50]"
         :page-size="5"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="totalData"
       >
       </el-pagination>
     </div>
@@ -112,6 +114,13 @@ import { getRowspanMethod } from '@/utils'
 import { Message, MessageBox } from 'element-ui'
 
 import { useOrderStore } from '@/store/order'
+import {
+  queryMyAllOrders,
+  queryMyToBePaidOrders,
+  queryMyCollectionConfirmOrders,
+  queryMyToBeDistributedOrders,
+  queryMyDisCompletedOrders,
+} from '@/api/order'
 export default {
   name: 'orderLists',
   components: {},
@@ -119,6 +128,8 @@ export default {
   data() {
     return {
       currentPage: 1,
+      numOfPerPage: 5,
+      totalData: 0,
       tableData: [],
       dialogImageUrl: '',
       dialogVisible: false,
@@ -155,74 +166,64 @@ export default {
   methods: {
     init(tabStatus) {
       console.log('init', tabStatus)
-      let initTableData = [
-        {
-          time: '2019-01-01 14:00:31',
-          billNo: '1342345635744781',
-          goodsName: '完整性校验密钥',
-          Validity: '1年',
-          price: '120.00',
-          num: '1',
-          discount: '1.0',
-          subtotal: '120.00',
-          status: '1',
-        },
-        {
-          time: '2019-01-01 14:00:32',
-          billNo: '1342345635744782',
-          goodsName: '完整性校验密钥',
-          Validity: '1年',
-          price: '120.00',
-          num: '1',
-          discount: '1.0',
-          subtotal: '120.00',
-          status: '2',
-        },
-        {
-          time: '2019-01-01 14:00:33',
-          billNo: '1342345635744783',
-          goodsName: '完整性校验密钥',
-          Validity: '1年',
-          price: '120.00',
-          num: '1',
-          discount: '1.0',
-          subtotal: '120.00',
-          status: '3',
-        },
-        {
-          time: '2019-01-01 14:00:33',
-          billNo: '1342345635744783',
-          goodsName: '完整性校验密钥',
-          Validity: '3年',
-          price: '360.00',
-          num: '1',
-          discount: '1.0',
-          subtotal: '360.00',
-          status: '3',
-        },
-        {
-          time: '2019-01-01 14:00:34',
-          billNo: '1342345635744784',
-          goodsName: '完整性校验密钥',
-          Validity: '1年',
-          price: '120.00',
-          num: '1',
-          discount: '1.0',
-          subtotal: '120.00',
-          status: '4',
-        },
-      ]
-      if (tabStatus === '0') {
-        this.tableData = Object.assign(initTableData)
-      } else {
-        let tableData = initTableData.filter(item => {
-          if (item.status === tabStatus) {
-            return true
-          }
-          return false
-        })
-        this.tableData = tableData
+      let params = {
+        currentPage: this.currentPage,
+        numOfPerPage: this.numOfPerPage,
       }
+      if (tabStatus === '全部') {
+        this.getMyOrders(
+          tabStatus,
+          queryMyAllOrders(params),
+          'queryMyAllOrders'
+        )
+      } else if (tabStatus === '等待支付') {
+        this.getMyOrders(
+          tabStatus,
+          queryMyToBePaidOrders(params),
+          'queryMyToBePaidOrders'
+        )
+      } else if (tabStatus === '待收款确认') {
+        this.getMyOrders(
+          tabStatus,
+          queryMyCollectionConfirmOrders(params),
+          'queryMyCollectionConfirmOrders'
+        )
+      } else if (tabStatus === '等待配货') {
+        this.getMyOrders(
+          tabStatus,
+          queryMyToBeDistributedOrders(params),
+          'queryMyToBeDistributedOrders'
+        )
+      } else if (tabStatus === '配货完成') {
+        this.getMyOrders(
+          tabStatus,
+          queryMyDisCompletedOrders(params),
+          'queryMyDisCompletedOrders'
+        )
+      }
+      // if (tabStatus === '全部') {
+      //   this.tableData = Object.assign(initTableData)
+      // } else {
+      //   let tableData = initTableData.filter(item => {
+      //     if (item.status === tabStatus) {
+      //       return true
+      //     }
+      //     return false
+      //   })
+      //   this.tableData = tableData
+      // }
+    },
+    getMyOrders(tabStatus, orderFn, dataName) {
+      console.log(tabStatus, '订单')
+      orderFn.then(res => {
+        if (res.data.rs !== '1') {
+          console.log('获取订单失败', res.data.rs)
+          return
+        }
+        console.log(`${dataName}订单列表`, res.data[dataName])
+        this.tableData = res.data[dataName]
+        this.totalData = res.data[`${dataName}_totalRecNum`]
+      })
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       //调用函数并导出需要的合并列函数 注意需要根据
@@ -251,11 +252,15 @@ export default {
       // })
     },
     handleSizeChange(val) {
+      this.numOfPerPage = val
+      this.currentPage = 1
+      this.init(this.currentTabs)
       console.log(`每页 ${val} 条`)
     },
     handleCurrentChange(val) {
+      this.currentPage = val
+      this.init(this.currentTabs)
       console.log(`当前页: ${val}`)
-      console.log(this.tabStatus)
       Message(`当前页: ${val}`)
     },
     handleRemove(file, fileList) {
@@ -278,7 +283,6 @@ export default {
     beforeRemove(file, fileList) {
       return MessageBox.confirm(`确定移除 ${file.name}？`)
     },
-    submitUpload(){}
   },
 }
 </script>
@@ -301,7 +305,7 @@ export default {
 .paginationBox {
   // 固定屏幕右下角
   position: fixed;
-  bottom: 50px;
+  bottom: 40px;
   right: 50px;
   background-color: #fff;
 }

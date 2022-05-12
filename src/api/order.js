@@ -25,3 +25,48 @@ export const getCryptographicAlgorithmList = params => {
     params,
   })
 }
+
+// (查询我的全部订单)queryMyAllOrders
+export const queryMyAllOrders = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryMyAllOrders',
+    params,
+  })
+}
+
+// (查询我的待支付订单)queryMyToBePaidOrders
+export const queryMyToBePaidOrders = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryMyToBePaidOrders',
+    params,
+  })
+}
+
+// (查询我的待商户收款确认订单)queryMyCollectionConfirmOrders
+export const queryMyCollectionConfirmOrders = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryMyCollectionConfirmOrders',
+    params,
+  })
+}
+
+// (查询我的待配货订单)queryMyToBeDistributedOrders
+export const queryMyToBeDistributedOrders = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryMyToBeDistributedOrders',
+    params,
+  })
+}
+
+// (查询我的配货完成订单)queryMyDisCompletedOrders
+export const queryMyDisCompletedOrders = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryMyDisCompletedOrders',
+    params,
+  })
+}

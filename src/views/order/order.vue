@@ -19,19 +19,19 @@
     <!-- tabs -->
     <div class="tabs">
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
-        <el-tab-pane label="全部" name="0">
+        <el-tab-pane label="全部" name="全部">
           <!-- <order-lists></order-lists> -->
         </el-tab-pane>
-        <el-tab-pane label="等待支付" name="1">
+        <el-tab-pane label="等待支付" name="等待支付">
           <!-- <order-lists></order-lists> -->
         </el-tab-pane>
-        <el-tab-pane label="待收款确认" name="2">
+        <el-tab-pane label="待收款确认" name="待收款确认">
           <!-- <order-lists></order-lists> -->
         </el-tab-pane>
-        <el-tab-pane label="等待配货" name="3">
+        <el-tab-pane label="等待配货" name="等待配货">
           <!-- <order-lists></order-lists> -->
         </el-tab-pane>
-        <el-tab-pane label="配货完成" name="4">
+        <el-tab-pane label="配货完成" name="配货完成">
           <!-- <order-lists></order-lists> -->
         </el-tab-pane>
       </el-tabs>
@@ -54,13 +54,13 @@ export default {
     return {
       searchValue: '',
       select: '',
-      activeName: '0',
+      activeName: '全部',
     }
   },
   computed: {},
   watch: {},
   created() {
-    useOrderStore().setCurentTabs('0')
+    useOrderStore().setCurentTabs('全部')
   },
   mounted() {},
   methods: {
