@@ -18,7 +18,7 @@
     <!-- 订单列表 -->
     <!-- tabs -->
     <div class="tabs">
-      <el-tabs v-model="activeName" @tab-click="handleTabClick">
+      <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
         <el-tab-pane label="全部" name="全部">
           <!-- <order-lists></order-lists> -->
         </el-tab-pane>

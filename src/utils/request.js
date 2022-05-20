@@ -66,6 +66,9 @@ request.interceptors.request.use(
     // 如果是 post 请求,并且请求的数据是对象格式
     if (config.method === 'post' && config.data) {
       if (config.headers['myType']) {
+        if (config.headers['myType'] === 'none') {
+          return
+        }
         config.headers['Content-Type'] = config.headers['myType']
         config.data = JSON.stringify(config.data)
       } else {
@@ -114,30 +117,18 @@ request.interceptors.response.use(
     // console.log('响应结果', res.data.rs)
     // 如果rs=-5 提示退回到菜单
     if (res.data.rs === '-5') {
-      MessageBox.confirm('登录已失效,是否重新登录?', '登录提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
+      MessageBox.alert('登录已失效,是否重新登录?', '登录提示', {
+        confirmButtonText: '立即登录',
+        callback: action => {
           // 清除登录信息
           window.localStorage.removeItem('user')
           window.localStorage.removeItem('enterpriseName')
           window.localStorage.removeItem('userName')
           window.localStorage.removeItem('memberID')
           // 跳转到登录页面
-          this.$router.push('/login')
-          Message({
-            type: 'success',
-            message: '跳转到登录页面',
-          })
-        })
-        .catch(() => {
-          Message({
-            type: 'info',
-            message: '已取消登录',
-          })
-        })
+          router.push('/login')
+        },
+      })
       // this.$toast(res.data.msg)
       // WeixinJSBridge.call('closeWindow')
       // setTimeout(function () {
@@ -167,30 +158,18 @@ request.interceptors.response.use(
     }
     // 如果rs=-6,提示跳转到登录
     if (res.data.rs === '-6') {
-      MessageBox.confirm('您还未登录,是否登录?', '登录提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          // // 清除登录信息
-          // window.localStorage.removeItem('user')
-          // window.localStorage.removeItem('enterpriseName')
-          // window.localStorage.removeItem('userName')
-          // window.localStorage.removeItem('memberID')
+      MessageBox.alert('登录已失效,是否重新登录?', '登录提示', {
+        confirmButtonText: '立即登录',
+        callback: action => {
+          // 清除登录信息
+          window.localStorage.removeItem('user')
+          window.localStorage.removeItem('enterpriseName')
+          window.localStorage.removeItem('userName')
+          window.localStorage.removeItem('memberID')
           // 跳转到登录页面
-          this.$router.push('/login')
-          Message({
-            type: 'success',
-            message: '跳转到登录页面',
-          })
-        })
-        .catch(() => {
-          Message({
-            type: 'info',
-            message: '已取消登录',
-          })
-        })
+          router.push('/login')
+        },
+      })
       // this.$toast(res.data.msg)
       // Dialog.confirm({
       //   title: '提示',

@@ -70,3 +70,25 @@ export const queryMyDisCompletedOrders = params => {
     params,
   })
 }
+
+// (上传文件)uploadFile
+// export const uploadFile = data => {
+//   return request({
+//     method: 'POST',
+//     headers: {
+//       // myType: 'multipart/form-data; boundary=<calculated when request is sent>',
+//       myType: 'none',
+//     },
+//     url: '/uploadFile',
+//     data,
+//   })
+// }
+
+// (上传订单支付凭证)uploadCredentials
+export const uploadCredentials = data => {
+  return request({
+    method: 'POST',
+    url: '/local/uploadCredentials',
+    data,
+  })
+}

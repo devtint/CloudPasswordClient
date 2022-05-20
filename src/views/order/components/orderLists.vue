@@ -2,6 +2,7 @@
   <div class="orderLists">
     <el-table
       :data="tableData"
+      v-loading="loading"
       border
       style="width: 100%"
       :span-method="objectSpanMethod"
@@ -30,16 +31,16 @@
       <el-table-column prop="status" label="状态" width="120">
         <template slot-scope="scope">
           <div class="statusStyle">
-            <span v-if="scope.row.status == '等待支付'" class="warning"
+            <span v-if="scope.row.status === '等待支付'" class="warning"
               ><i class="el-icon-warning"></i> {{ scope.row.status }}</span
             >
-            <span v-if="scope.row.status == '待付款确认'" class="info"
+            <span v-if="scope.row.status === '待收款确认'" class="info"
               ><i class="el-icon-info"></i> {{ scope.row.status }}</span
             >
-            <span v-if="scope.row.status == '等待配货'" class="goods"
+            <span v-if="scope.row.status === '等待配货'" class="goods"
               ><i class="el-icon-s-goods"></i> {{ scope.row.status }}</span
             >
-            <span v-if="scope.row.status == '配货完成'" class="success"
+            <span v-if="scope.row.status === '配货完成'" class="success"
               ><i class="el-icon-success"></i> {{ scope.row.status }}</span
             >
           </div>
@@ -54,37 +55,23 @@
           >
             订单详情
           </el-button>
-          <!-- <el-button
-            type="text"
-            size="small"
-            @click="updatePayCredentials(scope.row.billNo)"
-            v-if="scope.row.status == 1"
-          >
-            上传支付凭证
-          </el-button> -->
           <el-upload
-            class="upload-demo"
-            action="#"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            multiple
-            :limit="3"
-            :on-exceed="handleExceed"
-            :file-list="fileList"
-            :list-type="listType"
-            @on-success="handleSuccess"
-            v-if="scope.row.status == '等待支付'"
+            class="avatar-uploader"
+            :action="uploadURL"
+            :before-upload="beforeAvatarUpload"
+            name="file"
+            :show-file-list="true"
+            :on-success="handleAvatarSuccess"
+            v-if="scope.row.status === '等待支付'"
           >
-            <el-button
-              type="text"
-              size="small"
-              @click="updatePayCredentials(scope.row.billNo)"
+            <!-- <img
+              v-if="bannerRuleForm.imageUrl"
+              :src="bannerRuleForm.imageUrl"
+              class="avatar"
+            /> -->
+            <el-button type="text" size="small" @click="uploadimage(scope.row)"
               >上传支付凭证</el-button
             >
-            <!-- <div slot="tip" class="el-upload__tip">
-              只能上传jpg/png文件，且不超过500kb
-            </div> -->
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt="" />
@@ -109,6 +96,7 @@
 </template>
 
 <script>
+import { BASE_URL } from '@/global/config'
 //导入js文件(文件脚本内容在下文)
 import { getRowspanMethod } from '@/utils'
 import { Message, MessageBox } from 'element-ui'
@@ -120,6 +108,7 @@ import {
   queryMyCollectionConfirmOrders,
   queryMyToBeDistributedOrders,
   queryMyDisCompletedOrders,
+  uploadCredentials,
 } from '@/api/order'
 export default {
   name: 'orderLists',
@@ -127,6 +116,8 @@ export default {
   props: {},
   data() {
     return {
+      uploadURL: BASE_URL + '/uploadFile',
+      loading: false,
       currentPage: 1,
       numOfPerPage: 5,
       totalData: 0,
@@ -144,6 +135,10 @@ export default {
         //   url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
         // },
       ],
+      bannerRuleForm: {
+        imageUrl: '',
+      },
+      billNo: '',
     }
   },
   computed: {
@@ -166,6 +161,7 @@ export default {
   methods: {
     init(tabStatus) {
       console.log('init', tabStatus)
+      this.loading = true
       let params = {
         currentPage: this.currentPage,
         numOfPerPage: this.numOfPerPage,
@@ -223,6 +219,7 @@ export default {
         console.log(`${dataName}订单列表`, res.data[dataName])
         this.tableData = res.data[dataName]
         this.totalData = res.data[`${dataName}_totalRecNum`]
+        this.loading = false
       })
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
@@ -282,6 +279,84 @@ export default {
     },
     beforeRemove(file, fileList) {
       return MessageBox.confirm(`确定移除 ${file.name}？`)
+    },
+    uploadimage(item) {
+      console.log('上传图片', item)
+      this.billNo = item.billNo
+      // var fs = require('fs')
+      // let file = item.raw
+      // // // 创建表单对象 用于数据的格式  + 用于添加流文件！
+      // let formData = new FormData()
+      // formData.append('file', file)
+      // console.log('file', file)
+      // console.log('formData', formData)
+      // uploadFile(formData).then(res => {
+      //   // this.bannerRuleForm.imageUrl = res.data.url
+      //   console.log('uploadFile', res.data)
+      // })
+      // var myHeaders = new Headers()
+      // myHeaders.append('Cookie', 'JSESSIONID=601BFDF3548EA679481551DD42EE5882')
+      // myHeaders.append('res_token', 'adeebd32-5f54-4a88-9821-f38c44538dca')
+      // myHeaders.append('X-CSRF-TOKEN', '9681b818-bc33-4551-bded-35564058e4f9')
+      // var formdata = new FormData()
+      // formdata.append('file', file)
+      // var requestOptions = {
+      //   method: 'POST',
+      //   headers: myHeaders,
+      //   body: formdata,
+      //   redirect: 'follow',
+      // }
+      // fetch(
+      //   'http://www.paytunnel.cn/CloudPasswordServer/uploadFile',
+      //   requestOptions
+      // )
+      //   .then(response => response.text())
+      //   .then(result => console.log(result))
+      //   .catch(error => console.log('error', error))
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg' || 'image/png'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
+    },
+    handleAvatarSuccess(res, file) {
+      console.log('handleAvatarSuccess', res)
+      console.log('fileName:', res.fileName)
+      // billNo:14752205181524457686
+      // srlIDForEngine:Splenwise云密码服务平台
+      // busiNameForEngine:客户订单管理
+      // busiFunNameForEngine:上传订单支付凭证
+      // miniProcNameForEngine:上传订单支付凭证
+      // desResID:1501
+      // docIndex:1
+      // fileName:1652858705494.txt
+      let params = {
+        billNo: this.billNo,
+        srlIDForEngine: 'Splenwise云密码服务平台',
+        busiNameForEngine: '客户订单管理',
+        busiFunNameForEngine: '上传订单支付凭证',
+        miniProcNameForEngine: '上传订单支付凭证',
+        desResID: '1501',
+        docIndex: '1',
+        fileName: res.fileName,
+      }
+      console.log('params', params)
+      uploadCredentials(params).then(res => {
+        console.log('uploadCredentials', res)
+        if (res.data.ID_Positive === 'success') {
+          console.log('上传支付凭证成功')
+        } else {
+          console.log('上传支付凭证失败', res.data.ID_Positive)
+        }
+      })
+      // this.bannerRuleForm.imageUrl = URL.createObjectURL(file.raw)
     },
   },
 }

@@ -39,6 +39,7 @@ import {
   Avatar,
   Upload,
   Dialog,
+  Loading,
 } from 'element-ui'
 
 const components = [
@@ -81,6 +82,7 @@ const components = [
   Avatar,
   Upload,
   Dialog,
+  Loading,
 ]
 
 function install(Vue) {
