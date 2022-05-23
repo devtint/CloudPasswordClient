@@ -165,6 +165,7 @@ export default {
               window.localStorage.setItem('memberID', res.data.memberID)
 
               Message({
+                showClose: true,
                 message: '登录成功',
                 type: 'success',
               })

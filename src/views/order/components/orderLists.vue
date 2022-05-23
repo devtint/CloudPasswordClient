@@ -315,16 +315,21 @@ export default {
       //   .catch(error => console.log('error', error))
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg' || 'image/png'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
+      const isLt10M = file.size / 1024 / 1024 < 10
       if (!isJPG) {
-        this.$message.error('上传图片只能是 JPG 格式!')
+        Message({
+          message: '上传图片只能是 JPG或PNG 格式!',
+          type: 'warning',
+        })
       }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2MB!')
+      if (!isLt10M) {
+        Message({
+          message: '上传图片大小不能超过 10MB!',
+          type: 'warning',
+        })
       }
-      return isJPG && isLt2M
+      return isJPG && isLt10M
     },
     handleAvatarSuccess(res, file) {
       console.log('handleAvatarSuccess', res)
@@ -352,8 +357,19 @@ export default {
         console.log('uploadCredentials', res)
         if (res.data.ID_Positive === 'success') {
           console.log('上传支付凭证成功')
+          Message({
+            showClose: true,
+            message: '上传支付凭证成功',
+            type: 'success',
+          })
+          this.init(this.currentTabs)
         } else {
           console.log('上传支付凭证失败', res.data.ID_Positive)
+          Message({
+            showClose: true,
+            message: '上传支付凭证失败',
+            type: 'error',
+          })
         }
       })
       // this.bannerRuleForm.imageUrl = URL.createObjectURL(file.raw)
