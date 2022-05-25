@@ -92,3 +92,12 @@ export const uploadCredentials = data => {
     data,
   })
 }
+
+// (计算订单价格)countOrderPrice
+export const countOrderPrice = params => {
+  return request({
+    method: 'GET',
+    url: '/search/countOrderPrice',
+    params,
+  })
+}

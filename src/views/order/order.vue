@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       searchValue: '',
-      select: '',
+      select: '1',
       activeName: '全部',
     }
   },

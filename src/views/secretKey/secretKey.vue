@@ -27,7 +27,7 @@
     </main>
     <footer>
       <!-- 分页 -->
-      <div class="paginationBox">
+      <!-- <div class="paginationBox">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -38,7 +38,7 @@
           :total="totalData"
         >
         </el-pagination>
-      </div>
+      </div> -->
     </footer>
   </div>
 </template>

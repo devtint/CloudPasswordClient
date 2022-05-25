@@ -16,11 +16,15 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="goodsName" label="商品名称"> </el-table-column>
-      <el-table-column prop="Validity" label="有效期" width="80">
+      <el-table-column prop="srlID" label="商品名称"> </el-table-column>
+      <!-- <el-table-column prop="Validity" label="有效期" width="80">
+      </el-table-column> -->
+      <el-table-column prop="prdUnitPrc" label="单价" width="120">
+        <template slot-scope="scope">
+          <div>￥{{ scope.row.prdUnitPrc }}</div>
+        </template>
       </el-table-column>
-      <el-table-column prop="price" label="单价" width="120"> </el-table-column>
-      <el-table-column prop="num" label="数量" width="80"> </el-table-column>
+      <el-table-column prop="prdNum" label="数量" width="80"> </el-table-column>
       <el-table-column prop="discount" label="折扣" width="80">
       </el-table-column>
       <el-table-column prop="subtotal" label="小计" width="120">
@@ -48,13 +52,13 @@
       </el-table-column>
       <el-table-column prop="operation" label="操作">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             type="text"
             size="small"
             @click="toOrderDetail(scope.row.billNo)"
           >
             订单详情
-          </el-button>
+          </el-button> -->
           <el-upload
             class="avatar-uploader"
             :action="uploadURL"

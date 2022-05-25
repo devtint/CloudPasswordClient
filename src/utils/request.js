@@ -114,9 +114,9 @@ request.interceptors.request.use(
 // 响应拦截器
 request.interceptors.response.use(
   res => {
-    // console.log('响应结果', res.data.rs)
     // 如果rs=-5 提示退回到菜单
     if (res.data.rs === '-5') {
+      console.log('响应结果', res.data.rs)
       MessageBox.alert('登录已失效,是否重新登录?', '登录提示', {
         confirmButtonText: '立即登录',
         callback: action => {
@@ -126,38 +126,19 @@ request.interceptors.response.use(
           window.localStorage.removeItem('userName')
           window.localStorage.removeItem('memberID')
           // 跳转到登录页面
-          router.push('/login')
+          router.push({
+            //传递参数使用query的话，指定path或者name都行，但使用params的话，只能使用name指定
+            path: '/login',
+            query: {
+              auth: '0',
+            },
+          })
         },
       })
-      // this.$toast(res.data.msg)
-      // WeixinJSBridge.call('closeWindow')
-      // setTimeout(function () {
-      //   //这个可以关闭安卓系统的手机
-      //   document.addEventListener(
-      //     'WeixinJSBridgeReady',
-      //     function () {
-      //       WeixinJSBridge.call('closeWindow')
-      //     },
-      //     false
-      //   )
-      //   //这个可以关闭ios系统的手机
-      //   WeixinJSBridge.call('closeWindow')
-      // }, 300)
-      // Dialog.confirm({
-      //   title: '提示',
-      //   message: '长时间未操作，请重新进入',
-      // })
-      //   .then(() => {
-      //     // on confirm
-      //     // 关闭当前页面
-      //     wx.closeWindow()
-      //   })
-      //   .catch(() => {
-      //     // on cancel
-      //   })
     }
     // 如果rs=-6,提示跳转到登录
     if (res.data.rs === '-6') {
+      console.log('响应结果', res.data.rs)
       MessageBox.alert('登录已失效,是否重新登录?', '登录提示', {
         confirmButtonText: '立即登录',
         callback: action => {
@@ -167,27 +148,15 @@ request.interceptors.response.use(
           window.localStorage.removeItem('userName')
           window.localStorage.removeItem('memberID')
           // 跳转到登录页面
-          router.push('/login')
+          router.push({
+            //传递参数使用query的话，指定path或者name都行，但使用params的话，只能使用name指定
+            path: '/login',
+            query: {
+              auth: '0',
+            },
+          })
         },
       })
-      // this.$toast(res.data.msg)
-      // Dialog.confirm({
-      //   title: '提示',
-      //   message: '您还未登录，请先登录',
-      // })
-      //   .then(() => {
-      //     // on confirm
-      //     // 跳转到登录页面
-      //     router.push('/login')
-      //   })
-      //   .catch(() => {
-      //     // on cancel
-      //   })
-    }
-
-    // 如果rs=-1,提示msg
-    if (res.data.rs === '-1') {
-      // Toast('msg', res.data.msg)
     }
     return res
   },
