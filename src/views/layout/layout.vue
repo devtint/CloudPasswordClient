@@ -81,6 +81,8 @@ export default {
   width: 100%;
   height: 60px;
   background-color: white;
+  // 阴影
+  box-shadow: 0 1px 2px 0 #dcdfe6, 0 1px 8px 0 #c0c4cc;
 }
 .el-header {
   // line-height: 60px;

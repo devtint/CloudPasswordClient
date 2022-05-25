@@ -17,10 +17,9 @@
       <!-- <i class="el-icon-s-home"></i> -->
       <span slot="title">密钥管理</span>
     </el-menu-item>
-    <el-menu-item index="/password">
-      <!-- <i class="el-icon-s-home"></i> -->
+    <!-- <el-menu-item index="/password">
       <span slot="title">密码服务</span>
-    </el-menu-item>
+    </el-menu-item> -->
   </el-menu>
 </template>
 
