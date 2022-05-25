@@ -24,7 +24,8 @@
       <el-form-item prop="agree">
         <div class="agreement">
           <el-checkbox v-model="user.agree"
-            >我已阅读并同意 <a class="userAgreement" :href="userAgreement">《用户协议》</a>
+            >我已阅读并同意
+            <a class="userAgreement" :href="userAgreement">《用户协议》</a>
           </el-checkbox>
           <el-link class="forgotPassword" @click="onForget">忘记密码</el-link>
         </div>
@@ -169,7 +170,12 @@ export default {
                 message: '登录成功',
                 type: 'success',
               })
-              this.$router.push('/')
+              //在这里判断一下，是不是刚刚传过来的字段
+              if (this.$route.query.auth === '0') {
+                this.$router.go(-1)
+              } else {
+                this.$router.push('/')
+              }
             } else {
               // Message(res.data.rs)
               MessageBox.alert(res.data.rs)

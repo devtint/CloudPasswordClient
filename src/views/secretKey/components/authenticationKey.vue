@@ -94,7 +94,7 @@ export default {
         pageSize: this.numOfPerPage,
       }).then(res => {
         console.log('查询SK列表:', res.data)
-        this.tableData = res.data.querySKById_totalRecNum
+        // let numPage = res.data.querySKById_totalRecNum
 
         let data = res.data.querySKById.map(item => {
           return {
@@ -103,9 +103,8 @@ export default {
             isShowKey: false,
           }
         })
-        data.forEach(item => {
-          this.tableData.push(item)
-        })
+        let newData = newData.concat(data)
+        this.tableData = newData
       })
     },
     handleRandomCreateSK(index, row) {
