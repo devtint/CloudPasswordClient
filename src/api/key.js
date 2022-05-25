@@ -70,3 +70,12 @@ export const IssueCertificates = data => {
     data,
   })
 }
+
+// （下载证书文件）downloadCertificateFile
+export const downloadCertificateFile = data => {
+  return request({
+    method: 'POST',
+    url: '/downloadCertificateFile',
+    data,
+  })
+}

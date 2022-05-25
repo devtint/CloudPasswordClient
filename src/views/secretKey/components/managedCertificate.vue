@@ -43,6 +43,11 @@
             @click="handleIssueCertificate(scope.$index, scope.row)"
             >签发证书</el-button
           >
+          <el-button
+            size="mini"
+            @click="handleDownloadCertificate(scope.$index, scope.row)"
+            >下载证书</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -54,6 +59,7 @@ import {
   queryCertificateById,
   randomCreateKeyPair,
   IssueCertificates,
+  downloadCertificateFile,
 } from '@/api/key'
 import { Message, MessageBox } from 'element-ui'
 export default {
@@ -235,6 +241,76 @@ export default {
             message: '已取消',
           })
         })
+    },
+    handleDownloadCertificate(index, row) {
+      // companyName:北京江南天安科技有限公司
+      // projectName:Splenwise云密码服务平台
+      // keyModelID:数字签名证书-X509证书-SM2
+      // compName:采购云密码服务的企业
+      // devID:生产环境
+      // ITCompInstName:210804103316152366
+      // keyIndex:1
+      // fileName:download.file
+      let data = {
+        companyName: '北京江南天安科技有限公司',
+        projectName: 'Splenwise云密码服务平台',
+        keyModelID: row.keyModelID,
+        compName: '采购云密码服务的企业',
+        devID: row.DEVID,
+        ITCompInstName: row.ITCompInstName,
+        keyIndex: row.KEYINDEX,
+        fileName: 'download.file',
+      }
+      console.log('下载证书data', data)
+      downloadCertificateFile(data).then(res => {
+        console.log('下载证书:', res.data)
+        // if (res.data.rs === '1') {
+          let fileData = res.data.fileData
+          let fileName = res.data.fileName
+          console.log('下载证书链接:', fileData)
+          // 创建a标签
+          var elementA = document.createElement('a')
+
+          //文件的名称为时间戳加文件名后缀
+          elementA.download = fileName
+          elementA.style.display = 'none'
+
+          //生成一个blob二进制数据，内容为json数据
+          var blob = new Blob([fileData])
+
+          //生成一个指向blob的URL地址，并赋值给a标签的href属性
+          elementA.href = URL.createObjectURL(blob)
+          document.body.appendChild(elementA)
+          elementA.click()
+          document.body.removeChild(elementA)
+
+          // 下载文件
+          // const a_link = document.createElement('a') // 生成一个a链接
+          // fetch(downloadLink) // 括号里是文件链接
+          //   .then(res => res.blob())
+          //   .then(blob => {
+          //     // 将链接地址字符内容转变成blob地址
+          //     a_link.href = URL.createObjectURL(blob)
+          //     // console.log(a_link.href)
+          //     a_link.download = fileName //下载的文件的名字
+          //     document.body.appendChild(a_link)
+          //     a_link.click()
+          //   })
+
+          Message({
+            showClose: true,
+            message: '下载证书成功',
+            type: 'success',
+          })
+        // } else {
+        //   console.log('下载证书-失败:', res.data.rs)
+        //   Message({
+        //     showClose: true,
+        //     message: `下载证书失败${res.data.rs}`,
+        //     type: 'error',
+        //   })
+        // }
+      })
     },
   },
 }
