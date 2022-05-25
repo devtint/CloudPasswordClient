@@ -101,3 +101,30 @@ export const countOrderPrice = params => {
     params,
   })
 }
+
+// (通过订单ID查询我的订单)queryOrdersById
+export const queryOrdersById = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryOrdersById',
+    params,
+  })
+}
+
+// (通过商品名查询我的订单)queryOrdersByName
+export const queryOrdersByName = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryOrdersByName',
+    params,
+  })
+}
+
+// (通过下单日期查询我的订单)queryOrdersByDate
+export const queryOrdersByDate = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryOrdersByDate',
+    params,
+  })
+}

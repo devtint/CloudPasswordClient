@@ -10,9 +10,13 @@
         <el-select v-model="select" slot="prepend" placeholder="请选择">
           <el-option label="商品名称" value="1"></el-option>
           <el-option label="订单编号" value="2"></el-option>
-          <el-option label="下单时间" value="3"></el-option>
+          <!-- <el-option label="下单时间" value="3"></el-option> -->
         </el-select>
-        <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-button
+          slot="append"
+          icon="el-icon-search"
+          @click="searchByKeyWord"
+        ></el-button>
       </el-input>
     </div>
     <!-- 订单列表 -->
@@ -42,7 +46,11 @@
 
 <script>
 import orderLists from './components/orderLists.vue'
-
+import {
+  queryOrdersById,
+  queryOrdersByName,
+  queryOrdersByDate,
+} from '@/api/order'
 import { useOrderStore } from '@/store/order'
 export default {
   name: 'order',
@@ -67,6 +75,35 @@ export default {
     handleTabClick(tab, event) {
       console.log(tab.name)
       useOrderStore().setCurentTabs(tab.name)
+    },
+    searchByKeyWord() {
+      console.log('searchValue:', this.searchValue)
+      console.log('select:', this.select)
+      if (this.searchValue === '') {
+        useOrderStore().setOrderData('')
+        return
+      }
+      let params = {
+        keyWordsFld: this.searchValue,
+      }
+      // 根据关键词搜索
+      if (this.select === '1') {
+        // 搜索商品名称
+        this.searchFn(queryOrdersByName(params), 'queryOrdersByName')
+      } else if (this.select === '2') {
+        // 搜索订单编号
+        this.searchFn(queryOrdersById(params), 'queryOrdersById')
+      } else if (this.select === '3') {
+        // 搜索下单时间
+        this.searchFn(queryOrdersByDate(params), 'queryOrdersByDate')
+      }
+    },
+    searchFn(key, val) {
+      key.then(res => {
+        console.log(`根据${val}查询:`, res.data[val])
+        useOrderStore().setOrderData(res.data[val])
+        useOrderStore().setOrderDataTotalNum(res.data[`${val}_totalRecNum`])
+      })
     },
   },
 }

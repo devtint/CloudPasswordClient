@@ -149,11 +149,23 @@ export default {
     currentTabs() {
       return useOrderStore().getCurrentTabs
     },
+    orderData() {
+      return useOrderStore().getOrderData
+    },
+    orderDataNum() {
+      return useOrderStore().getOrderDataTotalNum
+    },
   },
   watch: {
     currentTabs: {
       handler(newValue, oldValue) {
         this.init(newValue)
+      },
+      immediate: true,
+    },
+    orderData: {
+      handler(newValue, oldValue) {
+        this.initBySearch(newValue)
       },
       immediate: true,
     },
@@ -163,6 +175,14 @@ export default {
   },
   mounted() {},
   methods: {
+    initBySearch(data) {
+      if (data) {
+        this.tableData = data
+        this.totalData = this.orderDataNum
+      } else {
+        this.init(this.currentTabs)
+      }
+    },
     init(tabStatus) {
       console.log('init', tabStatus)
       this.loading = true
@@ -262,17 +282,17 @@ export default {
       this.currentPage = val
       this.init(this.currentTabs)
       console.log(`当前页: ${val}`)
-      Message(`当前页: ${val}`)
+      // Message(`当前页: ${val}`)
     },
     handleRemove(file, fileList) {
       console.log(file, fileList)
     },
     handlePreview(file) {
-      console.log(file)
-      // this.listType = 'picture'
-      this.dialogImageUrl =
-        'http://www.paytunnel.cn/CloudPasswordClient/#/' + file.name
-      this.dialogVisible = true
+      // console.log(file)
+      // // this.listType = 'picture'
+      // this.dialogImageUrl =
+      //   'http://www.paytunnel.cn/CloudPasswordClient/#/' + file.name
+      // this.dialogVisible = true
     },
     handleExceed(files, fileList) {
       MessageBox.warning(

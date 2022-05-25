@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { getPK } from '@/api/user'
+import { getPK, getSmsCode, loginOfPhone } from '@/api/user'
 import { Message } from 'element-ui'
 export default {
   name: 'loginPhone',
