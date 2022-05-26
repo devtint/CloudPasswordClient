@@ -81,10 +81,7 @@
               v-if="apiShow === true"
             >
               <template slot-scope="scope">
-                <el-select
-                  v-model="apiValue"
-                  placeholder="请选择"
-                >
+                <el-select v-model="apiValue" placeholder="请选择">
                   <el-option
                     v-for="item in apiOptions"
                     :key="item.value"
@@ -154,8 +151,13 @@
             ><span class="totalPrice">{{ totalPrice }}</span>
           </div>
           <div class="submit">
-            <el-button type="primary" size="small" @click="submitOrder"
-              >提交订单</el-button
+            <el-button
+              type="primary"
+              size="small"
+              @click="submitOrder"
+              :disabled="validityValue ? false : true"
+            >
+              提交订单</el-button
             >
           </div>
         </div>
@@ -234,12 +236,6 @@ export default {
     },
     // 计算价格
     calculateThePrice(item) {
-      // actNo:1493-20210618083212-00040780-0217
-      // saleCmpName:北京江南天安科技有限公司
-      // productName:云密码机租赁服务
-      // srlID:云密码机租赁服务
-      // prdNum:2
-      // priceAttrValueList:DES/3DES/RSA.>=20000tps.1个月
       let valueList = ''
       if (this.tpsShow === true) {
         valueList = `${this.algorithmsValue}.${this.tpsValue}.${this.validityValue}`
@@ -256,7 +252,32 @@ export default {
       }
       console.log('countOrderPrice params', params)
       countOrderPrice(params).then(res => {
-        console.log('countOrderPrice res', res.data.countOrderPrice[0])
+        console.log('countOrderPrice res', res.data)
+        if (res.data.countOrderPrice_totalRecNum === 0) {
+          // 没有当前有限期报价,弹出提示/选项置灰（disabled: true)
+          MessageBox.alert(
+            '暂时还没有该产品的当前有限期报价,请重新选择',
+            '提示',
+            {
+              confirmButtonText: '确定',
+              callback: action => {
+                // 选项置灰
+                let newOptions = this.validityOptions.map(item => {
+                  if (item.value === this.validityValue) {
+                    item.disabled = true
+                  }
+                  return item
+                })
+                this.validityValue = ''
+                this.price = 0.0
+                this.totalPrice = 0.0
+                this.validityOptions = newOptions
+                console.log('this.validityOptions', this.validityOptions)
+              },
+            }
+          )
+          return
+        }
         if (res.data.rs === '1') {
           this.price = res.data.countOrderPrice[0].price
           this.totalPrice = res.data.countOrderPrice[0].totalPrice

@@ -186,6 +186,8 @@ export default {
     init(tabStatus) {
       console.log('init', tabStatus)
       this.loading = true
+      this.currentPage = 1
+      this.numOfPerPage = 5
       let params = {
         currentPage: this.currentPage,
         numOfPerPage: this.numOfPerPage,
