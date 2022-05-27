@@ -1,6 +1,6 @@
 <template>
   <div class="authenticationKey">
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="tableData" style="width: 100%" v-loading="loading">
       <el-table-column label="密钥模板" width="80">
         <template slot-scope="scope">
           <span style="">{{ scope.row.keyModelID }}</span>
@@ -78,6 +78,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       tableData: [],
     }
   },
@@ -89,6 +90,7 @@ export default {
   mounted() {},
   methods: {
     getSKById() {
+      this.loading = true
       querySKById({
         currentPage: this.currentPage,
         pageSize: this.numOfPerPage,
@@ -103,8 +105,10 @@ export default {
             isShowKey: false,
           }
         })
-        let newData = newData.concat(data)
-        this.tableData = newData
+        data.forEach(item => {
+          this.tableData.push(item)
+        })
+        this.loading = false
       })
     },
     handleRandomCreateSK(index, row) {

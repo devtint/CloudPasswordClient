@@ -159,6 +159,7 @@ export default {
   watch: {
     currentTabs: {
       handler(newValue, oldValue) {
+        this.currentPage = 1
         this.init(newValue)
       },
       immediate: true,
@@ -186,8 +187,6 @@ export default {
     init(tabStatus) {
       console.log('init', tabStatus)
       this.loading = true
-      this.currentPage = 1
-      this.numOfPerPage = 5
       let params = {
         currentPage: this.currentPage,
         numOfPerPage: this.numOfPerPage,
@@ -425,5 +424,6 @@ export default {
   bottom: 40px;
   right: 50px;
   background-color: #fff;
+  z-index: 999;
 }
 </style>

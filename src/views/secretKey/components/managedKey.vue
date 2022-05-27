@@ -1,6 +1,6 @@
 <template>
   <div class="managedKey">
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="tableData" style="width: 100%" v-loading="loading">
       <el-table-column label="订单明细凭证号">
         <template slot-scope="scope">
           <span style="">{{ scope.row.oriObjectID }}</span>
@@ -58,6 +58,7 @@ export default {
   props: {},
   data() {
     return {
+      loading: false,
       tableData: [],
     }
   },
@@ -69,6 +70,7 @@ export default {
   mounted() {},
   methods: {
     getKeyById() {
+      this.loading = true
       queryKeyById({
         currentPage: 1,
         pageSize: 10,
@@ -82,6 +84,7 @@ export default {
         data.forEach(item => {
           this.tableData.push(item)
         })
+        this.loading = false
       })
     },
     handleRandomCreateKey(index, row) {

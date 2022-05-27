@@ -56,37 +56,49 @@
     </div>
     <el-link href="javascript:;" :underline="false" v-else>
       <div class="avatar-wrap">
-        <el-dropdown>
-          <span class="el-dropdown-link">
-            <!-- <i class="icon icon-zhanghao"></i> -->
-            <!-- <el-avatar size="large" :src="circleUrl"></el-avatar> -->
+        <el-link href="javascript:;" :underline="false">
+          <a
+            href="javascript:void 0;"
+            hotrep="hp.pc.topnav.login"
+            rel="nofollow"
+            class="login_btn"
+            @click="toMyOrder"
+            >我的订单</a
+          >
+        </el-link>
+        <div class="userBox">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <!-- <i class="icon icon-zhanghao"></i> -->
+              <!-- <el-avatar size="large" :src="circleUrl"></el-avatar> -->
 
-            <div class="pls-nav-bubble-wrap pls-nav-account">
-              <a href="javascript:void 0;" class="pls-nav-bubble-trigger"
-                ><i
-                  class="pls-nav-bubble-trigger-icon"
-                  style="
-                    background-image: url('https://cloudcache.tencentcs.com/qcloud/portal/kit/images/default-avatar.de71167d.svg');
-                  "
-                ></i
-              ></a>
-            </div>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="toLogin">{{
-              userName
-            }}</el-dropdown-item>
-            <el-dropdown-item @click.native="toLogin"
-              >ID:{{ memberID }}</el-dropdown-item
-            >
-            <el-dropdown-item @click.native="toMyOrder"
+              <div class="pls-nav-bubble-wrap pls-nav-account">
+                <a href="javascript:void 0;" class="pls-nav-bubble-trigger"
+                  ><i
+                    class="pls-nav-bubble-trigger-icon"
+                    style="
+                      background-image: url('https://cloudcache.tencentcs.com/qcloud/portal/kit/images/default-avatar.de71167d.svg');
+                    "
+                  ></i
+                ></a>
+              </div>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="toLogin">{{
+                userName
+              }}</el-dropdown-item>
+              <el-dropdown-item @click.native="toLogin"
+                >ID:{{ memberID }}</el-dropdown-item
+              >
+              <!-- <el-dropdown-item @click.native="toMyOrder"
               >我的订单</el-dropdown-item
-            >
-            <el-dropdown-item @click.native="logout" v-if="isLogin"
-              >退出登录</el-dropdown-item
-            >
-          </el-dropdown-menu>
-        </el-dropdown>
+            > -->
+              <el-dropdown-item @click.native="logout" v-if="isLogin"
+                >退出登录</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
       </div>
     </el-link>
   </div>
@@ -189,11 +201,11 @@ a {
     background-color: #65acf2;
   }
 }
-.el-link {
-  font-size: 25px;
-  color: #409eff;
-  margin-right: 20px;
-}
+// .el-link {
+//   font-size: 25px;
+//   color: #409eff;
+//   margin-right: 20px;
+// }
 .pls-nav-bubble-trigger-icon {
   display: block;
   box-sizing: border-box;
@@ -207,5 +219,12 @@ a {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+
+.avatar-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 1.5rem;
 }
 </style>
