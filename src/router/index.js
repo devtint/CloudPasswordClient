@@ -68,6 +68,22 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "order" */ '@/views/order/order.vue'),
       },
+      {
+        path: '/account',
+        name: 'account',
+        component: () =>
+          import(
+            /* webpackChunkName: "account" */ '@/views/account/account.vue'
+          ),
+      },
+      {
+        path: '/modify',
+        name: 'modify',
+        component: () =>
+          import(
+            /* webpackChunkName: "modify" */ '@/views/modify/modifyAccountPassword.vue'
+          ),
+      },
     ],
   },
 ]

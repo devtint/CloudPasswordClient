@@ -50,3 +50,39 @@ export const getSmsCode = data => {
     data,
   })
 }
+
+// (子账号管理展示)subAccountdisplay
+export const getSubAcount = data => {
+  return request({
+    method: 'POST',
+    url: '/search/subAccountdisplay',
+    data,
+  })
+}
+
+// (强制修改子账号密码)btnUpdateSubAccountPassword
+export const subAccountUpdate = data => {
+  return request({
+    method: 'POST',
+    url: '/insertReturn/btnUpdateSubAccountPassword',
+    data,
+  })
+}
+
+// (子账号删除)btnDeleteEnterpriseSubAccount
+export const subAcountDelete = data => {
+  return request({
+    method: 'POST',
+    url: '/insertReturn/btnDeleteEnterpriseSubAccount',
+    data,
+  })
+}
+
+// (子账号创建)btnRegisteredEnterpriseSubAccount
+export const createSubAcount = data => {
+  return request({
+    method: 'POST',
+    url: '/insertReturn/btnRegisteredEnterpriseSubAccount',
+    data,
+  })
+}

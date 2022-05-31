@@ -1,10 +1,10 @@
 <template>
-  <div class="loginAccount">
+  <div class="registerAccount">
     <div class="register_header">
       <el-page-header
         @back="goBack"
         title=""
-        content="用户注册"
+        :content="headerContent"
       ></el-page-header>
     </div>
     <div class="login-container">
@@ -21,7 +21,7 @@
         </div>
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span class="headerTitle">账号注册</span>
+            <span class="headerTitle">{{ headerTitle }}</span>
           </div>
           <el-form
             :model="ruleForm"
@@ -102,7 +102,7 @@
 
 <script>
 import { encryption } from '@/utils'
-import { getPK, registerAccount } from '@/api/user'
+import { getPK, registerAccount, createSubAcount } from '@/api/user'
 import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'register',
@@ -181,15 +181,28 @@ export default {
         userName: [{ validator: validateUserName, trigger: 'blur' }],
         phone: [{ validator: validatePhone, trigger: 'blur' }],
       },
+      action: this.$route.query.action,
+      headerContent: '用户注册',
+      headerTitle: '账号注册',
     }
   },
   computed: {},
   watch: {},
   created() {
     this.getPKFn()
+    this.init()
   },
   mounted() {},
   methods: {
+    init() {
+      console.log('注册:', this.action)
+      if (this.action === 'childAccount') {
+        this.headerContent = '创建子账号'
+        this.headerTitle = '创建子账号'
+        this.ruleForm.enterpriseName =
+          window.localStorage.getItem('enterpriseName')
+      }
+    },
     getPKFn() {
       getPK()
         .then(res => {
@@ -217,7 +230,7 @@ export default {
         if (valid) {
           console.log('submitForm 检验通过')
           // 加密密码
-          let newPassword = encryption('RSA', this.pkbase64, this.ruleForm.pass)
+          let newPassword = encryption(this.pkbase64, this.ruleForm.pass)
           console.log('加密后', newPassword)
           // 注册请求
           // srlIDForEngine:Splenwise云密码服务平台
@@ -255,19 +268,57 @@ export default {
             passwordCiper: newPassword,
           }
           console.log('注册请求参数', data)
-          registerAccount(data).then(res => {
-            if (res.data.rs === '1') {
-              console.log('注册成功')
-              Message({
-                message: '注册成功!',
-                type: 'success',
-              })
-              this.$router.push('login')
-            } else {
-              // Message(res.data.rs)
-              MessageBox.alert(res.data.rs)
-            }
-          })
+          if (this.action !== 'childAccount') {
+            registerAccount(data).then(res => {
+              if (res.data.rs === '1') {
+                console.log('注册成功')
+                Message({
+                  message: '注册成功!',
+                  type: 'success',
+                })
+                this.$router.push('login')
+              } else {
+                // Message(res.data.rs)
+                MessageBox.alert(res.data.rs)
+              }
+            })
+          } else {
+            // srlIDForEngine:Splenwise云密码服务平台
+            // busiNameForEngine:企业客户管理
+            // busiFunNameForEngine:企业客户注册
+            // miniProcNameForEngine:为企业客户创建子账号配置
+            // workingStatus:1
+            // roleID:企业客户超级用户
+            // companyName:测试企业T
+            // mobile:18446833892
+            // authCode:1945
+            // tellerNo:testT6
+            // contactor:testT6
+            // passwordCiper:ngmNY1BYpR0S8XQFgUC9CrCeur8hZ6tYodqRJznRvDz7g32Smh8/e1WN5xl9+ayACPt2ED/6Us966mmIyecQdkSQPEHhWB1JzEfkgmPvSt9DqGgNjBQ+qAA6E5ePUcr4IEgIaiqiLBu8I1jswcej0iMXwKjV1jb1DjcGfUZQw2w=
+            // prjDesCmpName:北京江南天安科技有限公司
+            // projectName:Splenwise云密码服务平台
+            // cmpCate:采购云密码服务的企业
+            // status:1
+            // employeeName:李四6
+            // logonMode:1141
+            data.miniProcNameForEngine = '为企业客户创建子账号配置'
+            data.logonMode = '1141'
+            data.employeeName = this.ruleForm.userName
+            data.passwordCiper = this.ruleForm.pass // 暂时使用未加密密码
+            createSubAcount(data).then(res => {
+              if (res.data.rs === '1') {
+                console.log('子账号创建成功')
+                Message({
+                  message: '子账号创建成功!',
+                  type: 'success',
+                })
+                this.$router.push('account')
+              } else {
+                // Message(res.data.rs)
+                MessageBox.alert(res.data.rs)
+              }
+            })
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -332,7 +383,7 @@ export default {
     }
   }
 }
-.loginAccount {
+.registerAccount {
   width: 100%;
 }
 .btnBox {

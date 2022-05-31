@@ -15,12 +15,7 @@
       </el-form-item>
       <el-form-item prop="code">
         <div class="get_code">
-          <el-input
-            v-model="user.code"
-            placeholder="请输入验证码"
-            show-password
-            clearable
-          >
+          <el-input v-model="user.code" placeholder="请输入验证码" clearable>
             <!-- 发送验证码 -->
           </el-input>
           <el-button
@@ -34,13 +29,13 @@
       </el-form-item>
       <el-form-item prop="agree2">
         <div class="agreement">
-          <el-checkbox v-model="user.agree"
+          <el-checkbox v-model="user.agree2"
             >我已阅读并同意
             <a class="userAgreement" :href="userAgreement">《用户协议》</a>
           </el-checkbox>
-          <el-link class="forgotPassword" href="javascript:;" @click="onForget"
+          <!-- <el-link class="forgotPassword" href="javascript:;" @click="onForget"
             >忘记密码</el-link
-          >
+          > -->
         </div>
       </el-form-item>
       <el-form-item>
@@ -67,7 +62,8 @@
 
 <script>
 import { getPK, getSmsCode, loginOfPhone } from '@/api/user'
-import { Message } from 'element-ui'
+import { encryption } from '@/utils'
+import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'loginPhone',
   components: {},
@@ -97,11 +93,11 @@ export default {
         ],
         code: [
           { required: true, message: '验证码不能为空', trigger: 'blur' },
-          {
-            pattern: /^\d{6}$/,
-            message: '请输入正确的号码格式',
-            trigger: 'blur',
-          },
+          // {
+          //   pattern: /^\d{6}$/,
+          //   message: '请输入正确的号码格式',
+          //   trigger: 'blur',
+          // },
         ],
         agree2: [
           {
@@ -124,7 +120,7 @@ export default {
   computed: {},
   watch: {},
   created() {
-    this.getPKFn()
+    // this.getPKFn()
   },
   mounted() {},
   methods: {
@@ -156,58 +152,101 @@ export default {
       //   console.log(valid)
       //   console.log(error)
       // })
-      // validate 方法是异步的
       this.$refs['login-form'].validate(valid => {
-        // 如果表单验证失败，停止请求提交
-        if (!valid) {
-          return
+        if (valid) {
+          console.log('submitForm 检验通过')
+          // 加密密码
+          // let newPassword = encryption(this.pkbase64, this.user.password)
+          // console.log('加密后', newPassword)
+          let data = {
+            mobile: this.user.mobile,
+            authCode: this.user.code,
+          }
+          console.log('登录请求参数', data)
+          loginOfPhone(data).then(res => {
+            if (res.data.rs === '1') {
+              console.log('登录成功', res.data)
+              window.localStorage.setItem('user', JSON.stringify(res.data))
+              window.localStorage.setItem(
+                'enterpriseName',
+                res.data.TELLERCOMPANY
+              )
+              window.localStorage.setItem('userName', res.data.TELLERNAME)
+              window.localStorage.setItem('memberID', res.data.memberID)
+
+              Message({
+                showClose: true,
+                message: '登录成功',
+                type: 'success',
+              })
+              //在这里判断一下，是不是刚刚传过来的字段
+              if (this.$route.query.auth === '0') {
+                this.$router.go(-1)
+              } else {
+                this.$router.push('/')
+              }
+            } else {
+              // Message(res.data.rs)
+              MessageBox.alert(res.data.rs)
+            }
+          })
+        } else {
+          console.log('error submit!!')
+          return false
         }
-        // 验证通过,提交登录
-        this.login()
       })
+      // validate 方法是异步的
+      // this.$refs['login-form'].validate(valid => {
+      //   // 如果表单验证失败，停止请求提交
+      //   if (!valid) {
+      //     return
+      //   }
+      //   // 验证通过,提交登录
+      //   this.login()
+      // })
     },
 
-    login() {
-      // 登录按钮的loading...
-      this.loginLoading = true
-      // 接口封装后
-      login(this.user)
-        .then(res => {
-          // 登录成功
-          // console.log(res)
-          this.$message({
-            message: '恭喜你，登录成功!',
-            type: 'success',
-          })
+    // login() {
+    //   // 登录按钮的loading...
+    //   this.loginLoading = true
+    //   // 接口封装后
+    //   login(this.user)
+    //     .then(res => {
+    //       // 登录成功
+    //       // console.log(res)
+    //       this.$message({
+    //         message: '恭喜你，登录成功!',
+    //         type: 'success',
+    //       })
 
-          // 关闭 loading...
-          this.loginLoading = false
+    //       // 关闭 loading...
+    //       this.loginLoading = false
 
-          // 将接口返回的用户相关数据放到本地存储，方便应用数据共享
-          // window.localStorage.setItem('user', res.data.data)
-          // 但是本地存储只能存储字符串
-          // 想要存储对象、数组类型的数据，则把他们转为 JSON 格式字符串进行存储
-          window.localStorage.setItem('user', JSON.stringify(res.data.data))
+    //       // 将接口返回的用户相关数据放到本地存储，方便应用数据共享
+    //       // window.localStorage.setItem('user', res.data.data)
+    //       // 但是本地存储只能存储字符串
+    //       // 想要存储对象、数组类型的数据，则把他们转为 JSON 格式字符串进行存储
+    //       window.localStorage.setItem('user', JSON.stringify(res.data.data))
 
-          // 跳转到首页
-          // this.$router.push('./')  //方法一，直接输入路径
+    //       // 跳转到首页
+    //       // this.$router.push('./')  //方法一，直接输入路径
 
-          this.$router.push({
-            name: 'home',
-          })
-        })
-        .catch(err => {
-          // 登录失败
-          console.log('登录失败', err)
-          this.$message.error('登录失败，手机号或者验证码错误!')
+    //       this.$router.push({
+    //         name: 'home',
+    //       })
+    //     })
+    //     .catch(err => {
+    //       // 登录失败
+    //       console.log('登录失败', err)
+    //       this.$message.error('登录失败，手机号或者验证码错误!')
 
-          // 关闭 loading...
-          this.loginLoading = false
-        })
-      // 处理后端响应结果
-      //   成功:xxx
-      //   失败:xxx
-    },
+    //       // 关闭 loading...
+    //       this.loginLoading = false
+    //     })
+    //   // 处理后端响应结果
+    //   //   成功:xxx
+    //   //   失败:xxx
+    // },
     getCode() {
       // 先验证手机号是否合法
       this.$refs['login-form'].validateField('mobile', (valid, error) => {
@@ -220,6 +259,20 @@ export default {
         } else {
           console.log('通过')
           // 获取验证码
+          getSmsCode({
+            mobile: this.user.mobile,
+          })
+            .then(res => {
+              console.log('获取验证码', res)
+              Message({
+                message: '验证码已发送，请注意查收',
+                type: 'success',
+              })
+            })
+            .catch(err => {
+              console.log('获取验证码失败', err)
+              Message.error('获取验证码失败，请稍后重试')
+            })
           // 倒计时
           this.codeText = '获取验证码'
           this.codeDisabled = true

@@ -90,9 +90,9 @@
               <el-dropdown-item @click.native="toLogin"
                 >ID:{{ memberID }}</el-dropdown-item
               >
-              <!-- <el-dropdown-item @click.native="toMyOrder"
-              >我的订单</el-dropdown-item
-            > -->
+              <el-dropdown-item @click.native="toAccount"
+                >账号管理</el-dropdown-item
+              >
               <el-dropdown-item @click.native="logout" v-if="isLogin"
                 >退出登录</el-dropdown-item
               >
@@ -136,6 +136,9 @@ export default {
     },
     toLogin() {
       this.$router.push('/login')
+    },
+    toAccount() {
+      this.$router.push('/account')
     },
     toRegister() {
       this.$router.push('/register')

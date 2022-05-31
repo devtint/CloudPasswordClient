@@ -1,20 +1,21 @@
 import JSEncrypt from 'jsencrypt'
 
-export function encryption(algorithm, pkbase64, data) {
-  if (algorithm === 'RSA') {
-    //密码前面添加4位长度
-    let newPassword = PrefixZero(data.length * 2, 4)
-    newPassword = newPassword + stringToHex(data)
-    console.log('newPassword', newPassword)
+// export function encryption(algorithm = 'RSA', pkbase64, data) {
+export function encryption(pkbase64, data) {
+  // if (algorithm === 'RSA') {
+  //密码前面添加4位长度
+  let newPassword = PrefixZero(data.length * 2, 4)
+  newPassword = newPassword + stringToHex(data)
+  console.log('newPassword', newPassword)
 
-    //使用标准RSA算法处理
-    let privateKey =
-      '-----BEGIN PUBLIC KEY-----' + pkbase64 + '-----END PUBLIC KEY-----'
-    newPassword = encryptedData(privateKey, newPassword)
-    // console.log('privateKey', privateKey)
-    var password_temp = newPassword.replace(/\+/g, '%2B')
-    return password_temp
-  }
+  //使用标准RSA算法处理
+  let privateKey =
+    '-----BEGIN PUBLIC KEY-----' + pkbase64 + '-----END PUBLIC KEY-----'
+  newPassword = encryptedData(privateKey, newPassword)
+  // console.log('privateKey', privateKey)
+  var password_temp = newPassword.replace(/\+/g, '%2B')
+  return password_temp
+  // }
 }
 
 function PrefixZero(num, n) {

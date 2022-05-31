@@ -84,11 +84,11 @@ export default {
         ],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' },
-          {
-            pattern: /^\d{6}$/,
-            message: '请输入正确的密码格式',
-            trigger: 'blur',
-          },
+          // {
+          //   pattern: /^\d{6}$/,
+          //   message: '请输入正确的密码格式',
+          //   trigger: 'blur',
+          // },
         ],
         agree: [
           {
@@ -128,6 +128,13 @@ export default {
     onForget() {
       // this.$message('忘记密码')
       console.log('忘记密码')
+      this.$router.push({
+        path: '/modify',
+        query: {
+          modifyAction: 'forget',
+          inputAccount: this.user.account
+        },
+      })
     },
     onRegister() {
       this.$router.push({
@@ -147,7 +154,7 @@ export default {
         if (valid) {
           console.log('submitForm 检验通过')
           // 加密密码
-          let newPassword = encryption('RSA', this.pkbase64, this.user.password)
+          let newPassword = encryption(this.pkbase64, this.user.password)
           console.log('加密后', newPassword)
           let data = {
             tellerNo: this.user.account,
@@ -197,50 +204,50 @@ export default {
       // })
     },
 
-    login() {
-      // 登录按钮的loading...
-      this.loginLoading = true
-      let data = {
-        tellerNo: '',
-        cipherText: '',
-      }
-      loginAccount(data)
-        .then(res => {
-          // 登录成功
-          // console.log(res)
-          this.$message({
-            message: '恭喜你，登录成功!',
-            type: 'success',
-          })
+    // login() {
+    //   // 登录按钮的loading...
+    //   this.loginLoading = true
+    //   let data = {
+    //     tellerNo: '',
+    //     cipherText: '',
+    //   }
+    //   loginAccount(data)
+    //     .then(res => {
+    //       // 登录成功
+    //       // console.log(res)
+    //       this.$message({
+    //         message: '恭喜你，登录成功!',
+    //         type: 'success',
+    //       })
 
-          // 关闭 loading...
-          this.loginLoading = false
+    //       // 关闭 loading...
+    //       this.loginLoading = false
 
-          // 将接口返回的用户相关数据放到本地存储，方便应用数据共享
-          // window.localStorage.setItem('user', res.data.data)
-          // 但是本地存储只能存储字符串
-          // 想要存储对象、数组类型的数据，则把他们转为 JSON 格式字符串进行存储
-          window.localStorage.setItem('user', JSON.stringify(res.data.data))
+    //       // 将接口返回的用户相关数据放到本地存储，方便应用数据共享
+    //       // window.localStorage.setItem('user', res.data.data)
+    //       // 但是本地存储只能存储字符串
+    //       // 想要存储对象、数组类型的数据，则把他们转为 JSON 格式字符串进行存储
+    //       window.localStorage.setItem('user', JSON.stringify(res.data.data))
 
-          // 跳转到首页
-          // this.$router.push('./')  //方法一，直接输入路径
+    //       // 跳转到首页
+    //       // this.$router.push('./')  //方法一，直接输入路径
 
-          this.$router.push({
-            name: 'home',
-          })
-        })
-        .catch(err => {
-          // 登录失败
-          console.log('登录失败', err)
-          this.$message.error('登录失败，手机号或者验证码错误!')
+    //       this.$router.push({
+    //         name: 'home',
+    //       })
+    //     })
+    //     .catch(err => {
+    //       // 登录失败
+    //       console.log('登录失败', err)
+    //       this.$message.error('登录失败，手机号或者验证码错误!')
 
-          // 关闭 loading...
-          this.loginLoading = false
-        })
-      // 处理后端响应结果
-      //   成功:xxx
-      //   失败:xxx
-    },
+    //       // 关闭 loading...
+    //       this.loginLoading = false
+    //     })
+    //   // 处理后端响应结果
+    //   //   成功:xxx
+    //   //   失败:xxx
+    // },
   },
 }
 </script>
