@@ -6,60 +6,69 @@
           <span style="">{{ scope.row.oriObjectID }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="密钥模板">
+      <el-table-column label="密钥">
         <template slot-scope="scope">
           <span style="">{{ scope.row.keyModelID }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="密钥序号">
+      <el-table-column label="密钥序号" width="80">
         <template slot-scope="scope">
           <span style="margin-right: 10px">{{ scope.row.KEYINDEX }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="截至有效日期">
+      <el-table-column label="截至有效日期" width="180">
         <template slot-scope="scope">
           <span style="">{{ scope.row.endActiveDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="密钥密文">
+      <el-table-column label="密钥校验值">
         <template slot-scope="scope">
-          <span style="">{{ scope.row.secretKeyValue }}</span>
+          <span style="">{{ scope.row.checkValue }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="环境">
+      <!-- <el-table-column label="环境" width="180">
         <template slot-scope="scope">
           <span style="">{{ scope.row.DEVID }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="状态">
+      </el-table-column> -->
+      <el-table-column label="状态" width="180">
         <template slot-scope="scope">
           <span style="">{{ scope.row.status }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" class-name="btnBox">
         <template slot-scope="scope">
           <el-button
             size="mini"
             @click="handleRandomCreateKey(scope.$index, scope.row)"
             >随机生成密钥</el-button
           >
+          <el-button size="mini" @click="handleRenewal(scope.$index, scope.row)"
+            >续费</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
+
+    <order-renewal ref="renewalShow"></order-renewal>
   </div>
 </template>
 
 <script>
+import orderRenewal from '@/components/orderRenewal.vue'
 import { queryKeyById, randomCreateKey } from '@/api/key'
 import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'managedKey',
-  components: {},
+  components: {
+    orderRenewal,
+  },
   props: {},
   data() {
     return {
       loading: false,
       tableData: [],
+      renewalData: {},
     }
   },
   computed: {},
@@ -140,8 +149,20 @@ export default {
           })
         })
     },
+    handleRenewal(index, row) {
+      console.log(index, row)
+      this.renewalData = row
+      // 打开续费弹窗
+      this.$refs.renewalShow.showRenewal(this.renewalData)
+    },
   },
 }
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.btnBox {
+  .el-button {
+    margin: 5px;
+  }
+}
+</style>

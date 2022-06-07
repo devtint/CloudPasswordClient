@@ -15,6 +15,9 @@
         <el-button type="primary" @click="createChildAccount"
           >创建子账号</el-button
         >
+        <el-button type="primary" @click="modifyAccountPassword"
+          >修改当前账号密码</el-button
+        >
         <el-table :data="tableData" border style="width: 100%">
           <el-table-column prop="employeeName" label="姓名" width="180">
           </el-table-column>
@@ -45,7 +48,12 @@
 
 <script>
 import { encryption } from '@/utils'
-import { getPK, getSubAcount, subAccountDelete, subAccountUpdate } from '@/api/user'
+import {
+  getPK,
+  getSubAcount,
+  subAccountDelete,
+  subAccountUpdate,
+} from '@/api/user'
 import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'accountManagement',
@@ -88,6 +96,16 @@ export default {
         path: '/register',
         query: {
           action: 'childAccount',
+        },
+      })
+    },
+    modifyAccountPassword() {
+      console.log('修改密码')
+      this.$router.push({
+        path: '/modify',
+        query: {
+          modifyAction: 'modify',
+          inputAccount: window.localStorage.getItem('userName'),
         },
       })
     },

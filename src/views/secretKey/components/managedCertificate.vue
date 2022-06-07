@@ -11,27 +11,27 @@
           <span style="">{{ scope.row.keyModelID }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="证书序号">
+      <el-table-column label="证书序号" width="80">
         <template slot-scope="scope">
           <span style="margin-right: 10px">{{ scope.row.KEYINDEX }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="截至有效日期">
+      <el-table-column label="截至有效日期" width="180">
         <template slot-scope="scope">
           <span style="">{{ scope.row.endActiveDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="环境">
+      <!-- <el-table-column label="环境">
         <template slot-scope="scope">
           <span style="">{{ scope.row.DEVID }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="状态">
+      </el-table-column> -->
+      <el-table-column label="状态" width="180">
         <template slot-scope="scope">
           <span style="">{{ scope.row.status }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" class-name="btnBox">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -48,13 +48,19 @@
             @click="handleDownloadCertificate(scope.$index, scope.row)"
             >下载证书</el-button
           >
+          <el-button size="mini" @click="handleRenewal(scope.$index, scope.row)"
+            >续费</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
+
+    <order-renewal ref="renewalShow"></order-renewal>
   </div>
 </template>
 
 <script>
+import orderRenewal from '@/components/orderRenewal.vue'
 import {
   queryCertificateById,
   randomCreateKeyPair,
@@ -64,12 +70,15 @@ import {
 import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'managedCertificate',
-  components: {},
+  components: {
+    orderRenewal,
+  },
   props: {},
   data() {
     return {
       loading: false,
       tableData: [],
+      renewalData: {},
     }
   },
   computed: {},
@@ -268,43 +277,43 @@ export default {
       downloadCertificateFile(data).then(res => {
         console.log('下载证书:', res.data)
         // if (res.data.rs === '1') {
-          let fileData = res.data.fileData
-          let fileName = res.data.fileName
-          console.log('下载证书链接:', fileData)
-          // 创建a标签
-          var elementA = document.createElement('a')
+        let fileData = res.data.fileData
+        let fileName = res.data.fileName
+        console.log('下载证书链接:', fileData)
+        // 创建a标签
+        var elementA = document.createElement('a')
 
-          //文件的名称为时间戳加文件名后缀
-          elementA.download = fileName
-          elementA.style.display = 'none'
+        //文件的名称为时间戳加文件名后缀
+        elementA.download = fileName
+        elementA.style.display = 'none'
 
-          //生成一个blob二进制数据，内容为json数据
-          var blob = new Blob([fileData])
+        //生成一个blob二进制数据，内容为json数据
+        var blob = new Blob([fileData])
 
-          //生成一个指向blob的URL地址，并赋值给a标签的href属性
-          elementA.href = URL.createObjectURL(blob)
-          document.body.appendChild(elementA)
-          elementA.click()
-          document.body.removeChild(elementA)
+        //生成一个指向blob的URL地址，并赋值给a标签的href属性
+        elementA.href = URL.createObjectURL(blob)
+        document.body.appendChild(elementA)
+        elementA.click()
+        document.body.removeChild(elementA)
 
-          // 下载文件
-          // const a_link = document.createElement('a') // 生成一个a链接
-          // fetch(downloadLink) // 括号里是文件链接
-          //   .then(res => res.blob())
-          //   .then(blob => {
-          //     // 将链接地址字符内容转变成blob地址
-          //     a_link.href = URL.createObjectURL(blob)
-          //     // console.log(a_link.href)
-          //     a_link.download = fileName //下载的文件的名字
-          //     document.body.appendChild(a_link)
-          //     a_link.click()
-          //   })
+        // 下载文件
+        // const a_link = document.createElement('a') // 生成一个a链接
+        // fetch(downloadLink) // 括号里是文件链接
+        //   .then(res => res.blob())
+        //   .then(blob => {
+        //     // 将链接地址字符内容转变成blob地址
+        //     a_link.href = URL.createObjectURL(blob)
+        //     // console.log(a_link.href)
+        //     a_link.download = fileName //下载的文件的名字
+        //     document.body.appendChild(a_link)
+        //     a_link.click()
+        //   })
 
-          Message({
-            showClose: true,
-            message: '下载证书成功',
-            type: 'success',
-          })
+        Message({
+          showClose: true,
+          message: '下载证书成功',
+          type: 'success',
+        })
         // } else {
         //   console.log('下载证书-失败:', res.data.rs)
         //   Message({
@@ -315,8 +324,20 @@ export default {
         // }
       })
     },
+    handleRenewal(index, row) {
+      console.log(index, row)
+      this.renewalData = row
+      // 打开续费弹窗
+      this.$refs.renewalShow.showRenewal(this.renewalData)
+    },
   },
 }
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.btnBox {
+  .el-button {
+    margin: 5px;
+  }
+}
+</style>

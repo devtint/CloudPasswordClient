@@ -11,19 +11,20 @@
           <span style="">{{ scope.row.ITCompInstName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="密钥值">
+      <el-table-column label="密钥校验值">
         <template slot-scope="scope">
-          <span style="margin-right: 10px" v-if="scope.row.isShowKey">{{
-            scope.row.secretKeyValue
-          }}</span>
-          <span style="margin-right: 10px" v-else>
+          {{ scope.row.checkValue }}
+          <!-- <span style="margin-right: 10px" v-if="scope.row.isShowKey">{{
+            scope.row.checkValue
+          }}</span> -->
+          <!-- <span style="margin-right: 10px" v-else>
             ***************************</span
           >
           <span
             ><el-button size="mini" @click="showKey(scope.$index, scope.row)">{{
               scope.row.isShowKey ? '隐藏' : '显示'
             }}</el-button></span
-          >
+          > -->
         </template>
       </el-table-column>
       <el-table-column label="密钥的更新日期">
@@ -36,36 +37,42 @@
           <span style="">{{ scope.row.keyGenerateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="环境">
+      <!-- <el-table-column label="环境">
         <template slot-scope="scope">
           <span style="">{{ scope.row.DEVID }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="状态">
         <template slot-scope="scope">
           <span style="">{{ scope.row.status }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" class-name="btnBox">
         <template slot-scope="scope">
           <el-button
             size="mini"
             @click="handleRandomCreateSK(scope.$index, scope.row)"
             >随机生成SK</el-button
           >
+          <!-- <el-button size="mini" @click="handleRenewal(scope.$index, scope.row)"
+            >续费</el-button
+          > -->
         </template>
       </el-table-column>
     </el-table>
+
+
   </div>
 </template>
 
 <script>
+
 import { querySKById, randomCreateSK } from '@/api/key'
 import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'authenticationKey',
-  components: {},
-  emits: ['update-table'],
+  components: {
+  },
   props: {
     currentPage: {
       type: Number,
@@ -78,6 +85,7 @@ export default {
   },
   data() {
     return {
+      renewalShow: false,
       loading: false,
       tableData: [],
     }
@@ -182,8 +190,15 @@ export default {
       // 点击按钮显示当前密钥值明文
       this.tableData[index].isShowKey = !this.tableData[index].isShowKey
     },
+
   },
 }
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.btnBox {
+  .el-button {
+    margin: 5px;
+  }
+}
+</style>

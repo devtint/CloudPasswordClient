@@ -86,3 +86,12 @@ export const createSubAcount = data => {
     data,
   })
 }
+
+// (通过旧密码修改密码)modifyTellerPasswordAtAuthSvr
+export const accountOldPswUpdate = data => {
+  return request({
+    method: 'POST',
+    url: '/insertReturn/modifyTellerPasswordAtAuthSvr',
+    data,
+  })
+}
