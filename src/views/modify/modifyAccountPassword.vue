@@ -40,6 +40,7 @@
           class="validator-card"
           shadow="hover"
           @click.native="modifyOfOldPsw"
+          v-if="!forgetPassword"
         >
           <div class="action">
             <span>通过旧密码验证</span>
@@ -178,7 +179,9 @@
 </template>
 
 <script>
-import { getPK, getSmsCode } from '@/api/user'
+import { encryption } from '@/utils'
+import { Message, MessageBox } from 'element-ui'
+import { getPK, getSmsCode, accountOldPswUpdate } from '@/api/user'
 export default {
   name: 'modifyAccountPassword',
   components: {},
@@ -197,9 +200,9 @@ export default {
       } else if (value === this.ruleForm.oldPass) {
         callback(new Error('新旧密码不能一致!'))
       } else {
-        if (this.ruleForm.checkPass !== '') {
-          this.$refs.ruleForm.validateField('checkPass')
-        }
+        // if (this.ruleForm.checkPass !== '') {
+        //   this.$refs.ruleForm.validateField('checkPass')
+        // }
         callback()
       }
     }
@@ -207,9 +210,9 @@ export default {
       if (value === '') {
         callback(new Error('请输入旧密码'))
       } else {
-        if (this.ruleForm.pass !== '') {
-          this.$refs.ruleForm.validateField('pass')
-        }
+        // if (this.ruleForm.pass !== '') {
+        //   this.$refs.ruleForm.validateField('pass')
+        // }
         callback()
       }
     }
@@ -299,14 +302,17 @@ export default {
   methods: {
     init() {
       this.getPKFn()
-      console.log('修改密码:', this.modifyAction)
-      if (this.modifyAction) {
+      if (this.modifyAction === 'forget') {
         this.headerContent = '忘记密码'
         this.headerTitle = '忘记密码'
         this.forgetPassword = true
-        if (this.inputAccount) {
-          this.ruleForm.account = this.inputAccount
-        }
+      } else if (this.modifyAction === 'modify') {
+        this.headerContent = '修改密码'
+        this.headerTitle = '修改密码'
+        this.forgetPassword = false
+      }
+      if (this.inputAccount) {
+        this.ruleForm.account = this.inputAccount
       }
     },
     getPKFn() {
@@ -332,9 +338,6 @@ export default {
       console.log('modifyOfOldPsw')
       this.modifyValidatorAction = 'oldPsw'
       this.isModifyShow = true
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
     },
     getCode() {
       // 先验证手机号是否合法
@@ -380,6 +383,53 @@ export default {
         }
       })
     },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          console.log('submitForm 检验通过')
+          // 加密密码
+          let newPassword = encryption(this.pkbase64, this.ruleForm.pass)
+          console.log('加密后', newPassword)
+          if (this.modifyValidatorAction === 'oldPsw') {
+            let oldPassword = encryption(this.pkbase64, this.ruleForm.oldPass)
+            let oldData = {
+              cipherText: newPassword,
+              tellerNo: this.ruleForm.account,
+              oldPinCiperUnderOriKey: oldPassword,
+            }
+            console.log('通过旧密码修改密码请求参数', oldData)
+            // 通过旧密码修改密码
+            this.oldPswUpdate(oldData)
+          } else {
+            this.phoneCodePswUpdate(oldData)
+          }
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    oldPswUpdate(data) {
+      accountOldPswUpdate(data).then(res => {
+        if (res.data.rs === '1') {
+          console.log('修改成功')
+          Message({
+            message: '修改成功,请重新登录!',
+            type: 'success',
+          })
+          this.$router.push('login')
+        } else {
+          // Message(res.data.rs)
+          MessageBox.alert(res.data.rs)
+        }
+      })
+    },
+    phoneCodePswUpdate(data) {
+      console.log('phoneCodePswUpdate', data)
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    },
   },
 }
 </script>
@@ -387,6 +437,7 @@ export default {
 <style scoped lang="less">
 .register_header {
   padding: 20px;
+  z-index: 1002;
 }
 .headerTitle {
   display: flex;
@@ -397,17 +448,28 @@ export default {
   color: #4f4f4f;
 }
 .login-container {
-  position: absolute;
-  left: 0;
-  top: 50px;
-  right: 0;
-  bottom: 0;
+  // 垂直左右居中
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  // background: url('./login_bg.jpg') no-repeat;
-  background-size: cover;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  padding: 0;
+  margin: 0;
+
+  // position: absolute;
+  // left: 0;
+  // top: 0;
+  // right: 0;
+  // bottom: 0;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: center;
+  // align-items: center;
+  // // background: url('./login_bg.jpg') no-repeat;
+  // background-size: cover;
 
   .login-form-wrap {
     min-width: 380px;
@@ -455,6 +517,7 @@ export default {
 }
 .forgetPassword {
   width: 20rem;
+  margin-top: 10%;
 }
 .forgetPassword_title {
   font-size: 16px;

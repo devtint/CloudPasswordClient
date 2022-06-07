@@ -54,8 +54,12 @@
         >免费注册</a
       >
     </div>
-    <el-link href="javascript:;" :underline="false" v-else>
+    <div href="javascript:;" :underline="false" v-else>
       <div class="avatar-wrap">
+        <div href="javascript:;" :underline="false">
+          <span class="ename">{{ enterpriseName }}</span>
+          <span class="ename-1">|</span>
+        </div>
         <el-link href="javascript:;" :underline="false">
           <a
             href="javascript:void 0;"
@@ -100,7 +104,7 @@
           </el-dropdown>
         </div>
       </div>
-    </el-link>
+    </div>
   </div>
 </template>
 
@@ -115,6 +119,7 @@ export default {
       isLogin: false,
       userName: '',
       memberID: '',
+      enterpriseName: '',
       // circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
       circleUrl:
         'https://cloudcache.tencentcs.com/qcloud/portal/kit/images/default-avatar.de71167d.svg',
@@ -125,6 +130,7 @@ export default {
   created() {
     this.userName = window.localStorage.getItem('userName')
     this.memberID = window.localStorage.getItem('memberID')
+    this.enterpriseName = window.localStorage.getItem('enterpriseName')
     if (this.memberID) {
       this.isLogin = true
     }
@@ -229,5 +235,16 @@ a {
   justify-content: space-between;
   align-items: center;
   margin-right: 1.5rem;
+}
+.ename {
+  font-family: 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
+  font-size: 16px;
+  font-weight: 550;
+  color: darkgray;
+}
+.ename-1 {
+  font-size: 16px;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 </style>
