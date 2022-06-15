@@ -35,18 +35,19 @@
             <el-form-item prop="enterpriseName" label="企业名称">
               <el-input
                 v-model="ruleForm.enterpriseName"
+                :disabled="this.action === 'childAccount'"
                 placeholder="请输入企业名称"
                 clearable
               ></el-input>
             </el-form-item>
-            <el-form-item prop="userName" label="姓名">
+            <el-form-item prop="userName" label="姓名" v-if="this.action !== 'childAccount'">
               <el-input
                 v-model="ruleForm.userName"
                 placeholder="请输入姓名"
                 clearable
               ></el-input>
             </el-form-item>
-            <el-form-item prop="phone" label="手机号码">
+            <el-form-item prop="phone" label="手机号码" v-if="this.action !== 'childAccount'">
               <el-input
                 v-model="ruleForm.phone"
                 placeholder="请输入手机号码"
@@ -301,11 +302,18 @@ export default {
             // status:1
             // employeeName:李四6
             // logonMode:1141
-            data.miniProcNameForEngine = '为企业客户创建子账号配置'
-            data.logonMode = '1141'
-            data.employeeName = this.ruleForm.userName
-            data.passwordCiper = this.ruleForm.pass // 暂时使用未加密密码
-            createSubAcount(data).then(res => {
+            // data.miniProcNameForEngine = '为企业客户创建子账号配置'
+            // data.logonMode = '1141'
+            // data.employeeName = this.ruleForm.userName
+            // data.passwordCiper = newPassword
+
+            let subData = {
+              cipherText: newPassword,
+              companyName: window.localStorage.getItem('enterpriseName'),
+              tellerNo: this.ruleForm.account,
+              tellerName: window.localStorage.getItem('memberID'),
+            }
+            createSubAcount(subData).then(res => {
               if (res.data.rs === '1') {
                 console.log('子账号创建成功')
                 Message({

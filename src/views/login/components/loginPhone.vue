@@ -264,10 +264,14 @@ export default {
           })
             .then(res => {
               console.log('获取验证码', res)
-              Message({
-                message: '验证码已发送，请注意查收',
-                type: 'success',
-              })
+              if (res.data.rs === '1') {
+                Message({
+                  message: '验证码已发送，请注意查收',
+                  type: 'success',
+                })
+              } else {
+                Message.error(res.data.rs)
+              }
             })
             .catch(err => {
               console.log('获取验证码失败', err)

@@ -61,7 +61,7 @@ export const getSubAcount = data => {
 }
 
 // (强制修改子账号密码)btnUpdateSubAccountPassword
-export const subAccountUpdate = data => {
+export const subAcountUpdate = data => {
   return request({
     method: 'POST',
     url: '/insertReturn/btnUpdateSubAccountPassword',
@@ -82,7 +82,7 @@ export const subAcountDelete = data => {
 export const createSubAcount = data => {
   return request({
     method: 'POST',
-    url: '/insertReturn/btnRegisteredEnterpriseSubAccount',
+    url: '/insertReturn/registerAtAuthSvr',
     data,
   })
 }

@@ -24,13 +24,13 @@
           <el-table-column prop="tellerNo" label="账号"> </el-table-column>
           <el-table-column prop="operation" label="操作">
             <template slot-scope="scope">
-              <el-button
+              <!-- <el-button
                 type="text"
                 size="small"
                 @click="modifyChildAccountPassword(scope.row)"
               >
                 修改子账号密码
-              </el-button>
+              </el-button> -->
               <el-button
                 type="text"
                 size="small"
@@ -51,8 +51,8 @@ import { encryption } from '@/utils'
 import {
   getPK,
   getSubAcount,
-  subAccountDelete,
-  subAccountUpdate,
+  subAcountDelete,
+  subAcountUpdate,
 } from '@/api/user'
 import { Message, MessageBox } from 'element-ui'
 export default {
@@ -126,8 +126,8 @@ export default {
             newPassword: encryptedPassword,
             newPassword: value,
           }
-          subAccountUpdate(data).then(res => {
-            console.log('subAccountUpdate', res)
+          subAcountUpdate(data).then(res => {
+            console.log('subAcountUpdate', res)
             if (res.data.rs !== '1') {
               Message({
                 message: res.data.msg,
@@ -164,7 +164,7 @@ export default {
             miniProcNameForEngine: '删除企业客户子账号',
             tellerNo: row.tellerNo,
           }
-          subAccountDelete(deleteData).then(res => {
+          subAcountDelete(deleteData).then(res => {
             if (res.data.rs !== '1') {
               console.log('删除子账号失败')
               return
