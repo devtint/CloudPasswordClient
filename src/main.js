@@ -2,6 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
+import Clipboard from 'vue-clipboard2'
+Vue.use(Clipboard)
 // 全局引入
 import { globalRegister } from './global'
 import '@/assets/style/global_icon.css'

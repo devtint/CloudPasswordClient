@@ -75,8 +75,8 @@
             </el-table-column>
             <el-table-column
               align="center"
-              prop="密码服务API标准"
-              label="密码服务API标准"
+              prop="国密局批号"
+              label="国密局批号"
               width="180"
               v-if="apiShow === true"
             >
@@ -224,7 +224,7 @@ export default {
     // this.getAlgorithmAndOtherList('密码算法')
     // this.getAlgorithmAndOtherList('有效期限')
     // this.getAlgorithmAndOtherList('TPS')
-    // this.getAlgorithmAndOtherList('密码服务API标准')
+    // this.getAlgorithmAndOtherList('国密局批号')
 
     this.getProductInfo(this.currentGoods.srlID)
   },
@@ -238,7 +238,7 @@ export default {
     calculateThePrice(item) {
       let valueList = ''
       if (this.tpsShow === true) {
-        valueList = `${this.algorithmsValue}.${this.tpsValue}.${this.validityValue}`
+        valueList = `${this.apiValue}.${this.algorithmsValue}.${this.tpsValue}.${this.validityValue}`
       } else {
         valueList = `${this.validityValue}`
       }
@@ -323,7 +323,7 @@ export default {
       // 获取密码算法或TPS或有效期限列表
       await this.getAlgorithmAndOtherList('密码算法')
       await this.getAlgorithmAndOtherList('TPS')
-      await this.getAlgorithmAndOtherList('密码服务API标准')
+      await this.getAlgorithmAndOtherList('国密局批号')
       await this.getAlgorithmAndOtherList('有效期限')
       // setTimeout(() => {
       // 计算价格
@@ -354,7 +354,7 @@ export default {
         }
         if (type === 'TPS') {
           this.tpsShow = true
-        } else if (type === '密码服务API标准') {
+        } else if (type === '国密局批号') {
           this.apiShow = true
         }
         let lists = res.data.queryCryptographicAlgorithmList
@@ -381,7 +381,7 @@ export default {
           option: 'validityOptions',
         },
         {
-          name: '密码服务API标准',
+          name: '国密局批号',
           value: 'apiValue',
           option: 'apiOptions',
         },
@@ -456,7 +456,7 @@ export default {
           密码算法: this.algorithmsValue,
           有效期限: this.validityValue,
           TPS: this.tpsValue,
-          密码服务API标准: this.apiValue,
+          国密局批号: this.apiValue,
           prdUnitPrc: this.orderData[0].priceAfterDiscount,
           prdNum: this.prdNum,
           totalPrice: this.totalPrice,

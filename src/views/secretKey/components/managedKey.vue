@@ -46,6 +46,9 @@
           <el-button size="mini" @click="handleRenewal(scope.$index, scope.row)"
             >续费</el-button
           >
+          <el-button size="mini" @click="handleChecKey(scope.$index, scope.row)"
+            >查看Key</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -56,7 +59,10 @@
 
 <script>
 import orderRenewal from '@/components/orderRenewal.vue'
-import { queryKeyById, randomCreateKey } from '@/api/key'
+
+import { encryption } from '@/utils'
+import { getPK } from '@/api/user'
+import { queryKeyById, randomCreateKey, queryKeyValueByKeyId } from '@/api/key'
 import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'managedKey',
@@ -75,9 +81,20 @@ export default {
   watch: {},
   created() {
     this.getKeyById()
+    this.getPKFn()
   },
   mounted() {},
   methods: {
+    getPKFn() {
+      getPK()
+        .then(res => {
+          console.log('PK res', res)
+          this.pkbase64 = res.data.pkkey
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     getKeyById() {
       this.loading = true
       queryKeyById({
@@ -154,6 +171,74 @@ export default {
       this.renewalData = row
       // 打开续费弹窗
       this.$refs.renewalShow.showRenewal(this.renewalData)
+    },
+    handleChecKey(index, row) {
+      this.userID = row.ObjectID
+      MessageBox.prompt('请输入密码验证身份', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputType: 'password',
+        // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+        // inputErrorMessage: '邮箱格式不正确'
+      })
+        .then(({ value }) => {
+          // 加密密码
+          let cipherText = encryption(this.pkbase64, value)
+          this.checkSK(cipherText)
+        })
+        .catch(() => {
+          Message({
+            type: 'info',
+            message: '取消输入',
+          })
+        })
+    },
+    checkSK(password) {
+      queryKeyValueByKeyId({
+        keyId: this.userID,
+        cipherText: password,
+      }).then(res => {
+        console.log('查询key值:', res.data.queryKeyValueByKeyId)
+        if (res.data.rs === '1') {
+          // 验证通过后显示密钥值,点击复制即可复制到剪切板
+          let secretKeyValue = res.data.queryKeyValueByKeyId[0].secretKeyValue
+          MessageBox.confirm(`密钥值: ${secretKeyValue}`, '提示', {
+            confirmButtonText: '复制',
+            cancelButtonText: '取消',
+            type: 'warning',
+          })
+            .then(() => {
+              // 复制密钥值
+              this.$copyText(secretKeyValue).then(
+                function (e) {
+                  Message({
+                    type: 'success',
+                    message: '已复制到剪贴板!',
+                  })
+                },
+                function (e) {
+                  Message({
+                    type: 'success',
+                    message: '该浏览器不支持自动复制,请手动复制!',
+                  })
+                }
+              )
+            })
+            .catch(() => {
+              Message({
+                type: 'info',
+                message: '已取消',
+              })
+            })
+        } else {
+          console.log('查询key值-失败:', res.data.rs)
+          Message({
+            showClose: true,
+            message: `查询key值失败${res.data.rs}`,
+            type: 'error',
+          })
+        }
+      })
     },
   },
 }

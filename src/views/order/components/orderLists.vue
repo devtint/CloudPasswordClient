@@ -52,13 +52,13 @@
       </el-table-column>
       <el-table-column prop="operation" label="操作">
         <template slot-scope="scope">
-          <!-- <el-button
+          <el-button
             type="text"
             size="small"
             @click="toOrderDetail(scope.row.billNo)"
           >
             订单详情
-          </el-button> -->
+          </el-button>
           <el-upload
             class="avatar-uploader"
             :action="uploadURL"
@@ -66,7 +66,7 @@
             name="file"
             :show-file-list="true"
             :on-success="handleAvatarSuccess"
-            v-if="scope.row.status === '等待支付'"
+            v-if="scope.row.status === '等待支付' || scope.row.status === '待收款确认'"
           >
             <!-- <img
               v-if="bannerRuleForm.imageUrl"
@@ -74,7 +74,7 @@
               class="avatar"
             /> -->
             <el-button type="text" size="small" @click="uploadimage(scope.row)"
-              >上传支付凭证</el-button
+              >{{ scope.row.status === '等待支付' ? '上传支付凭证' : '更新支付凭证'}}</el-button
             >
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
@@ -399,6 +399,9 @@ export default {
       })
       // this.bannerRuleForm.imageUrl = URL.createObjectURL(file.raw)
     },
+    toOrderDetail() {
+      console.log('订单详情')
+    }
   },
 }
 </script>
