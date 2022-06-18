@@ -69,21 +69,35 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    showRenewal(data) {
+    showRenewal(data, type) {
       this.dialogFormVisible = true
       this.renewalData = data
-      this.init()
       console.log('showRenewal data:', data)
+      if (type) {
+        this.init(type)
+      } else {
+        this.init()
+      }
     },
-    init() {
+    init(type) {
       // 截取参数,计算价格
-      this.keyModelID = this.renewalData.keyModelID
-      this.productName = this.renewalData.productName
       this.srlID = this.renewalData.srlID
-      let _length = this.srlID.length
-      this.algorithmsValue = this.keyModelID.slice(_length + 1)
-      console.log('algorithmsValue', this.algorithmsValue)
-      this.toObtainValidTerm()
+      this.productName = this.renewalData.productName
+      if (type) {
+        // 云密码机
+        this.wareAttrValueList = this.renewalData.wareAttrValueList
+        // 切割this.wareAttrValueList字符串,获取国密局批号/密码算法/TPS
+        this.bureauOfBatchNumber = this.wareAttrValueList.split('.')[0]
+        this.algorithmsValue = this.wareAttrValueList.split('.')[1]
+        this.tpsValue = this.wareAttrValueList.split('.')[2]
+        this.toObtainValidTerm()
+      } else {
+        this.keyModelID = this.renewalData.keyModelID
+        let _length = this.srlID.length
+        this.algorithmsValue = this.keyModelID.slice(_length + 1)
+        console.log('algorithmsValue', this.algorithmsValue)
+        this.toObtainValidTerm()
+      }
     },
     // 获取有效期限
     toObtainValidTerm() {
@@ -220,8 +234,8 @@ export default {
           srlID: this.renewalData.srlID,
           密码算法: this.algorithmsValue,
           有效期限: this.validityValue,
-          // TPS: this.tpsValue,
-          // 密码服务API标准: this.apiValue,
+          TPS: this.tpsValue,
+          密码服务API标准: this.bureauOfBatchNumber,
           prdUnitPrc: this.totalPrice,
           prdNum: '1',
           totalPrice: this.totalPrice,

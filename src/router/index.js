@@ -84,6 +84,14 @@ const routes = [
             /* webpackChunkName: "modify" */ '@/views/modify/modifyAccountPassword.vue'
           ),
       },
+      {
+        path: '/cipherMachine',
+        name: 'cipherMachine',
+        component: () =>
+          import(
+            /* webpackChunkName: "cipherMachine" */ '@/views/cipherMachine/cloudCipherMachine.vue'
+          ),
+      },
     ],
   },
 ]

@@ -43,11 +43,11 @@
             @click="handleRandomCreateKey(scope.$index, scope.row)"
             >随机生成密钥</el-button
           >
+          <el-button size="mini" @click="handleChecKey(scope.$index, scope.row)"
+            >查看密钥值</el-button
+          >
           <el-button size="mini" @click="handleRenewal(scope.$index, scope.row)"
             >续费</el-button
-          >
-          <el-button size="mini" @click="handleChecKey(scope.$index, scope.row)"
-            >查看Key</el-button
           >
         </template>
       </el-table-column>

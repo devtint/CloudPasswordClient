@@ -55,7 +55,7 @@
             >随机生成SK</el-button
           >
           <el-button size="mini" @click="handleCheckSK(scope.$index, scope.row)"
-            >查看SK</el-button
+            >查看密钥值</el-button
           >
         </template>
       </el-table-column>

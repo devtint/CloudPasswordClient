@@ -89,6 +89,7 @@ export default {
           return
         }
         this.tableData = res.data.subAccountdisplay
+        console.log('子账号列表:', this.tableData)
       })
     },
     createChildAccount() {

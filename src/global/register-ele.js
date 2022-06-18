@@ -40,6 +40,7 @@ import {
   Upload,
   Dialog,
   Loading,
+  Drawer,
 } from 'element-ui'
 
 const components = [
@@ -83,6 +84,7 @@ const components = [
   Upload,
   Dialog,
   Loading,
+  Drawer,
 ]
 
 function install(Vue) {
