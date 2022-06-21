@@ -41,6 +41,8 @@ import {
   Dialog,
   Loading,
   Drawer,
+  Descriptions,
+  DescriptionsItem,
 } from 'element-ui'
 
 const components = [
@@ -85,6 +87,8 @@ const components = [
   Dialog,
   Loading,
   Drawer,
+  Descriptions,
+  DescriptionsItem,
 ]
 
 function install(Vue) {

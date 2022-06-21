@@ -66,15 +66,25 @@
             name="file"
             :show-file-list="true"
             :on-success="handleAvatarSuccess"
-            v-if="scope.row.status === '等待支付' || scope.row.status === '待收款确认'"
+            v-if="
+              scope.row.status === '等待支付' ||
+              scope.row.status === '待收款确认'
+            "
           >
             <!-- <img
               v-if="bannerRuleForm.imageUrl"
               :src="bannerRuleForm.imageUrl"
               class="avatar"
             /> -->
-            <el-button type="text" size="small" @click="uploadimage(scope.row)"
-              >{{ scope.row.status === '等待支付' ? '上传支付凭证' : '更新支付凭证'}}</el-button
+            <el-button
+              type="text"
+              size="small"
+              @click="uploadimage(scope.row)"
+              >{{
+                scope.row.status === '等待支付'
+                  ? '上传支付凭证'
+                  : '更新支付凭证'
+              }}</el-button
             >
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
@@ -96,6 +106,8 @@
       >
       </el-pagination>
     </div>
+
+    <OrderDetail ref="orderDetail"></OrderDetail>
   </div>
 </template>
 
@@ -114,9 +126,12 @@ import {
   queryMyDisCompletedOrders,
   uploadCredentials,
 } from '@/api/order'
+import OrderDetail from './orderDetail.vue'
 export default {
   name: 'orderLists',
-  components: {},
+  components: {
+    OrderDetail,
+  },
   props: {},
   data() {
     return {
@@ -129,16 +144,7 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       listType: 'text',
-      fileList: [
-        // {
-        //   name: 'food.jpeg',
-        //   url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-        // },
-        // {
-        //   name: 'food2.jpeg',
-        //   url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-        // },
-      ],
+      fileList: [],
       bannerRuleForm: {
         imageUrl: '',
       },
@@ -222,17 +228,6 @@ export default {
           'queryMyDisCompletedOrders'
         )
       }
-      // if (tabStatus === '全部') {
-      //   this.tableData = Object.assign(initTableData)
-      // } else {
-      //   let tableData = initTableData.filter(item => {
-      //     if (item.status === tabStatus) {
-      //       return true
-      //     }
-      //     return false
-      //   })
-      //   this.tableData = tableData
-      // }
     },
     getMyOrders(tabStatus, orderFn, dataName) {
       console.log(tabStatus, '订单')
@@ -257,12 +252,7 @@ export default {
     },
     toOrderDetail(billNo) {
       console.log('订单详情', billNo)
-      // this.$router.push({
-      //   path: '/orderDetail',
-      //   query: {
-      //     billNo,
-      //   },
-      // })
+      this.$refs.orderDetail.showDrawer(billNo)
     },
     updatePayCredentials(billNo) {
       console.log('上传支付凭证', billNo)
@@ -399,9 +389,6 @@ export default {
       })
       // this.bannerRuleForm.imageUrl = URL.createObjectURL(file.raw)
     },
-    toOrderDetail() {
-      console.log('订单详情')
-    }
   },
 }
 </script>

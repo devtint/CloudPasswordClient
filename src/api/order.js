@@ -128,3 +128,12 @@ export const queryOrdersByDate = params => {
     params,
   })
 }
+
+// （展示订单详细内容）}/order/queryDetailOrder
+export const queryDetailOrder = data => {
+  return request({
+    method: 'POST',
+    url: '/order/queryDetailOrder',
+    data,
+  })
+}
