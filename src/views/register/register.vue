@@ -311,7 +311,7 @@ export default {
               cipherText: newPassword,
               companyName: window.localStorage.getItem('enterpriseName'),
               tellerNo: this.ruleForm.account,
-              tellerName: window.localStorage.getItem('memberID'),
+              tellerName: window.localStorage.getItem('userName'),
             }
             createSubAcount(subData).then(res => {
               if (res.data.rs === '1') {

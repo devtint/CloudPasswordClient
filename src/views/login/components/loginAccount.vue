@@ -132,7 +132,7 @@ export default {
         path: '/modify',
         query: {
           modifyAction: 'forget',
-          inputAccount: this.user.account
+          inputAccount: this.user.account,
         },
       })
     },
@@ -171,6 +171,9 @@ export default {
               )
               window.localStorage.setItem('userName', res.data.TELLERNAME)
               window.localStorage.setItem('memberID', res.data.memberID)
+
+              // 关闭标签页重新登录
+              window.sessionStorage.setItem('afreshLogin', true)
 
               Message({
                 showClose: true,

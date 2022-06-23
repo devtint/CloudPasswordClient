@@ -29,7 +29,7 @@
                 size="small"
                 @click="modifyChildAccountPassword(scope.row)"
               >
-                修改子账号密码
+                修改密码
               </el-button> -->
               <el-button
                 type="text"
