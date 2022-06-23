@@ -55,6 +55,20 @@
       </el-table-column>
     </el-table>
 
+    <!-- 分页 -->
+    <div class="paginationBox">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5, 10, 20, 50]"
+        :page-size="5"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalData"
+      >
+      </el-pagination>
+    </div>
+
     <order-renewal ref="renewalShow"></order-renewal>
   </div>
 </template>
@@ -79,20 +93,24 @@ export default {
       loading: false,
       tableData: [],
       renewalData: {},
+      currentPage: 1,
+      numOfPerPage: 5,
+      totalData: 0,
     }
   },
   computed: {},
   watch: {},
   created() {
-    this.getCertificateById()
+    this.init(1, 5)
   },
   mounted() {},
   methods: {
-    getCertificateById() {
+    init(currentPage, pageSize) {
       this.loading = true
+      this.tableData = []
       queryCertificateById({
-        currentPage: 1,
-        pageSize: 10,
+        currentPage: currentPage,
+        numOfPerPage: pageSize,
       }).then(res => {
         console.log('查询证书列表:', res.data)
         let data = res.data.queryCertificateById.map(item => {
@@ -103,6 +121,7 @@ export default {
         data.forEach(item => {
           this.tableData.push(item)
         })
+        this.totalData = res.data.queryCertificateById_totalRecNum
         this.loading = false
       })
     },
@@ -155,7 +174,7 @@ export default {
               })
               // 重新获取列表
               this.tableData = []
-              this.getCertificateById()
+              this.init()
             } else {
               console.log('随机生成密钥对-失败:', res.data.rs)
               Message({
@@ -236,7 +255,7 @@ export default {
               })
               // 重新获取列表
               this.tableData = []
-              this.getCertificateById()
+              this.init()
             } else {
               console.log('签发证书-失败:', res.data.rs)
               Message({
@@ -330,6 +349,18 @@ export default {
       // 打开续费弹窗
       this.$refs.renewalShow.showRenewal(this.renewalData)
     },
+    handleSizeChange(val) {
+      this.numOfPerPage = val
+      this.currentPage = 1
+      this.init(this.currentPage, this.numOfPerPage)
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.init(this.currentPage, this.numOfPerPage)
+      console.log(`当前页: ${val}`)
+      // Message(`当前页: ${val}`)
+    },
   },
 }
 </script>
@@ -339,5 +370,13 @@ export default {
   .el-button {
     margin: 5px;
   }
+}
+.paginationBox {
+  // 固定屏幕右下角
+  position: fixed;
+  bottom: 40px;
+  right: 50px;
+  background-color: #fff;
+  z-index: 999;
 }
 </style>

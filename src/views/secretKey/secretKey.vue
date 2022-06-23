@@ -2,13 +2,6 @@
   <div class="secretKey">
     <main>
       <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-        <el-tab-pane label="认证密钥" name="SK">
-          <AuthenticationKey
-            v-if="activeName === 'SK'"
-            :current-page="currentPage"
-            :num-ofer-page="numOfPerPage"
-          ></AuthenticationKey>
-        </el-tab-pane>
         <el-tab-pane label="托管密钥" name="Key">
           <ManagedKey
             v-if="activeName === 'Key'"
@@ -22,6 +15,13 @@
             :current-page="currentPage"
             :num-ofer-page="numOfPerPage"
           ></ManagedCertificate>
+        </el-tab-pane>
+        <el-tab-pane label="认证密钥" name="SK">
+          <AuthenticationKey
+            v-if="activeName === 'SK'"
+            :current-page="currentPage"
+            :num-ofer-page="numOfPerPage"
+          ></AuthenticationKey>
         </el-tab-pane>
       </el-tabs>
     </main>
@@ -58,7 +58,7 @@ export default {
   props: {},
   data() {
     return {
-      activeName: 'SK',
+      activeName: 'Key',
       currentPage: 1,
       numOfPerPage: 5,
       totalData: 0,

@@ -118,6 +118,20 @@
       </el-table>
     </el-card>
 
+    <!-- 分页 -->
+    <div class="paginationBox">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5, 10, 20, 50]"
+        :page-size="5"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalData"
+      >
+      </el-pagination>
+    </div>
+
     <order-renewal ref="renewalShow"></order-renewal>
   </div>
 </template>
@@ -137,21 +151,23 @@ export default {
       loading: false,
       tableData: [],
       currentPage: 1,
-      pageSize: 10,
+      numOfPerPage: 5,
+      totalData: 0,
     }
   },
   computed: {},
   watch: {},
   created() {
-    this.init()
+    this.init(1, 5)
   },
   mounted() {},
   methods: {
-    init() {
+    init(currentPage, pageSize) {
       this.loading = true
+      this.tableData = []
       querySVMDetails({
-        currentPage: this.currentPage,
-        pageSize: this.numOfPerPage,
+        currentPage: currentPage,
+        numOfPerPage: pageSize,
       }).then(res => {
         console.log('查询VSM列表:', res.data)
         // let numPage = res.data.querySVMDetails_totalRecNum
@@ -166,6 +182,7 @@ export default {
         data.forEach(item => {
           this.tableData.push(item)
         })
+        this.totalData = res.data.querySVMDetails_totalRecNum
         this.loading = false
       })
     },
@@ -175,6 +192,18 @@ export default {
       let type = 'cipherMachine'
       // 打开续费弹窗
       this.$refs.renewalShow.showRenewal(this.renewalData, type)
+    },
+    handleSizeChange(val) {
+      this.numOfPerPage = val
+      this.currentPage = 1
+      this.init(this.currentPage, this.numOfPerPage)
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.init(this.currentPage, this.numOfPerPage)
+      console.log(`当前页: ${val}`)
+      // Message(`当前页: ${val}`)
     },
   },
 }
@@ -196,5 +225,13 @@ export default {
   margin-right: 0;
   margin-bottom: 0;
   width: 45%;
+}
+.paginationBox {
+  // 固定屏幕右下角
+  position: fixed;
+  bottom: 40px;
+  right: 50px;
+  background-color: #fff;
+  z-index: 999;
 }
 </style>
