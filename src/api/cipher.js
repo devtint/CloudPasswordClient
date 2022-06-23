@@ -11,7 +11,7 @@ import { request } from '@/utils'
 // (查询SVM)querySVMDetails
 export const querySVMDetails = params => {
   return request({
-    method: 'POST',
+    method: 'GET',
     url: '/search/querySVMDetails',
     params,
   })

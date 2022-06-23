@@ -84,6 +84,7 @@ export default {
       this.srlID = this.renewalData.srlID
       this.productName = this.renewalData.productName
       if (type) {
+        this.type = type
         // 云密码机
         this.wareAttrValueList = this.renewalData.wareAttrValueList
         // 切割this.wareAttrValueList字符串,获取国密局批号/密码算法/TPS
@@ -118,22 +119,23 @@ export default {
             }
           })
 
-          this.calculateThePrice(this.validityValue)
+          this.calculateThePrice(this.validityValue, this.type)
         }
       })
     },
     changePriceForSelect(val) {
       console.log('changePriceForSelect', val)
-      this.calculateThePrice(val)
+      this.calculateThePrice(val, this.type)
     },
     // 计算价格
-    calculateThePrice(val) {
-      // let valueList = ''
-      // if (this.tpsShow === true) {
-      //   valueList = `${this.algorithmsValue}.${this.tpsValue}.${this.validityValue}`
-      // } else {
-      //   valueList = `${this.validityValue}`
-      // }
+    calculateThePrice(val, type) {
+      let valueList = ''
+      if (type) {
+        valueList = `${this.renewalData.wareAttrValueList}.${val}`
+      } else {
+        valueList = val
+      }
+      console.log('valueList:', valueList)
       let params = {
         actNo: this.renewalData.actNo,
         saleCmpName: this.renewalData.saleCmpName,
@@ -141,7 +143,7 @@ export default {
         // productName: this.renewalData.productName,
         srlID: this.renewalData.srlID,
         prdNum: '1',
-        priceAttrValueList: val,
+        priceAttrValueList: valueList,
       }
       console.log('countOrderPrice params', params)
       countOrderPrice(params).then(res => {
@@ -235,7 +237,7 @@ export default {
           密码算法: this.algorithmsValue,
           有效期限: this.validityValue,
           TPS: this.tpsValue,
-          密码服务API标准: this.bureauOfBatchNumber,
+          国密局批号: this.bureauOfBatchNumber,
           prdUnitPrc: this.totalPrice,
           prdNum: '1',
           totalPrice: this.totalPrice,

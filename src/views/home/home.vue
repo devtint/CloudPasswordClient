@@ -103,7 +103,12 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+    let afreshLogin = window.sessionStorage.getItem('afreshLogin')
+    if (afreshLogin) {
+      // this.checklogin()
+    }
+  },
   mounted() {},
   methods: {
     checkTheDetails(item) {

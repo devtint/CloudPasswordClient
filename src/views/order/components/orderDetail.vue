@@ -45,7 +45,13 @@
             >￥{{ lists.totalPrice }}</el-descriptions-item
           >
           <el-descriptions-item label="支付凭证">
-            <img width="100%" :src="imgSrc" alt="" />
+            <!-- <img width="100%" :src="imgSrc" alt="" /> -->
+            <el-image
+              style="width: 100%"
+              :src="imgSrc"
+              :preview-src-list="srcList"
+            >
+            </el-image>
           </el-descriptions-item>
         </el-descriptions>
       </div>
@@ -65,6 +71,8 @@ export default {
       drawer: false,
       lists: [],
       show: false,
+      imgSrc: '',
+      srcList: [],
     }
   },
   computed: {},
@@ -90,6 +98,7 @@ export default {
         console.log('订单详情-:', this.lists)
         if (this.lists.contractPayPlan.length > 0) {
           this.imgSrc = `data:image/png;base64,${this.lists.contractPayPlan[0].payPlanImg.imgBase64Str}`
+          this.srcList = [this.imgSrc]
         }
         this.$nextTick(() => {
           // 以服务的方式调用的 Loading 需要异步关闭

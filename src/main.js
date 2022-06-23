@@ -7,12 +7,30 @@ import Clipboard from 'vue-clipboard2'
 Vue.use(Clipboard)
 // 全局引入
 import { globalRegister } from './global'
+import { checkLogin } from '@/api/user'
 import '@/assets/style/global_icon.css'
 
 Vue.config.productionTip = false
 Vue.config.devtools = true
 Vue.use(store)
 Vue.use(globalRegister)
+
+// 检测是否登陆。
+Vue.prototype.checklogin = function (callback) {
+  checkLogin().then(function (response) {
+    //请求成功
+    console.log('checkLogin response:', response)
+    var userName = response.data.memberID
+    let storage = window.localStorage
+    if (userName === 'null') {
+      storage.removeItem('user')
+      storage.removeItem('memberID')
+      storage.removeItem('userName')
+      storage.removeItem('enterpriseName')
+      console.log('memberID', window.localStorage.getItem('memberID'))
+    }
+  })
+}
 
 new Vue({
   router,

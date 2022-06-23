@@ -81,18 +81,18 @@ export const downloadCertificateFile = data => {
 }
 
 // (通过用户编号获取SK值)querySKValueById
-export const querySKValueById = data => {
+export const querySKValueById = params => {
   return request({
-    method: 'POST',
+    method: 'GET',
     url: '/search/querySKValueById',
-    data,
+    params,
   })
 }
 
 // (通过密钥ID获取密钥值)queryKeyValueByKeyId
-export const queryKeyValueByKeyId = data => {
+export const queryKeyValueByKeyId = params => {
   return request({
-    method: 'POST',
+    method: 'GET',
     url: '/search/queryKeyValueByKeyId',
     data,
   })

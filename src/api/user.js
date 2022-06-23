@@ -7,6 +7,13 @@ import { request } from '@/utils'
 //     params,
 //   })
 // }
+// 检查登录状态
+export const checkLogin = () => {
+  return request({
+    method: 'GET',
+    url: '/app/checkLogin',
+  })
+}
 // getPk
 export const getPK = () => {
   return request({

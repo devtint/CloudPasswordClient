@@ -55,14 +55,6 @@ const routes = [
           ),
       },
       {
-        path: '/password',
-        name: 'password',
-        component: () =>
-          import(
-            /* webpackChunkName: "password" */ '@/views/password/passwordService.vue'
-          ),
-      },
-      {
         path: '/order',
         name: 'order',
         component: () =>
