@@ -102,3 +102,12 @@ export const accountOldPswUpdate = data => {
     data,
   })
 }
+
+// （个人信息查询）queryPersonalInfo
+export const queryPersonalInfo = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryPersonalInfo',
+    params,
+  })
+}
