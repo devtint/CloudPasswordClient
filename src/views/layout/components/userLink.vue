@@ -88,16 +88,18 @@
               </div>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="toLogin">{{
-                userName
-              }}</el-dropdown-item>
-              <el-dropdown-item @click.native="toLogin"
-                >ID:{{ memberID }}</el-dropdown-item
+              <el-dropdown-item>
+                <p class="userName">{{ userName }}</p>
+                <span class="userID">账号ID：{{ memberID }}</span>
+              </el-dropdown-item>
+              <!-- <el-dropdown-item><span class="userID">账号ID:{{ memberID }}</span></el-dropdown-item> -->
+              <el-dropdown-item divided @click.native="toPersonalData"
+                >个人资料</el-dropdown-item
               >
               <el-dropdown-item @click.native="toAccount"
                 >账号管理</el-dropdown-item
               >
-              <el-dropdown-item @click.native="logout" v-if="isLogin"
+              <el-dropdown-item divided @click.native="logout" v-if="isLogin"
                 >退出登录</el-dropdown-item
               >
             </el-dropdown-menu>
@@ -142,6 +144,9 @@ export default {
     },
     toLogin() {
       this.$router.push('/login')
+    },
+    toPersonalData() {
+      this.$router.push('/personal')
     },
     toAccount() {
       this.$router.push('/account')
@@ -246,5 +251,16 @@ a {
   font-size: 16px;
   margin-left: 1rem;
   margin-right: 1rem;
+}
+.userName {
+  font-size: larger;
+  font-weight: bold;
+}
+.userID {
+  font-size: small;
+  color: #ccc;
+}
+/deep/ .el-dropdown-menu {
+  width: 150%;
 }
 </style>

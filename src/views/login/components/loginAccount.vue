@@ -170,6 +170,7 @@ export default {
                 res.data.TELLERCOMPANY
               )
               window.localStorage.setItem('userName', res.data.TELLERNAME)
+              window.localStorage.setItem('accountName', res.data.tellerNo)
               window.localStorage.setItem('memberID', res.data.memberID)
 
               // 关闭标签页重新登录

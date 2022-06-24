@@ -89,6 +89,7 @@
                 v-model="ruleForm.account"
                 placeholder="请输入账号"
                 clearable
+                disabled
               ></el-input>
             </el-form-item>
             <el-form-item
@@ -260,7 +261,7 @@ export default {
     }
     return {
       modifyAction: this.$route.query.modifyAction,
-      inputAccount: this.$route.query.inputAccount,
+      inputAccount: window.localStorage.getItem('accountName'),
       headerTitle: '修改密码',
       headerContent: '修改密码',
       forgetPassword: false,

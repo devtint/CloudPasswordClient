@@ -202,16 +202,18 @@ export default {
         .then(({ value }) => {
           // 加密密码
           let cipherText = encryption(this.pkbase64, value)
+          console.log('密文:', cipherText)
           this.checkSK(cipherText)
         })
         .catch(() => {
-          Message({
-            type: 'info',
-            message: '取消输入',
-          })
+          // Message({
+          //   type: 'info',
+          //   message: '取消输入',
+          // })
         })
     },
     checkSK(password) {
+      console.log('开始查询密钥值#############')
       queryKeyValueByKeyId({
         keyId: this.userID,
         cipherText: password,
@@ -256,6 +258,14 @@ export default {
             type: 'error',
           })
         }
+      })
+      .catch(err => {
+        console.log('查询key值-失败:', err)
+        Message({
+          showClose: true,
+          message: `查询key值失败${err}`,
+          type: 'error',
+        })
       })
     },
     handleSizeChange(val) {
