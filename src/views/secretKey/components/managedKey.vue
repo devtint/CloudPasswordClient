@@ -203,7 +203,7 @@ export default {
           // 加密密码
           let cipherText = encryption(this.pkbase64, value)
           console.log('密文:', cipherText)
-          this.checkSK(cipherText)
+          this.checkSK(cipherText, index, row)
         })
         .catch(() => {
           // Message({
@@ -212,61 +212,58 @@ export default {
           // })
         })
     },
-    checkSK(password) {
+    checkSK(password, index, row) {
       console.log('开始查询密钥值#############')
       queryKeyValueByKeyId({
         keyId: this.userID,
         cipherText: password,
-      }).then(res => {
-        console.log('查询key值:', res.data.queryKeyValueByKeyId)
-        if (res.data.rs === '1') {
-          // 验证通过后显示密钥值,点击复制即可复制到剪切板
-          let secretKeyValue = res.data.queryKeyValueByKeyId[0].secretKeyValue
-          MessageBox.confirm(`密钥值: ${secretKeyValue}`, '提示', {
-            confirmButtonText: '复制',
-            cancelButtonText: '取消',
-            type: 'warning',
-          })
-            .then(() => {
-              // 复制密钥值
-              this.$copyText(secretKeyValue).then(
-                function (e) {
-                  Message({
-                    type: 'success',
-                    message: '已复制到剪贴板!',
-                  })
-                },
-                function (e) {
-                  Message({
-                    type: 'success',
-                    message: '该浏览器不支持自动复制,请手动复制!',
-                  })
-                }
-              )
+      })
+        .then(res => {
+          console.log('查询key值:', res.data.queryKeyValueByKeyId)
+          if (res.data.rs === '1') {
+            // 验证通过后显示密钥值,点击复制即可复制到剪切板
+            let secretKeyValue = res.data.queryKeyValueByKeyId[0].secretKeyValue
+            MessageBox.confirm(`密钥值: ${secretKeyValue}`, '提示', {
+              confirmButtonText: '复制',
+              cancelButtonText: '取消',
+              type: 'warning',
             })
-            .catch(() => {
-              Message({
-                type: 'info',
-                message: '已取消',
+              .then(() => {
+                // 复制密钥值
+                this.$copyText(secretKeyValue).then(
+                  function (e) {
+                    Message({
+                      type: 'success',
+                      message: '已复制到剪贴板!',
+                    })
+                  },
+                  function (e) {
+                    Message({
+                      type: 'success',
+                      message: '该浏览器不支持自动复制,请手动复制!',
+                    })
+                  }
+                )
               })
+              .catch(() => {
+                Message({
+                  type: 'info',
+                  message: '已取消',
+                })
+              })
+          } else {
+            console.log('查询key值-失败:', res.data.rs)
+            Message({
+              showClose: true,
+              message: `密码验证错误,请重新输入`,
+              type: 'error',
             })
-        } else {
-          console.log('查询key值-失败:', res.data.rs)
-          Message({
-            showClose: true,
-            message: `查询key值失败${res.data.rs}`,
-            type: 'error',
-          })
-        }
-      })
-      .catch(err => {
-        console.log('查询key值-失败:', err)
-        Message({
-          showClose: true,
-          message: `查询key值失败${err}`,
-          type: 'error',
+            this.handleChecKey(index, row)
+          }
         })
-      })
+        .catch(err => {
+          console.log('查询key值-失败:', err)
+        })
     },
     handleSizeChange(val) {
       this.numOfPerPage = val

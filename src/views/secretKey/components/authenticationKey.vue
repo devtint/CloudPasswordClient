@@ -212,7 +212,7 @@ export default {
         .then(({ value }) => {
           // 加密密码
           let cipherText = encryption(this.pkbase64, value)
-          this.checkSK(cipherText)
+          this.checkSK(cipherText, index, row)
         })
         .catch(() => {
           Message({
@@ -221,7 +221,7 @@ export default {
           })
         })
     },
-    checkSK(password) {
+    checkSK(password, index, row) {
       querySKValueById({
         userId: this.userID,
         cipherText: password,
@@ -262,9 +262,10 @@ export default {
           console.log('查询SK值-失败:', res.data.rs)
           Message({
             showClose: true,
-            message: `查询SK值失败${res.data.rs}`,
+            message: `密码验证错误,请重新输入`,
             type: 'error',
           })
+          this.handleChecKey(index, row)
         }
       })
     },
