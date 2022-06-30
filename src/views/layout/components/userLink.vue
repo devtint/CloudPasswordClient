@@ -94,7 +94,7 @@
               </el-dropdown-item>
               <!-- <el-dropdown-item><span class="userID">账号ID:{{ memberID }}</span></el-dropdown-item> -->
               <el-dropdown-item divided @click.native="toPersonalData"
-                >个人资料</el-dropdown-item
+                >账号信息</el-dropdown-item
               >
               <el-dropdown-item @click.native="toAccount"
                 >账号管理</el-dropdown-item

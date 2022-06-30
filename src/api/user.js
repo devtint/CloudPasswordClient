@@ -111,3 +111,12 @@ export const queryPersonalInfo = params => {
     params,
   })
 }
+
+// (修改手机号)modifyMobileAccount
+export const modifyMobileAccount = data => {
+  return request({
+    method: 'POST',
+    url: '/insertReturn/modifyMobileAccount',
+    data,
+  })
+}
