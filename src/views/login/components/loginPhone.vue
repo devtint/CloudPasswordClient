@@ -180,11 +180,11 @@ export default {
                 type: 'success',
               })
               //在这里判断一下，是不是刚刚传过来的字段
-              if (this.$route.query.auth === '0') {
-                this.$router.go(-1)
-              } else {
-                this.$router.push('/')
-              }
+              // if (this.$route.query.auth === '0') {
+              //   this.$router.go(-1)
+              // } else {
+              this.$router.push('/')
+              // }
             } else {
               // Message(res.data.rs)
               MessageBox.alert(res.data.rs)

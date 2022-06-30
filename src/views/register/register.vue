@@ -40,14 +40,18 @@
                 clearable
               ></el-input>
             </el-form-item>
-            <el-form-item prop="userName" label="姓名" v-if="this.action !== 'childAccount'">
+            <el-form-item prop="userName" label="姓名">
               <el-input
                 v-model="ruleForm.userName"
                 placeholder="请输入姓名"
                 clearable
               ></el-input>
             </el-form-item>
-            <el-form-item prop="phone" label="手机号码" v-if="this.action !== 'childAccount'">
+            <el-form-item
+              prop="phone"
+              label="手机号码"
+              v-if="this.action !== 'childAccount'"
+            >
               <el-input
                 v-model="ruleForm.phone"
                 placeholder="请输入手机号码"
@@ -311,7 +315,10 @@ export default {
               cipherText: newPassword,
               companyName: window.localStorage.getItem('enterpriseName'),
               tellerNo: this.ruleForm.account,
-              tellerName: window.localStorage.getItem('userName'),
+              tellerName: window.localStorage.getItem('accountName'),
+              roleID: '企业用户',
+              contactor: this.ruleForm.userName,
+              employeeName: this.ruleForm.userName,
             }
             createSubAcount(subData).then(res => {
               if (res.data.rs === '1') {

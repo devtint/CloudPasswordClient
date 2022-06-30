@@ -12,13 +12,9 @@
     <div class="title">账号列表</div>
     <div class="accountLists">
       <el-card class="box-card">
-        <el-button type="primary" @click="createChildAccount"
-          >创建子账号</el-button
-        >
-        <el-button type="primary" @click="modifyAccountPassword"
-          >修改当前账号密码</el-button
-        >
-        <el-table :data="tableData" border style="width: 100%">
+        <el-button type="primary" @click="createChildAccount">创建子账号</el-button>
+        <el-button type="primary" @click="modifyAccountPassword">修改当前账号密码</el-button>
+        <el-table :data="tableData" border style="width: 100%" :row-class-name="tableRowClassName">
           <el-table-column prop="employeeName" label="姓名" width="180">
           </el-table-column>
           <el-table-column prop="tellerNo" label="账号"> </el-table-column>
@@ -31,11 +27,8 @@
               >
                 修改密码
               </el-button> -->
-              <el-button
-                type="text"
-                size="small"
-                @click="deleteChildAccount(scope.row)"
-              >
+              <el-button type="text" size="small" @click="deleteChildAccount(scope.row)"
+                         v-if="scope.row.tellerNo !== accountName">
                 删除子账号
               </el-button>
             </template>
@@ -62,6 +55,7 @@ export default {
   data() {
     return {
       tableData: [],
+      accountName: window.localStorage.getItem('accountName'),
     }
   },
   computed: {},
@@ -69,7 +63,7 @@ export default {
   created() {
     this.init()
   },
-  mounted() {},
+  mounted() { },
   methods: {
     getPKFn() {
       getPK()
@@ -184,11 +178,21 @@ export default {
           })
         })
     },
+    tableRowClassName({ row, rowIndex }) {
+      if (row.tellerNo === this.accountName) {
+        return 'success-row'
+      }
+      return ''
+    },
   },
 }
 </script>
 
 <style scoped lang="less">
+/deep/ .el-table .success-row {
+  background: #e4f0fb;
+}
+
 .breadcrumbBox {
   padding: 20px;
 }
@@ -199,15 +203,18 @@ export default {
   margin: 1.5rem;
   // text-align: center;
 }
+
 .tableBox {
   display: flex;
   justify-content: center;
   // align-items: center;
 }
+
 .accountLists {
   width: 95%;
   margin: 0 auto;
 }
+
 .el-table {
   margin-top: 1rem;
 }
