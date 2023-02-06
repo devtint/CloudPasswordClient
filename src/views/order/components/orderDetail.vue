@@ -21,8 +21,8 @@
           <el-descriptions-item label="商品名称">{{
             lists.purchaseContractTarget[0].srlID
           }}</el-descriptions-item>
-          <el-descriptions-item label="下单企业">{{
-            lists.purchaseCompanyName
+          <el-descriptions-item label="库存规格">{{
+            lists.purchaseContractTarget[0].wareAttrValueList
           }}</el-descriptions-item>
           <el-descriptions-item label="支付状态">{{
             lists.purchaseContract1[0].payStatus

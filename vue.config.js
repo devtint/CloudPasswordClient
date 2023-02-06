@@ -2,6 +2,12 @@ module.exports = {
   configureWebpack: {
     // other webpack options to merge in ...
   },
+  chainWebpack: config => {
+    config.plugin('html').tap(args => {
+      args[0].title = '云密码服务平台客户端'
+      return args
+    })
+  },
 
   // devServer Options don't belong into `configureWebpack`
   publicPath: './',
