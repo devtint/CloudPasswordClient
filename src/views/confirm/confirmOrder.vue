@@ -5,9 +5,7 @@
         <!-- 面包屑路径导航 -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/products' }">{{
-            currentGoods.productName
-          }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/products' }">{{ currentGoods.productName }}</el-breadcrumb-item>
           <el-breadcrumb-item>{{ currentGoods.srlID }}</el-breadcrumb-item>
         </el-breadcrumb>
         <!-- 面包屑路径导航  end -->
@@ -15,102 +13,33 @@
       <div class="title">确认订单信息</div>
       <div class="tableBox">
         <div>
-          <el-table
-            :data="orderData"
-            stripe
-            style="width: 100%"
-            v-loading="loading"
-          >
-            <el-table-column
-              align="center"
-              prop="srlID"
-              label="商品名称"
-              width="250"
-            >
-            </el-table-column>
-            <el-table-column
-              align="center"
-              prop="algorithms"
-              label="密码算法"
-              width="180"
-            >
+          <el-table :data="orderData" stripe style="width: 100%" v-loading="loading">
+            <el-table-column align="center" prop="srlID" label="商品名称" width="250"> </el-table-column>
+            <el-table-column align="center" prop="algorithms" label="密码算法" width="180">
               <template slot-scope="scope">
-                <el-select
-                  v-model="algorithmsValue"
-                  placeholder="请选择"
-                  @change="changePriceForSelect"
-                >
-                  <el-option
-                    v-for="item in algorithmsOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
+                <el-select v-model="algorithmsValue" placeholder="请选择" @change="changePriceForSelect">
+                  <el-option v-for="item in algorithmsOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column
-              align="center"
-              prop="TPS"
-              label="TPS"
-              width="180"
-              v-if="tpsShow === true"
-            >
+            <el-table-column align="center" prop="TPS" label="TPS" width="180" v-if="tpsShow === true">
               <template slot-scope="scope">
-                <el-select
-                  v-model="tpsValue"
-                  placeholder="请选择"
-                  @change="changePriceForSelect"
-                >
-                  <el-option
-                    v-for="item in tpsOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
+                <el-select v-model="tpsValue" placeholder="请选择" @change="changePriceForSelect">
+                  <el-option v-for="item in tpsOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column
-              align="center"
-              prop="国密局批号"
-              label="国密局批号"
-              width="180"
-              v-if="apiShow === true"
-            >
+            <el-table-column align="center" prop="国密局批号" label="国密局批号" width="180" v-if="apiShow === true">
               <template slot-scope="scope">
                 <el-select v-model="apiValue" placeholder="请选择">
-                  <el-option
-                    v-for="item in apiOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
+                  <el-option v-for="item in apiOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column
-              align="center"
-              prop="validity"
-              label="有效期限"
-              width="180"
-            >
+            <el-table-column align="center" prop="validity" label="有效期限" width="180">
               <template slot-scope="scope">
-                <el-select
-                  v-model="validityValue"
-                  placeholder="请选择"
-                  @change="changePriceForSelect"
-                >
-                  <el-option
-                    v-for="item in validityOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
+                <el-select v-model="validityValue" placeholder="请选择" @change="changePriceForSelect">
+                  <el-option v-for="item in validityOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
                 </el-select>
               </template>
             </el-table-column>
@@ -121,21 +50,10 @@
             </el-table-column>
             <el-table-column align="center" label="数量" width="180">
               <template slot-scope="scope">
-                <el-input-number
-                  v-model="prdNum"
-                  :min="1"
-                  :max="100"
-                  size="mini"
-                  @change="changeNum"
-                ></el-input-number>
+                <el-input-number v-model="prdNum" :min="1" :max="100" size="mini" @change="changeNum"></el-input-number>
               </template>
             </el-table-column>
-            <el-table-column
-              align="center"
-              prop="total"
-              label="小计"
-              width="180"
-            >
+            <el-table-column align="center" prop="total" label="小计" width="180">
               <template slot-scope="scope">
                 <div class="priceStyle">￥{{ totalPrice }}</div>
               </template>
@@ -147,18 +65,10 @@
         <div class="submitBoxAll">
           <div class="total">
             <span class="totalTitle">实付金额：</span>
-            <span class="priceStyle">￥</span
-            ><span class="totalPrice">{{ totalPrice }}</span>
+            <span class="priceStyle">￥</span><span class="totalPrice">{{ totalPrice }}</span>
           </div>
           <div class="submit">
-            <el-button
-              type="primary"
-              size="small"
-              @click="submitOrder"
-              :disabled="validityValue ? false : true"
-            >
-              提交订单</el-button
-            >
+            <el-button type="primary" size="small" @click="submitOrder" :disabled="validityValue ? false : true"> 提交订单</el-button>
           </div>
         </div>
       </div>
@@ -169,11 +79,7 @@
 <script>
 import { useHomeStore } from '@/store/home'
 import { useOrderStore } from '@/store/order'
-import {
-  createOrder,
-  getCryptographicAlgorithmList,
-  countOrderPrice,
-} from '@/api/order'
+import { createOrder, getCryptographicAlgorithmList, countOrderPrice } from '@/api/order'
 import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'confirmOrder',
@@ -238,7 +144,11 @@ export default {
     calculateThePrice(item) {
       let valueList = ''
       if (this.tpsShow === true) {
-        valueList = `${this.apiValue}.${this.algorithmsValue}.${this.tpsValue}.${this.validityValue}`
+        if (this.apiValue) {
+          valueList = `${this.apiValue}.${this.algorithmsValue}.${this.tpsValue}.${this.validityValue}`
+        } else {
+          valueList = `${this.algorithmsValue}.${this.tpsValue}.${this.validityValue}`
+        }
       } else {
         valueList = `${this.validityValue}`
       }
@@ -255,27 +165,23 @@ export default {
         console.log('countOrderPrice res', res.data)
         if (res.data.countOrderPrice_totalRecNum === 0) {
           // 没有当前有限期报价,弹出提示/选项置灰（disabled: true)
-          MessageBox.alert(
-            '暂时还没有该产品的当前有限期报价,请重新选择',
-            '提示',
-            {
-              confirmButtonText: '确定',
-              callback: action => {
-                // 选项置灰
-                let newOptions = this.validityOptions.map(item => {
-                  if (item.value === this.validityValue) {
-                    item.disabled = true
-                  }
-                  return item
-                })
-                this.validityValue = ''
-                this.price = 0.0
-                this.totalPrice = 0.0
-                this.validityOptions = newOptions
-                console.log('this.validityOptions', this.validityOptions)
-              },
-            }
-          )
+          MessageBox.alert('暂时还没有该产品的当前有限期报价,请重新选择', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+              // 选项置灰
+              let newOptions = this.validityOptions.map(item => {
+                if (item.value === this.validityValue) {
+                  item.disabled = true
+                }
+                return item
+              })
+              this.validityValue = ''
+              this.price = 0.0
+              this.totalPrice = 0.0
+              this.validityOptions = newOptions
+              console.log('this.validityOptions', this.validityOptions)
+            },
+          })
           return
         }
         if (res.data.rs === '1') {
