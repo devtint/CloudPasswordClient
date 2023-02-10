@@ -1,8 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login_header">
-      <el-page-header @back="goBack" title="" content="用户登录">
-      </el-page-header>
+      <el-page-header @back="goBack" title="" content="用户登录"> </el-page-header>
     </div>
     <div class="login_main">
       <!--
@@ -28,12 +27,7 @@
         2、通过 ref 获取 el-form 组件，调用组件的 validate 进行验证
         -->
 
-        <el-tabs
-          type="border-card"
-          stretch
-          v-model="activeName"
-          @tab-click="handleClick"
-        >
+        <el-tabs type="border-card" stretch v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="账号登录" name="1">
             <login-account></login-account>
           </el-tab-pane>
@@ -110,10 +104,10 @@ export default {
           this.loginLoding = false
 
           // 将接口返回的用户相关数据放到本地存储，方便应用数据共享
-          // window.localStorage.setItem('user', res.data.data)
+          // window.sessionStorage.setItem('user', res.data.data)
           // 但是本地存储只能存储字符串
           // 想要存储对象、数组类型的数据，则把他们转为 JSON 格式字符串进行存储
-          window.localStorage.setItem('user', JSON.stringify(res.data.data))
+          window.sessionStorage.setItem('user', JSON.stringify(res.data.data))
 
           // 跳转到首页
           // this.$router.push('./')  //方法一，直接输入路径

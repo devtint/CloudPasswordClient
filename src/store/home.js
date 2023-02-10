@@ -31,7 +31,7 @@ export const useHomeStore = defineStore({
     },
     setStoreProductList(payload) {
       this.storeProductList = payload
-    }
+    },
     // // 异步actions
     // async login(account, pwd) {
     //   const { data } = await api.login(account, pwd)
@@ -39,13 +39,13 @@ export const useHomeStore = defineStore({
     // },
   },
   // 开启数据缓存 数据默认存在 sessionStorage 里，并且会以 store 的 id 作为 key
-  // 可以在 strategies 里自定义 key 值，并将存放位置由 sessionStorage 改为 localStorage
+  // 可以在 strategies 里自定义 key 值，并将存放位置由 sessionStorage 改为 sessionStorage
   persist: {
     enabled: true,
     // strategies: [
     //   {
     //     key: 'my_user',
-    //     storage: localStorage,
+    //     storage: sessionStorage,
     //     paths: ['name', 'age'], // 持久化部分的 state
     //   },
     // ],

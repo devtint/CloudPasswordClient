@@ -106,9 +106,9 @@ export default {
   computed: {},
   watch: {},
   created() {
-    this.userName = window.localStorage.getItem('userName')
-    this.memberID = window.localStorage.getItem('memberID')
-    this.enterpriseName = window.localStorage.getItem('enterpriseName')
+    this.userName = window.sessionStorage.getItem('userName')
+    this.memberID = window.sessionStorage.getItem('memberID')
+    this.enterpriseName = window.sessionStorage.getItem('enterpriseName')
     if (this.memberID) {
       this.isLogin = true
     }
@@ -137,9 +137,9 @@ export default {
       this.$router.push('/register')
     },
     logout() {
-      window.localStorage.removeItem('user')
-      window.localStorage.removeItem('userName')
-      window.localStorage.removeItem('memberID')
+      window.sessionStorage.removeItem('user')
+      window.sessionStorage.removeItem('userName')
+      window.sessionStorage.removeItem('memberID')
       window.location.href = BASE_HREF
       Message({
         message: '已退出登录',

@@ -12,7 +12,7 @@ export const useOrderStore = defineStore({
       // 当前tabs选项
       curentTabs: '',
       orderData: [],
-      orderDataTotalNum: ''
+      orderDataTotalNum: '',
     }
   },
   getters: {
@@ -34,7 +34,7 @@ export const useOrderStore = defineStore({
 
     getOrderDataTotalNum: state => {
       return state.orderDataTotalNum
-    }
+    },
   },
   actions: {
     // setHello(payload) {
@@ -52,7 +52,7 @@ export const useOrderStore = defineStore({
 
     setOrderDataTotalNum(payload) {
       this.orderDataTotalNum = payload
-    }
+    },
     // // 异步actions
     // async login(account, pwd) {
     //   const { data } = await api.login(account, pwd)
@@ -60,13 +60,13 @@ export const useOrderStore = defineStore({
     // },
   },
   // 开启数据缓存 数据默认存在 sessionStorage 里，并且会以 store 的 id 作为 key
-  // 可以在 strategies 里自定义 key 值，并将存放位置由 sessionStorage 改为 localStorage
+  // 可以在 strategies 里自定义 key 值，并将存放位置由 sessionStorage 改为 sessionStorage
   persist: {
     enabled: true,
     // strategies: [
     //   {
     //     key: 'my_user',
-    //     storage: localStorage,
+    //     storage: sessionStorage,
     //     paths: ['name', 'age'], // 持久化部分的 state
     //   },
     // ],

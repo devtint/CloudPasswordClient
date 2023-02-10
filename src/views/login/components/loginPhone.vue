@@ -1,30 +1,15 @@
 <template>
   <div class="loginPhone">
-    <el-form
-      class="login-form"
-      ref="login-form"
-      :model="user"
-      :rules="formRules"
-    >
+    <el-form class="login-form" ref="login-form" :model="user" :rules="formRules">
       <el-form-item prop="mobile">
-        <el-input
-          v-model="user.mobile"
-          placeholder="请输入手机号"
-          clearable
-        ></el-input>
+        <el-input v-model="user.mobile" placeholder="请输入手机号" clearable></el-input>
       </el-form-item>
       <el-form-item prop="code">
         <div class="get_code">
           <el-input v-model="user.code" placeholder="请输入验证码" clearable>
             <!-- 发送验证码 -->
           </el-input>
-          <el-button
-            class="get-btn"
-            type="primary"
-            :disabled="codeDisabled"
-            @click="getCode"
-            >{{ codeText }}</el-button
-          >
+          <el-button class="get-btn" type="primary" :disabled="codeDisabled" @click="getCode">{{ codeText }}</el-button>
         </div>
       </el-form-item>
       <el-form-item prop="agree2">
@@ -40,20 +25,8 @@
       </el-form-item>
       <el-form-item>
         <div class="loginBox">
-          <el-button
-            class="login-btn"
-            type="primary"
-            @click="onLogin"
-            :loading="loginLoading"
-            >登录</el-button
-          >
-          <el-button
-            class="login-btn"
-            type="primary"
-            @click="onRegister"
-            :loading="loginLoading"
-            >注册</el-button
-          >
+          <el-button class="login-btn" type="primary" @click="onLogin" :loading="loginLoading">登录</el-button>
+          <el-button class="login-btn" type="primary" @click="onRegister" :loading="loginLoading">注册</el-button>
         </div>
       </el-form-item>
     </el-form>
@@ -166,13 +139,10 @@ export default {
           loginOfPhone(data).then(res => {
             if (res.data.rs === '1') {
               console.log('登录成功', res.data)
-              window.localStorage.setItem('user', JSON.stringify(res.data))
-              window.localStorage.setItem(
-                'enterpriseName',
-                res.data.TELLERCOMPANY
-              )
-              window.localStorage.setItem('userName', res.data.TELLERNAME)
-              window.localStorage.setItem('memberID', res.data.memberID)
+              window.sessionStorage.setItem('user', JSON.stringify(res.data))
+              window.sessionStorage.setItem('enterpriseName', res.data.TELLERCOMPANY)
+              window.sessionStorage.setItem('userName', res.data.TELLERNAME)
+              window.sessionStorage.setItem('memberID', res.data.memberID)
 
               Message({
                 showClose: true,
@@ -223,10 +193,10 @@ export default {
     //       this.loginLoading = false
 
     //       // 将接口返回的用户相关数据放到本地存储，方便应用数据共享
-    //       // window.localStorage.setItem('user', res.data.data)
+    //       // window.sessionStorage.setItem('user', res.data.data)
     //       // 但是本地存储只能存储字符串
     //       // 想要存储对象、数组类型的数据，则把他们转为 JSON 格式字符串进行存储
-    //       window.localStorage.setItem('user', JSON.stringify(res.data.data))
+    //       window.sessionStorage.setItem('user', JSON.stringify(res.data.data))
 
     //       // 跳转到首页
     //       // this.$router.push('./')  //方法一，直接输入路径

@@ -312,7 +312,7 @@ export default {
     submitOrder() {
       console.log('submitOrder')
       // 验证是否登录
-      let user = window.localStorage.getItem('user')
+      let user = window.sessionStorage.getItem('user')
       if (!user) {
         MessageBox.confirm('接下来的操作需要用户登录,是否登录?', '登录提示', {
           confirmButtonText: '确定',
@@ -354,7 +354,7 @@ export default {
           transChanelCate: this.orderData[0].transChanelCate,
           transChanelID: this.orderData[0].transChanelID,
           buyerCmpCate: this.orderData[0].buyerCmpCate,
-          purchaseCompanyName: window.localStorage.getItem('enterpriseName'),
+          purchaseCompanyName: window.sessionStorage.getItem('enterpriseName'),
           companyName: this.orderData[0].companyName,
           saleCmpName: this.orderData[0].saleCmpName,
           productName: this.orderData[0].productName,
@@ -397,10 +397,10 @@ export default {
               })
                 .then(() => {
                   // 清除登录信息
-                  window.localStorage.removeItem('user')
-                  window.localStorage.removeItem('enterpriseName')
-                  window.localStorage.removeItem('userName')
-                  window.localStorage.removeItem('memberID')
+                  window.sessionStorage.removeItem('user')
+                  window.sessionStorage.removeItem('enterpriseName')
+                  window.sessionStorage.removeItem('userName')
+                  window.sessionStorage.removeItem('memberID')
                   // 跳转到登录页面
                   this.$router.push('/login')
                   Message({

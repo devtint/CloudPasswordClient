@@ -84,7 +84,7 @@ request.interceptors.request.use(
     }
     // 取到本地存储中的用户信息 getItem
     // 再还原成 JSON格式，就可用点方法调用
-    var user = JSON.parse(window.localStorage.getItem('user'))
+    var user = JSON.parse(window.sessionStorage.getItem('user'))
     // 如果有登录用户信息（不为空），则统一设置 token
 
     // 属性名和值一般看接口的要求
@@ -123,10 +123,10 @@ request.interceptors.response.use(
         confirmButtonText: '立即登录',
         callback: action => {
           // 清除登录信息
-          window.localStorage.removeItem('user')
-          window.localStorage.removeItem('enterpriseName')
-          window.localStorage.removeItem('userName')
-          window.localStorage.removeItem('memberID')
+          window.sessionStorage.removeItem('user')
+          window.sessionStorage.removeItem('enterpriseName')
+          window.sessionStorage.removeItem('userName')
+          window.sessionStorage.removeItem('memberID')
           // 跳转到登录页面
           router.push({
             //传递参数使用query的话，指定path或者name都行，但使用params的话，只能使用name指定
@@ -145,10 +145,10 @@ request.interceptors.response.use(
         confirmButtonText: '立即登录',
         callback: action => {
           // 清除登录信息
-          window.localStorage.removeItem('user')
-          window.localStorage.removeItem('enterpriseName')
-          window.localStorage.removeItem('userName')
-          window.localStorage.removeItem('memberID')
+          window.sessionStorage.removeItem('user')
+          window.sessionStorage.removeItem('enterpriseName')
+          window.sessionStorage.removeItem('userName')
+          window.sessionStorage.removeItem('memberID')
           // 跳转到登录页面
           router.push({
             //传递参数使用query的话，指定path或者name都行，但使用params的话，只能使用name指定

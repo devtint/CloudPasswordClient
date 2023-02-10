@@ -1,11 +1,7 @@
 <template>
   <div class="registerAccount">
     <div class="register_header">
-      <el-page-header
-        @back="goBack"
-        title=""
-        :content="headerContent"
-      ></el-page-header>
+      <el-page-header @back="goBack" title="" :content="headerContent"></el-page-header>
     </div>
     <div class="login-container">
       <!--
@@ -23,15 +19,7 @@
           <div slot="header" class="clearfix">
             <span class="headerTitle">{{ headerTitle }}</span>
           </div>
-          <el-form
-            :model="ruleForm"
-            status-icon
-            :rules="rules"
-            ref="ruleForm"
-            class="demo-ruleForm"
-            label-position="right"
-            label-width="80px"
-          >
+          <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" class="demo-ruleForm" label-position="right" label-width="80px">
             <el-form-item prop="enterpriseName" label="企业名称">
               <el-input
                 v-model="ruleForm.enterpriseName"
@@ -41,39 +29,16 @@
               ></el-input>
             </el-form-item>
             <el-form-item prop="userName" label="姓名">
-              <el-input
-                v-model="ruleForm.userName"
-                placeholder="请输入姓名"
-                clearable
-              ></el-input>
+              <el-input v-model="ruleForm.userName" placeholder="请输入姓名" clearable></el-input>
             </el-form-item>
-            <el-form-item
-              prop="phone"
-              label="手机号码"
-              v-if="this.action !== 'childAccount'"
-            >
-              <el-input
-                v-model="ruleForm.phone"
-                placeholder="请输入手机号码"
-                clearable
-              ></el-input>
+            <el-form-item prop="phone" label="手机号码" v-if="this.action !== 'childAccount'">
+              <el-input v-model="ruleForm.phone" placeholder="请输入手机号码" clearable></el-input>
             </el-form-item>
             <el-form-item prop="account" label="账号">
-              <el-input
-                v-model="ruleForm.account"
-                placeholder="请输入账号"
-                clearable
-              ></el-input>
+              <el-input v-model="ruleForm.account" placeholder="请输入账号" clearable></el-input>
             </el-form-item>
             <el-form-item prop="pass" label="密码">
-              <el-input
-                type="password"
-                placeholder="请输入密码"
-                v-model="ruleForm.pass"
-                autocomplete="off"
-                show-password
-                clearable
-              ></el-input>
+              <el-input type="password" placeholder="请输入密码" v-model="ruleForm.pass" autocomplete="off" show-password clearable></el-input>
             </el-form-item>
             <el-form-item prop="checkPass" label="确认密码">
               <el-input
@@ -87,15 +52,8 @@
             </el-form-item>
             <el-form-item>
               <div class="btnBox">
-                <el-button
-                  type="primary"
-                  class="btn"
-                  @click="submitForm('ruleForm')"
-                  >提交</el-button
-                >
-                <el-button class="btn" @click="resetForm('ruleForm')"
-                  >重置</el-button
-                >
+                <el-button type="primary" class="btn" @click="submitForm('ruleForm')">提交</el-button>
+                <el-button class="btn" @click="resetForm('ruleForm')">重置</el-button>
               </div>
             </el-form-item>
           </el-form>
@@ -180,9 +138,7 @@ export default {
         pass: [{ validator: validatePass, trigger: 'blur' }],
         checkPass: [{ validator: validatePass2, trigger: 'blur' }],
         account: [{ validator: validateAccount, trigger: 'blur' }],
-        enterpriseName: [
-          { validator: validateEnterpriseName, trigger: 'blur' },
-        ],
+        enterpriseName: [{ validator: validateEnterpriseName, trigger: 'blur' }],
         userName: [{ validator: validateUserName, trigger: 'blur' }],
         phone: [{ validator: validatePhone, trigger: 'blur' }],
       },
@@ -204,8 +160,7 @@ export default {
       if (this.action === 'childAccount') {
         this.headerContent = '创建子账号'
         this.headerTitle = '创建子账号'
-        this.ruleForm.enterpriseName =
-          window.localStorage.getItem('enterpriseName')
+        this.ruleForm.enterpriseName = window.sessionStorage.getItem('enterpriseName')
       }
     },
     getPKFn() {
@@ -313,9 +268,9 @@ export default {
 
             let subData = {
               cipherText: newPassword,
-              companyName: window.localStorage.getItem('enterpriseName'),
+              companyName: window.sessionStorage.getItem('enterpriseName'),
               tellerNo: this.ruleForm.account,
-              tellerName: window.localStorage.getItem('accountName'),
+              tellerName: window.sessionStorage.getItem('accountName'),
               roleID: '企业用户',
               contactor: this.ruleForm.userName,
               employeeName: this.ruleForm.userName,

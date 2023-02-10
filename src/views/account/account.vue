@@ -15,8 +15,7 @@
         <el-button type="primary" @click="createChildAccount">创建子账号</el-button>
         <el-button type="primary" @click="modifyAccountPassword">修改当前账号密码</el-button>
         <el-table :data="tableData" border style="width: 100%" :row-class-name="tableRowClassName">
-          <el-table-column prop="employeeName" label="姓名" width="180">
-          </el-table-column>
+          <el-table-column prop="employeeName" label="姓名" width="180"> </el-table-column>
           <el-table-column prop="tellerNo" label="账号"> </el-table-column>
           <el-table-column prop="operation" label="操作">
             <template slot-scope="scope">
@@ -27,8 +26,7 @@
               >
                 修改密码
               </el-button> -->
-              <el-button type="text" size="small" @click="deleteChildAccount(scope.row)"
-                         v-if="scope.row.tellerNo !== accountName">
+              <el-button type="text" size="small" @click="deleteChildAccount(scope.row)" v-if="scope.row.tellerNo !== accountName">
                 删除子账号
               </el-button>
             </template>
@@ -41,12 +39,7 @@
 
 <script>
 import { encryption } from '@/utils'
-import {
-  getPK,
-  getSubAcount,
-  subAcountDelete,
-  subAcountUpdate,
-} from '@/api/user'
+import { getPK, getSubAcount, subAcountDelete, subAcountUpdate } from '@/api/user'
 import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'accountManagement',
@@ -55,7 +48,7 @@ export default {
   data() {
     return {
       tableData: [],
-      accountName: window.localStorage.getItem('accountName'),
+      accountName: window.sessionStorage.getItem('accountName'),
     }
   },
   computed: {},
@@ -63,7 +56,7 @@ export default {
   created() {
     this.init()
   },
-  mounted() { },
+  mounted() {},
   methods: {
     getPKFn() {
       getPK()
@@ -100,7 +93,7 @@ export default {
         path: '/modify',
         query: {
           modifyAction: 'modify',
-          inputAccount: window.localStorage.getItem('userName'),
+          inputAccount: window.sessionStorage.getItem('userName'),
         },
       })
     },
@@ -116,7 +109,7 @@ export default {
         .then(({ value }) => {
           let encryptedPassword = encryption(this.pkbase64, value)
           let data = {
-            companyName: window.localStorage.getItem('enterpriseName'),
+            companyName: window.sessionStorage.getItem('enterpriseName'),
             tellerNo: row.tellerNo,
             newPassword: encryptedPassword,
             newPassword: value,

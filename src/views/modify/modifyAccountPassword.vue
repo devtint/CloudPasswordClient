@@ -1,11 +1,7 @@
 <template>
   <div class="modifyAccountPassword">
     <div class="register_header">
-      <el-page-header
-        @back="goBack"
-        title=""
-        :content="headerContent"
-      ></el-page-header>
+      <el-page-header @back="goBack" title="" :content="headerContent"></el-page-header>
     </div>
     <div class="login-container">
       <!--
@@ -26,22 +22,13 @@
           <span>通过旧密码验证</span>
           <i class="el-icon-arrow-right"></i>
         </div> -->
-        <el-card
-          class="validator-card"
-          shadow="hover"
-          @click.native="modifyOfPhone"
-        >
+        <el-card class="validator-card" shadow="hover" @click.native="modifyOfPhone">
           <div class="action">
             <span>通过手机号验证</span>
             <i class="el-icon-arrow-right"></i>
           </div>
         </el-card>
-        <el-card
-          class="validator-card"
-          shadow="hover"
-          @click.native="modifyOfOldPsw"
-          v-if="!forgetPassword"
-        >
+        <el-card class="validator-card" shadow="hover" @click.native="modifyOfOldPsw" v-if="!forgetPassword">
           <div class="action">
             <span>通过旧密码验证</span>
             <i class="el-icon-arrow-right"></i>
@@ -56,20 +43,10 @@
         </div>
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span style="float: left" @click="isModifyShow = !isModifyShow"
-              ><i class="el-icon-arrow-left"></i
-            ></span>
+            <span style="float: left" @click="isModifyShow = !isModifyShow"><i class="el-icon-arrow-left"></i></span>
             <span class="headerTitle">{{ headerTitle }}</span>
           </div>
-          <el-form
-            :model="ruleForm"
-            status-icon
-            :rules="rules"
-            ref="modifyRef"
-            class="demo-ruleForm"
-            label-position="right"
-            label-width="80px"
-          >
+          <el-form :model="ruleForm" status-icon :rules="rules" ref="modifyRef" class="demo-ruleForm" label-position="right" label-width="80px">
             <!-- <el-form-item prop="enterpriseName" label="企业名称">
               <el-input
                 v-model="ruleForm.enterpriseName"
@@ -85,69 +62,24 @@
               ></el-input>
             </el-form-item> -->
             <el-form-item prop="account" label="账号">
-              <el-input
-                v-model="ruleForm.account"
-                placeholder="请输入账号"
-                clearable
-                disabled
-              ></el-input>
+              <el-input v-model="ruleForm.account" placeholder="请输入账号" clearable disabled></el-input>
             </el-form-item>
-            <el-form-item
-              prop="phone"
-              label="手机号码"
-              v-if="modifyValidatorAction === 'phone'"
-            >
-              <el-input
-                v-model="ruleForm.phone"
-                placeholder="请输入手机号码"
-                clearable
-              ></el-input>
+            <el-form-item prop="phone" label="手机号码" v-if="modifyValidatorAction === 'phone'">
+              <el-input v-model="ruleForm.phone" placeholder="请输入手机号码" clearable></el-input>
             </el-form-item>
-            <el-form-item
-              prop="code"
-              label="验证码"
-              v-if="modifyValidatorAction === 'phone'"
-            >
+            <el-form-item prop="code" label="验证码" v-if="modifyValidatorAction === 'phone'">
               <div class="get_code">
-                <el-input
-                  v-model="ruleForm.code"
-                  placeholder="请输入验证码"
-                  clearable
-                >
+                <el-input v-model="ruleForm.code" placeholder="请输入验证码" clearable>
                   <!-- 发送验证码 -->
                 </el-input>
-                <el-button
-                  class="get-btn"
-                  type="primary"
-                  :disabled="codeDisabled"
-                  @click="getCode"
-                  >{{ codeText }}</el-button
-                >
+                <el-button class="get-btn" type="primary" :disabled="codeDisabled" @click="getCode">{{ codeText }}</el-button>
               </div>
             </el-form-item>
-            <el-form-item
-              prop="oldPass"
-              label="旧密码"
-              v-if="modifyValidatorAction !== 'phone'"
-            >
-              <el-input
-                type="password"
-                placeholder="请输入旧密码"
-                v-model="ruleForm.oldPass"
-                autocomplete="off"
-                show-password
-                clearable
-              ></el-input>
+            <el-form-item prop="oldPass" label="旧密码" v-if="modifyValidatorAction !== 'phone'">
+              <el-input type="password" placeholder="请输入旧密码" v-model="ruleForm.oldPass" autocomplete="off" show-password clearable></el-input>
             </el-form-item>
             <el-form-item prop="pass" label="新密码">
-              <el-input
-                type="password"
-                placeholder="请输入新密码"
-                v-model="ruleForm.pass"
-                autocomplete="off"
-                show-password
-                clearable
-              ></el-input>
+              <el-input type="password" placeholder="请输入新密码" v-model="ruleForm.pass" autocomplete="off" show-password clearable></el-input>
             </el-form-item>
             <el-form-item prop="checkPass" label="确认密码">
               <el-input
@@ -161,15 +93,8 @@
             </el-form-item>
             <el-form-item>
               <div class="btnBox">
-                <el-button
-                  type="primary"
-                  class="btn"
-                  @click="submitForm('modifyRef')"
-                  >提交</el-button
-                >
-                <el-button class="btn" @click="resetForm('modifyRef')"
-                  >重置</el-button
-                >
+                <el-button type="primary" class="btn" @click="submitForm('modifyRef')">提交</el-button>
+                <el-button class="btn" @click="resetForm('modifyRef')">重置</el-button>
               </div>
             </el-form-item>
           </el-form>
@@ -261,7 +186,7 @@ export default {
     }
     return {
       modifyAction: this.$route.query.modifyAction,
-      inputAccount: window.localStorage.getItem('accountName'),
+      inputAccount: window.sessionStorage.getItem('accountName'),
       headerTitle: '修改密码',
       headerContent: '修改密码',
       forgetPassword: false,

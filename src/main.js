@@ -21,13 +21,13 @@ Vue.prototype.checklogin = function (callback) {
     //请求成功
     console.log('checkLogin response:', response)
     var userName = response.data.memberID
-    let storage = window.localStorage
+    let storage = window.sessionStorage
     if (userName === 'null') {
       storage.removeItem('user')
       storage.removeItem('memberID')
       storage.removeItem('userName')
       storage.removeItem('enterpriseName')
-      console.log('memberID', window.localStorage.getItem('memberID'))
+      console.log('memberID', window.sessionStorage.getItem('memberID'))
     }
   })
 }

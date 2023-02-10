@@ -3,18 +3,8 @@
     <el-dialog title="产品续费" :visible.sync="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="续费时间" :label-width="formLabelWidth">
-          <el-select
-            v-model="validityValue"
-            placeholder="请选择续费时间"
-            @change="changePriceForSelect"
-          >
-            <el-option
-              v-for="item in validityOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
+          <el-select v-model="validityValue" placeholder="请选择续费时间" @change="changePriceForSelect">
+            <el-option v-for="item in validityOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="续费价格" :label-width="formLabelWidth">
@@ -31,11 +21,7 @@
 </template>
 
 <script>
-import {
-  countOrderPrice,
-  getCryptographicAlgorithmList,
-  createOrder,
-} from '@/api/order'
+import { countOrderPrice, getCryptographicAlgorithmList, createOrder } from '@/api/order'
 import { Message, MessageBox } from 'element-ui'
 export default {
   name: 'orderRenewal',
@@ -150,27 +136,23 @@ export default {
         console.log('countOrderPrice res', res.data)
         if (res.data.countOrderPrice_totalRecNum === 0) {
           // 没有当前有限期报价,弹出提示/选项置灰（disabled: true)
-          MessageBox.alert(
-            '暂时还没有该产品的当前有限期报价,请重新选择',
-            '提示',
-            {
-              confirmButtonText: '确定',
-              callback: action => {
-                // 选项置灰
-                let newOptions = this.validityOptions.map(item => {
-                  if (item.value === this.validityValue) {
-                    item.disabled = true
-                  }
-                  return item
-                })
-                this.validityValue = ''
-                // this.price = 0.0
-                this.totalPrice = 0.0
-                this.validityOptions = newOptions
-                console.log('this.validityOptions', this.validityOptions)
-              },
-            }
-          )
+          MessageBox.alert('暂时还没有该产品的当前有限期报价,请重新选择', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+              // 选项置灰
+              let newOptions = this.validityOptions.map(item => {
+                if (item.value === this.validityValue) {
+                  item.disabled = true
+                }
+                return item
+              })
+              this.validityValue = ''
+              // this.price = 0.0
+              this.totalPrice = 0.0
+              this.validityOptions = newOptions
+              console.log('this.validityOptions', this.validityOptions)
+            },
+          })
           return
         }
         if (res.data.rs === '1') {
@@ -186,7 +168,7 @@ export default {
     submitOrder() {
       console.log('submitOrder')
       // 验证是否登录
-      let user = window.localStorage.getItem('user')
+      let user = window.sessionStorage.getItem('user')
       if (!user) {
         MessageBox.confirm('接下来的操作需要用户登录,是否登录?', '登录提示', {
           confirmButtonText: '确定',
@@ -228,7 +210,7 @@ export default {
           transChanelCate: '企业客户工作站',
           transChanelID: this.renewalData.saleCmpName,
           buyerCmpCate: '采购云密码服务的企业',
-          purchaseCompanyName: window.localStorage.getItem('enterpriseName'),
+          purchaseCompanyName: window.sessionStorage.getItem('enterpriseName'),
           companyName: this.renewalData.saleCmpName,
           saleCmpName: this.renewalData.saleCmpName,
           // productName: this.renewalData.productName,
@@ -273,10 +255,10 @@ export default {
               })
                 .then(() => {
                   // 清除登录信息
-                  window.localStorage.removeItem('user')
-                  window.localStorage.removeItem('enterpriseName')
-                  window.localStorage.removeItem('userName')
-                  window.localStorage.removeItem('memberID')
+                  window.sessionStorage.removeItem('user')
+                  window.sessionStorage.removeItem('enterpriseName')
+                  window.sessionStorage.removeItem('userName')
+                  window.sessionStorage.removeItem('memberID')
                   // 跳转到登录页面
                   this.$router.push('/login')
                   Message({
