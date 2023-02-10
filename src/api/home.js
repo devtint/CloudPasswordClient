@@ -1,9 +1,10 @@
 import { request } from '@/utils'
 
-// export const getHello = params => {
-//   return request({
-//     method: 'GET',
-//     url: '/search/getHello',
-//     params,
-//   })
-// }
+// (查询服务分类)queryServiceClassify
+export const queryServiceClassify = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryServiceClassify',
+    params,
+  })
+}

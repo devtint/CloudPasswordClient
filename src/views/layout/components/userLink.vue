@@ -37,22 +37,8 @@
     <!-- <el-button type="text">登录</el-button>
     <el-button type="primary">立即注册</el-button> -->
     <div class="loginBox" v-if="!isLogin">
-      <a
-        href="javascript:void 0;"
-        hotrep="hp.pc.topnav.login"
-        rel="nofollow"
-        class="login_btn"
-        @click="toLogin"
-        >登录</a
-      >
-      <a
-        href="javascript:void 0;"
-        hotrep="hp.pc.topnav.register"
-        rel="nofollow"
-        class="register_btn"
-        @click="toRegister"
-        >免费注册</a
-      >
+      <a href="javascript:void 0;" hotrep="hp.pc.topnav.login" rel="nofollow" class="login_btn" @click="toLogin">登录</a>
+      <a href="javascript:void 0;" hotrep="hp.pc.topnav.register" rel="nofollow" class="register_btn" @click="toRegister">免费注册</a>
     </div>
     <div href="javascript:;" :underline="false" v-else>
       <div class="avatar-wrap">
@@ -61,14 +47,13 @@
           <span class="ename-1">|</span>
         </div>
         <el-link href="javascript:;" :underline="false">
-          <a
-            href="javascript:void 0;"
-            hotrep="hp.pc.topnav.login"
-            rel="nofollow"
-            class="login_btn"
-            @click="toMyOrder"
-            >我的订单</a
-          >
+          <a href="javascript:void 0;" hotrep="hp.pc.topnav.login" rel="nofollow" class="login_btn" @click="toSecretKey">密钥管理</a>
+        </el-link>
+        <el-link href="javascript:;" :underline="false">
+          <a href="javascript:void 0;" hotrep="hp.pc.topnav.login" rel="nofollow" class="login_btn" @click="toCipherMachine">云密码机管理</a>
+        </el-link>
+        <el-link href="javascript:;" :underline="false">
+          <a href="javascript:void 0;" hotrep="hp.pc.topnav.login" rel="nofollow" class="login_btn" @click="toMyOrder">我的订单</a>
         </el-link>
         <div class="userBox">
           <el-dropdown>
@@ -80,9 +65,7 @@
                 <a href="javascript:void 0;" class="pls-nav-bubble-trigger"
                   ><i
                     class="pls-nav-bubble-trigger-icon"
-                    style="
-                      background-image: url('https://cloudcache.tencentcs.com/qcloud/portal/kit/images/default-avatar.de71167d.svg');
-                    "
+                    style="background-image: url('https://cloudcache.tencentcs.com/qcloud/portal/kit/images/default-avatar.de71167d.svg')"
                   ></i
                 ></a>
               </div>
@@ -93,15 +76,9 @@
                 <span class="userID">账号ID：{{ memberID }}</span>
               </el-dropdown-item>
               <!-- <el-dropdown-item><span class="userID">账号ID:{{ memberID }}</span></el-dropdown-item> -->
-              <el-dropdown-item divided @click.native="toPersonalData"
-                >账号信息</el-dropdown-item
-              >
-              <el-dropdown-item @click.native="toAccount"
-                >账号管理</el-dropdown-item
-              >
-              <el-dropdown-item divided @click.native="logout" v-if="isLogin"
-                >退出登录</el-dropdown-item
-              >
+              <el-dropdown-item divided @click.native="toPersonalData">账号信息</el-dropdown-item>
+              <el-dropdown-item @click.native="toAccount">账号管理</el-dropdown-item>
+              <el-dropdown-item divided @click.native="logout" v-if="isLogin">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -123,8 +100,7 @@ export default {
       memberID: '',
       enterpriseName: '',
       // circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-      circleUrl:
-        'https://cloudcache.tencentcs.com/qcloud/portal/kit/images/default-avatar.de71167d.svg',
+      circleUrl: 'https://cloudcache.tencentcs.com/qcloud/portal/kit/images/default-avatar.de71167d.svg',
     }
   },
   computed: {},
@@ -141,6 +117,12 @@ export default {
   methods: {
     toMyOrder() {
       this.$router.push('/order')
+    },
+    toCipherMachine() {
+      this.$router.push('/cipherMachine')
+    },
+    toSecretKey() {
+      this.$router.push('/secretKey')
     },
     toLogin() {
       this.$router.push('/login')

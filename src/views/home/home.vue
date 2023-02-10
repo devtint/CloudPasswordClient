@@ -5,27 +5,13 @@
     <main>
       <div class="title">服务产品</div>
       <el-row :gutter="0">
-        <el-col
-          :xs="24"
-          :sm="24"
-          :md="12"
-          :lg="8"
-          :xl="1"
-          v-for="(item, index) in cardData"
-          :key="index"
-        >
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="1" v-for="(item, index) in cardData" :key="index">
           <el-card>
             <el-image :src="item.imgUrl" style="width: 100px" />
             <div class="cardMain">
               <h3>{{ item.title }}</h3>
               <p>{{ item.desc }}</p>
-              <el-button
-                type="primary"
-                size="small"
-                plain
-                @click="checkTheDetails(item)"
-                >查看详情</el-button
-              >
+              <el-button type="primary" size="small" plain @click="checkTheDetails(item)">查看详情</el-button>
             </div>
           </el-card>
         </el-col>
@@ -34,11 +20,7 @@
     <footer>
       <div class="title">购物流程</div>
       <div class="shoppingDiv">
-        <el-image
-          class="shoppingImg"
-          :src="require('@/views/home/images/shopping.png')"
-          style="width: 60%"
-        />
+        <el-image class="shoppingImg" :src="require('@/views/home/images/shopping.png')" style="width: 60%" />
       </div>
       <!-- <el-steps :active="5" align-center>
         <el-step title="用户注册" description="用户注册"></el-step>
@@ -58,6 +40,7 @@
 import rotationVue from '@/components/rotation.vue'
 
 import { useHomeStore } from '@/store/home'
+import { queryServiceClassify } from '@/api/home'
 export default {
   name: 'home',
   components: {
@@ -88,11 +71,11 @@ export default {
           title: '云证书托管服务',
           desc: '数字签名证书-X509证书（1年/2年/3年/永久有效）',
         },
-        {
-          imgUrl: require('@/views/home/images/v2_云证书托管.png'),
-          title: '云密码服务',
-          desc: '签名服务（RSA，RSA/SM2，SM1）',
-        },
+        // {
+        //   imgUrl: require('@/views/home/images/v2_云证书托管.png'),
+        //   title: '云密码服务',
+        //   desc: '签名服务（RSA，RSA/SM2，SM1）',
+        // },
         {
           imgUrl: require('@/views/home/images/v2_租赁云密码机.png'),
           title: '云密码机租赁服务',
@@ -104,6 +87,7 @@ export default {
   computed: {},
   watch: {},
   created() {
+    this.getServiceClassify()
     let afreshLogin = window.sessionStorage.getItem('afreshLogin')
     if (afreshLogin) {
       // this.checklogin()
@@ -111,6 +95,11 @@ export default {
   },
   mounted() {},
   methods: {
+    getServiceClassify() {
+      queryServiceClassify().then(res => {
+        console.log('(查询服务分类)queryServiceClassify:', res)
+      })
+    },
     checkTheDetails(item) {
       useHomeStore().setCurentProduct(item)
       this.$router.push({
