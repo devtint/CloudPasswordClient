@@ -15,3 +15,11 @@ export const getServiceProductList = params => {
     params,
   })
 }
+// (查询密钥接口)queryKeyImpl
+export const queryKeyImpl = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryKeyImpl',
+    params,
+  })
+}

@@ -43,6 +43,8 @@ import {
   Drawer,
   Descriptions,
   DescriptionsItem,
+  Alert,
+  Tag,
 } from 'element-ui'
 
 const components = [
@@ -89,6 +91,8 @@ const components = [
   Drawer,
   Descriptions,
   DescriptionsItem,
+  Alert,
+  Tag,
 ]
 
 function install(Vue) {

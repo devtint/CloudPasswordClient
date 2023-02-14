@@ -13,24 +13,23 @@
     <main>
       <div class="title">{{ curentProduct.title }}</div>
       <el-row :gutter="0">
-        <el-col
-          :xs="24"
-          :sm="24"
-          :md="12"
-          :lg="6"
-          :xl="1"
-          v-for="(item, index) in productList"
-          :key="index"
-        >
+        <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="1" v-for="(item, index) in productList" :key="index">
           <el-card>
             <div class="cardMain">
               <h3>{{ item }}</h3>
               <!-- <p>有效期: {{ item.validity }}</p> -->
               <p>简单详情介绍</p>
               <!-- <p class="price">￥{{ item.price }}</p> -->
-              <el-button type="warning" size="small" plain @click="payPro(item)"
-                >立即选购</el-button
-              >
+              <div>
+                <el-button type="warning" size="small" plain @click="payPro(item)">立即选购</el-button>
+                <el-button size="small" @click="goDocs">查看文档</el-button>
+              </div>
+              <div v-for="(keys, i) in interfaces" :key="i" class="cardMain-left">
+                <p v-if="keys.name === item"><i class="el-icon el-icon-success"></i> {{ keys.interface }}</p>
+                <!-- <p>
+                  <el-alert :title="keys.interface" type="success" center show-icon :closable="false" v-if="keys.name === item"></el-alert>
+                </p> -->
+              </div>
             </div>
           </el-card>
         </el-col>
@@ -44,7 +43,7 @@ import rotationVue from '@/components/rotation.vue'
 
 import { useHomeStore } from '@/store/home'
 import { useOrderStore } from '@/store/order'
-import { getServiceProductList } from '@/api/product'
+import { getServiceProductList, queryKeyImpl } from '@/api/product'
 export default {
   name: 'serviceProducts',
   components: {
@@ -55,6 +54,7 @@ export default {
     return {
       title: '服务产品',
       productList: [],
+      interfaces: [],
     }
   },
   computed: {
@@ -62,7 +62,11 @@ export default {
       return useHomeStore().getCurentProduct
     },
   },
-  watch: {},
+  watch: {
+    curentProduct() {
+      this.init(this.curentProduct.title)
+    },
+  },
   created() {
     // // 获取路由传过来的参数
     // this.title = this.$route.params.title
@@ -100,8 +104,9 @@ export default {
             }
           })
           this.productList = lists
-          console.log('lists:', lists)
+          console.log('this.productList:', lists)
 
+          this.getKeyImpl(lists)
           // 过滤对应产品的有效期列表
           // let newLists = []
           // // 产品对应的有效期和价格列表
@@ -119,6 +124,45 @@ export default {
           // console.log('newLists:', newLists)
         } else {
           console.log(res.data.rs)
+        }
+      })
+    },
+    goDocs() {
+      window.open('http://www.paytunnel.cn/CloudPasswordClient/docs/api/')
+    },
+    getKeyImpl(lists) {
+      let newLists = []
+      // lists.forEach(e => {
+      //   newLists.push({
+      //     name: e,
+      //   })
+      // })
+      console.log('new lists:', newLists)
+      queryKeyImpl().then(res => {
+        if (res.data.rs === '1') {
+          console.log('queryKeyImpl:', res.data.queryKeyImpl)
+          let keys = res.data.queryKeyImpl
+          keys.forEach(e => {
+            lists.forEach(list => {
+              let list1
+              if (list.indexOf('-')) {
+                list1 = list.split('-')[0]
+              } else {
+                list1 = list
+              }
+              if (e.keyName === list1) {
+                newLists.push({
+                  name: list,
+                  interface: e.implName,
+                })
+              }
+            })
+          })
+
+          console.log('new lists:', newLists)
+          this.interfaces = newLists
+        } else {
+          console.log('queryKeyImpl:', res.data.rs)
         }
       })
     },
@@ -157,19 +201,28 @@ export default {
   .cardMain {
     padding: 1rem;
     p {
+      width: 70%;
+      margin: auto;
       font-size: small;
       color: #999;
       margin-top: 1rem;
       margin-bottom: 1rem;
+      .el-icon-success:before {
+        color: #34d058;
+        // color: seagreen;
+      }
+    }
+    .cardMain-left {
+      text-align: left;
     }
     .price {
       font-size: large;
       color: #ff6600;
     }
     .el-button {
-      width: 70%;
+      width: 40%;
       margin-top: 1rem;
-      margin-bottom: -2rem;
+      margin-bottom: 0.5rem;
     }
   }
 }
