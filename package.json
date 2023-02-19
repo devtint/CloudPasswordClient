@@ -24,13 +24,17 @@
     "vue-router": "^3.2.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.2.17",
     "@vue/cli-plugin-babel": "~4.5.13",
     "@vue/cli-plugin-router": "~4.5.13",
     "@vue/cli-service": "~4.5.13",
+    "autoprefixer": "^9.8.8",
     "babel-plugin-component": "^1.1.1",
     "commitizen": "^4.2.4",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
+    "postcss": "^7.0.39",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
     "vue-template-compiler": "^2.6.11"
   },
   "config": {

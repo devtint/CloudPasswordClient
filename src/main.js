@@ -9,6 +9,8 @@ Vue.use(Clipboard)
 import { globalRegister } from './global'
 import { checkLogin } from '@/api/user'
 import '@/assets/style/global_icon.css'
+// import 'tailwindcss/tailwind.css'
+import './assets/tailwindcss.css'
 
 Vue.config.productionTip = false
 Vue.config.devtools = true

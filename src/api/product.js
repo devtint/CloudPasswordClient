@@ -15,6 +15,15 @@ export const getServiceProductList = params => {
     params,
   })
 }
+
+// (查询服务列表)queryServiceList
+export const queryServiceList = params => {
+  return request({
+    method: 'GET',
+    url: '/search/queryServiceList',
+    params,
+  })
+}
 // (查询密钥接口)queryKeyImpl
 export const queryKeyImpl = params => {
   return request({
